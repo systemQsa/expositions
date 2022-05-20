@@ -1,0 +1,40 @@
+body{
+    background-color: rgba(39, 139, 245, 0.2);
+}
+
+#sticky-footer{
+    position: fixed;
+    bottom: 0;
+    width: 82%;
+    height: 10%;
+}
+
+#navBar{
+    height: 10%;
+}
+.vh-100{
+    background-color: #eee;
+}
+
+.card {
+    border-radius: 25px;
+}
+
+.picture{
+    width: 18rem;
+    height: 7rem;
+}
+
+.logout{
+    text-decoration: none;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 0.3fr 1fr;
+    grid-gap: 20px;
+}
+
+
+
