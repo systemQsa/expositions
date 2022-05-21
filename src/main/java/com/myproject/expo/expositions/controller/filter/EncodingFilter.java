@@ -5,6 +5,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class EncodingFilter implements Filter {
@@ -13,9 +15,14 @@ public class EncodingFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
-        servletResponse.setContentType(Constant.CONTENT_TYPE);
-        servletResponse.setCharacterEncoding(Constant.ENCODING);
-        servletRequest.setCharacterEncoding(Constant.ENCODING);
+        servletResponse.setContentType("text/html");
+        servletResponse.setCharacterEncoding("UTF-8");
+        servletRequest.setCharacterEncoding("UTF-8");
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse)servletResponse;
+        response.setHeader("Cache-Control", "no-store,must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
         logger.info(Constant.LogMsg.ENCODING_FILTER_WORKING);
         filterChain.doFilter(servletRequest, servletResponse);
     }

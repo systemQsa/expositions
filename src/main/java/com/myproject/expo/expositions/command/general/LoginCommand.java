@@ -35,8 +35,6 @@ public class LoginCommand implements Command {
 
     @Override
     public Route execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
-
-        System.out.println(" email " + req.getParameter(Constant.EMAIL));
         try {
             User user = authenticationAndAuthorization(req);
             setUserToTheSession(req, user);

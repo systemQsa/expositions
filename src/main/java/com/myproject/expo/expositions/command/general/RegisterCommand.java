@@ -40,8 +40,8 @@ public class RegisterCommand implements Command {
         try {
             User user = retrieveUserDataFromReqToRegister(req);
             isUserInputCorrect(user);
-            //userService.registerUser(user);
-        } catch (ValidationException e) {
+            userService.registerUser(user);
+        } catch (ValidationException | ServiceException e) {
             logger.warn(Constant.LogMsg.USER_ENTERED_INCORRECT_INPUT);
             setInformMessageToUser(1, req, e.getMessage());
             throw new CommandException(Constant.URL.REGISTER);
@@ -62,9 +62,9 @@ public class RegisterCommand implements Command {
     }
 
     private boolean isUserInputCorrect(User user) throws ValidationException {
-        return //validate.isNameValid(user.getName())
-               // && validate.isSurnameValid(user.getSurname())
-                validate.isEmailValid(user.getEmail())
+        return validate.isNameValid(user.getName())
+                && validate.isSurnameValid(user.getSurname())
+                && validate.isEmailValid(user.getEmail())
                 && validate.isPhoneValid(user.getPhone());
     }
 }
