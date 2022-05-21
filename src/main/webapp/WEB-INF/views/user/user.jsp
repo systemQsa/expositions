@@ -70,17 +70,15 @@
                 <!-- Search -->
                 <jsp:include page="/WEB-INF/views/general/search.jsp"/>
 
-                <!-- Logout -->
-                <div class="d-flex align-items-center">
-                    <ul class="nav navbar-nav navbar-right mb-0">
-                        <li class="me-3">
-                            <form method="post" action="${pageContext.request.contextPath}/controller">
-                                <input type="hidden" name="action" value="logout">
-                                <button type="submit" class="btn btn-info btn-sm">Logout</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+                <%--            Logout--%>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <form method="post" action="${pageContext.request.contextPath}/controller">
+                            <input type="hidden" name="action" value="logout">
+                            <button type="submit" class="logout btn btn-link link-light">Logout</button>
+                        </form>
+                    </li>
+                </ul>
             </div>
 
         </div>

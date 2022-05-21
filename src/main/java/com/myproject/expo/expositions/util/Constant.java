@@ -54,6 +54,7 @@ public final class Constant {
     public static final String NEW_EMAIL = "newEmail";
     public static final String PRICE = "price";
     public static final String COMMAND = "command";
+    public static final String KEY = "123";
 
     public static class ErrMsg {
         public static final String REGISTER = "err.register";

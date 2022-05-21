@@ -52,7 +52,6 @@ public class HallDaoImplTest {
         assertThat(hallDao.update(updateHall)).isTrue();
     }
 
-    @Test
     public void remove() {
         assertDoesNotThrow(() -> hallDao.remove(3));
     }

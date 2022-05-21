@@ -76,7 +76,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByEmailAndPass(String email, String pass) throws DaoException {
         connection = connectManager.getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(Query.UserSQL.GET_USER_BY_EMAIL_AND_PASS)) {
+        try (PreparedStatement ps = connection.prepareStatement(Query.UserSQL.GET_USER_BY_EMAIL)) {
             return extractFoundedUserFromResultSet(setStatementToFindUser(ps, email))
                     .filter(obj -> obj.getEmail() != null)
                     .orElseThrow(() -> new DaoException(Constant.ErrMsg.CANNOT_FIND_SUCH_USER));
@@ -111,7 +111,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User updateBalance(User user, BigDecimal price) throws DaoException {
         connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement("UPDATE users SET balance=? WHERE id_user=?")) {
+        try (PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_BALANCE)) {
             prepareStatementToTopUpUserBalance(user.getIdUser(), setNewUserBalance(user, price), statement);
             statement.executeUpdate();
             return user;
@@ -136,8 +136,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User buyExpo(User user, Exposition expo) throws DaoException {
         connection = connectManager.getConnection();
-        try (PreparedStatement updateUserBalance = connection.prepareStatement("UPDATE users,exposition SET balance=?,sold=?,tickets=? WHERE id_expo=? AND id_user=?");
-             PreparedStatement tieUserWithExpo = connection.prepareStatement("INSERT INTO exposition_users(expo_id, user_id) VALUES (?,?)")) {
+        try (PreparedStatement updateUserBalance = connection.prepareStatement(Query.UserSQL.WITHDRAW_MONEY_AND_UPDATE_EXPOS_SOLD_TICKETS);
+             PreparedStatement tieUserWithExpo = connection.prepareStatement(Query.UserSQL.INSERT_REFS_EXPO_USER)) {
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             buyingProcess(user, expo, updateUserBalance, tieUserWithExpo);
@@ -203,7 +203,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean changeEmail(String oldEmail, String newEmail) throws DaoException {
         connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement("UPDATE users SET email=? WHERE email=?")) {
+        try (PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_EMAIL)) {
             setStatementToUpdateTheEmail(oldEmail, newEmail, statement);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -222,7 +222,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean changePass(String email, String password) throws DaoException {
         connection = connectManager.getConnection();
-        try(PreparedStatement statement = connection.prepareStatement("UPDATE users SET password=? WHERE email=?")){
+        try(PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_PASS)){
             setStatementToUpdateThePass(email, password, statement);
             return executeUpdatingUserPass(statement);
         }catch (SQLException | DaoException e){

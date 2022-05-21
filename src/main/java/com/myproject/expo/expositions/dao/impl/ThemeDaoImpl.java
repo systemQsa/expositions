@@ -4,6 +4,7 @@ import com.myproject.expo.expositions.dao.ThemeDao;
 import com.myproject.expo.expositions.dao.connection.ConnectManager;
 import com.myproject.expo.expositions.dao.connection.ConnectionPool;
 import com.myproject.expo.expositions.dao.entity.Theme;
+import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -28,7 +29,7 @@ public class ThemeDaoImpl implements ThemeDao {
     @Override
     public List<Theme> getAllRecords(long page, long noOfRecords, String querySortBy) throws DaoException {
         connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM theme ORDER BY id_theme DESC LIMIT ?,?")) {
+        try (PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.GET_ALL_THEMES)) {
             return createThemeListFromStatement(statement, page, noOfRecords);
         } catch (SQLException e) {
             logger.warn("Impossible to get All Themes from db");
@@ -60,7 +61,7 @@ public class ThemeDaoImpl implements ThemeDao {
     @Override
     public Theme add(Theme theme) throws DaoException {
         connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO theme(name) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.ADD_NEW_THEME, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, theme.getName());
             return setGeneratedIdToTheTheme(theme, statement);
         } catch (SQLException e) {
@@ -84,7 +85,7 @@ public class ThemeDaoImpl implements ThemeDao {
     @Override
     public boolean update(Theme theme) throws DaoException {
         connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement("UPDATE theme SET name=? WHERE id_theme=?")) {
+        try (PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.UPDATE_THEME)) {
             setStatementToUpdateTheTheme(theme, statement);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -102,7 +103,7 @@ public class ThemeDaoImpl implements ThemeDao {
     @Override
     public boolean remove(long idTheme) throws Exception {
         connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM theme WHERE id_theme=?")) {
+        try (PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.DELETE_THEME)) {
             statement.setLong(1, idTheme);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {

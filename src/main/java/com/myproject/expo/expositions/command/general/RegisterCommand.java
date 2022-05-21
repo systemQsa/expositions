@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
@@ -26,13 +25,16 @@ public class RegisterCommand implements Command {
     private static final Logger logger = LogManager.getLogger(RegisterCommand.class);
     private final Validate validate = new ValidateInput();
     private final UserService userService;
+    private final PassEncrypt passEncrypt;
 
     public RegisterCommand() {
         userService = new UserServiceImpl();
+        passEncrypt = new PassEncrypt();
     }
 
-    public RegisterCommand(UserService userService) {
+    public RegisterCommand(UserService userService, PassEncrypt passEncrypt) {
         this.userService = userService;
+        this.passEncrypt = passEncrypt;
     }
 
     @Override
@@ -51,8 +53,8 @@ public class RegisterCommand implements Command {
 
     private User retrieveUserDataFromReqToRegister(HttpServletRequest req) throws ValidationException {
         User.UserBuilder user = User.builder();
-        String encrypt = PassEncrypt.encrypt(String.valueOf(req.getParameter(Constant.PASSWORD)).getBytes(StandardCharsets.UTF_8), "123");
-        return Optional.ofNullable(req)
+        String encrypt = passEncrypt.encrypt(String.valueOf(req.getParameter(Constant.PASSWORD)).getBytes(StandardCharsets.UTF_8), Constant.KEY);
+        return Optional.of(req)
                 .map(request -> user.setName(request.getParameter(Constant.NAME))
                         .setSurname(request.getParameter(Constant.SURNAME))
                         .setEmail(request.getParameter(Constant.EMAIL))

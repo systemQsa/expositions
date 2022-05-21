@@ -37,7 +37,7 @@ public class PassEncrypt {
      * @throws ValidationException in case encryption fail
      */
 
-    public static String encrypt(byte[] pText, String key) throws ValidationException {
+    public String encrypt(byte[] pText, String key) throws ValidationException {
         byte[] salt = getRandomNonce(SALT_LENGTH_BYTE);
         byte[] iv = getRandomNonce(IV_LENGTH_BYTE);
         try {
@@ -73,7 +73,7 @@ public class PassEncrypt {
      * @return in case if passwords are match returns true else returns false
      * @throws ValidationException in case decryption fail
      */
-    public static boolean decryptPass(String text, String key, char[] password) throws ValidationException {
+    public boolean decryptPass(String text, String key, char[] password) throws ValidationException {
         try {
             return decrypt(text, key).equals(String.valueOf(password));
         } catch (Exception e) {
@@ -93,7 +93,6 @@ public class PassEncrypt {
         SecretKey aesKeyFromPassword = getAESKeyFromPassword(password.toCharArray(), salt);
         Cipher cipher = Cipher.getInstance(ENCRYPT_ALGO);
         cipher.init(Cipher.DECRYPT_MODE, aesKeyFromPassword, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
-        //byte[] plainText = cipher.doFinal(cipherText);
         return new String(cipher.doFinal(cipherText), StandardCharsets.UTF_8);
     }
 }

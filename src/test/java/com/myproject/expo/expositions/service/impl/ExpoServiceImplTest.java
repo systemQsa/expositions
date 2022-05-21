@@ -4,9 +4,11 @@ import com.myproject.expo.expositions.dao.ExpositionDao;
 import com.myproject.expo.expositions.dao.entity.Exposition;
 import com.myproject.expo.expositions.dao.entity.Hall;
 import com.myproject.expo.expositions.dao.entity.Theme;
+import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.dao.impl.ExpositionDaoImpl;
 import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
+import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.service.ExpositionService;
 import com.myproject.expo.expositions.validation.Validate;
 import com.myproject.expo.expositions.validation.ValidateInput;
@@ -17,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
@@ -44,8 +47,8 @@ public class ExpoServiceImplTest {
             .setExpoDate(LocalDate.parse("2022-09-13"))
             .setExpoTime(LocalTime.parse("17:30:00"))
             .setExpoPrice(BigDecimal.valueOf(250.00))
-           // .setHall(Hall.builder().setIDHall(1).build())
-            .setTheme(Theme.builder().setIDTheme(2).build())
+            .setTheme(Theme.builder().setIDTheme(2)
+                    .setThemeName("Job").build())
             .setTickets(25)
             .build();
 
@@ -81,5 +84,33 @@ public class ExpoServiceImplTest {
     public void update() throws DaoException {
         when(expoDao.update(expoTest)).thenReturn(true);
         assertDoesNotThrow(() -> expoService.update(expoTest));
+    }
+
+    @Test
+    public void searchExpoByTheme() throws DaoException {
+        when(expoDao.searchExpo(Query.ExpoSQL.SEARCH_BY_THEME,"Job"))
+                .thenReturn(Collections.singletonList(expoTest));
+       assertDoesNotThrow(() -> expoService.searchExpo("searchByTheme","Job"));
+    }
+
+    @Test
+    public void searchExpoByDate() throws DaoException {
+        LocalDate date = LocalDate.of(2022,9,13);
+        when(expoDao.searchExpo(Query.ExpoSQL.SEARCH_BY_DATE,date))
+                .thenReturn(Collections.singletonList(expoTest));
+        assertDoesNotThrow(() -> expoService.searchExpo("searchByDate",date));
+    }
+
+    @Test
+    public void getCanceledExposForUser() throws DaoException {
+        User user = User.builder().setIdUser(2).build();
+        when(expoDao.getCanceledExposForUser(user,2,1,5)).thenReturn(expoList);
+        assertDoesNotThrow(() -> expoService.getCanceledExposForUser(user,2,1,5));
+    }
+
+    @Test
+    public void cancelExpo() throws DaoException {
+        when(expoDao.changeStatus(1,2)).thenReturn(true);
+        assertDoesNotThrow(() -> expoService.cancelExpo(1,2));
     }
 }

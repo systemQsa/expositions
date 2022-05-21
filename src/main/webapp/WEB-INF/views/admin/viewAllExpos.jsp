@@ -81,7 +81,7 @@
                     <form method="post" action="${pageContext.request.contextPath}/controller">
                         <input type="hidden" name="action" value="buyExpo">
                         <input type="hidden" name="expoId" value="${expo.idExpo}">
-                        <button type="submit">Buy</button>
+                        <button type="submit" class="btn btn-success btn-sm">Buy</button>
                     </form>
                 </td>
             </c:if>

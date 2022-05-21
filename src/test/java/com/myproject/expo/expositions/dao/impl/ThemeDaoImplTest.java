@@ -46,8 +46,7 @@ public class ThemeDaoImplTest {
     public void update() throws DaoException {
         assertThat(themeDao.update(themeJobbing)).isTrue();
     }
-
-    @Test
+    
     public void remove() {
         assertDoesNotThrow(() -> themeDao.remove(4));
     }

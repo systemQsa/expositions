@@ -1,6 +1,3 @@
-drop database if exists expositions;
-create database if not exists expositions;
-
 use expositions;
 
 

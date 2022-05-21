@@ -1,6 +1,7 @@
 package com.myproject.expo.expositions.dao.impl;
 
 import com.myproject.expo.expositions.dao.UserDao;
+import com.myproject.expo.expositions.dao.entity.Exposition;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.dao.impl.connection.DBManager;
 import com.myproject.expo.expositions.exception.DaoException;
@@ -30,7 +31,13 @@ public class UserDaoImplTest {
             .setSurname("Thompson")
             .setEmail("jess@gmail.com")
             .setPhone("+1234567888")
-            .setBalance(new BigDecimal("0.0"))
+            .setBalance(new BigDecimal("500.0"))
+            .build();
+    private static final Exposition expo = Exposition.builder()
+            .setExpositionID(2)
+            .setTickets(45)
+            .setExpoPrice(new BigDecimal("300.50"))
+            .setExpoSoldTickets(15)
             .build();
 
 
@@ -46,31 +53,35 @@ public class UserDaoImplTest {
     }
 
     @Test
+    public void getUserByEmailAndPass() throws DaoException {
+        User res = userDao.getUserByEmailAndPass("art@gmail.com", "1234");
+         Assertions.assertEquals("+56234567888", res.getPhone());
+    }
+
+    @Test
     public void add() {
         assertDoesNotThrow(() -> userDao.add(user));
     }
 
     @Test
-    public void getUserByEmailAndPass() throws DaoException {
-        User res = userDao.getUserByEmailAndPass("peter@gmail.com", "1234");
-
-        Assertions.assertEquals("+32403567667", res.getPhone());
-    }
-
-    @Test
     public void updateBalance() throws DaoException {
         User resUser = userDao.updateBalance(updateUser, new BigDecimal(100));
-        Assertions.assertEquals(BigDecimal.valueOf(100.0),resUser.getBalance());
+        Assertions.assertEquals(BigDecimal.valueOf(600.0), resUser.getBalance());
     }
 
     @Test
-    public void changeEmail(){
-      assertDoesNotThrow(() -> userDao.changeEmail("peter@gmail.com","peter1@gmail.com"));
+    public void changeEmail() {
+        assertDoesNotThrow(() -> userDao.changeEmail("peter@gmail.com", "peter1@gmail.com"));
     }
 
     @Test(expected = DaoException.class)
     public void changePass() throws DaoException {
-        userDao.changePass("peter123@gmail.com","2345");
+        userDao.changePass("peter123@gmail.com", "2345");
+    }
+
+    @Test
+    public void buyExpo() {
+       assertDoesNotThrow(() -> userDao.buyExpo(updateUser,expo));
     }
 
 }

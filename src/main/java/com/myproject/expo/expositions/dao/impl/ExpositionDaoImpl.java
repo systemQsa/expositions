@@ -94,7 +94,6 @@ public class ExpositionDaoImpl implements ExpositionDao {
     }
 
     private Exposition createExpoFromResultSet(ResultSet resSet) throws SQLException {
-        System.out.println("build list expos");
         return Exposition.builder()
                 .setExpositionID(resSet.getLong(1))
                 .setExpoName(resSet.getString("name"))
@@ -145,9 +144,9 @@ public class ExpositionDaoImpl implements ExpositionDao {
     @Override
     public boolean update(Exposition expo) throws DaoException {
         connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement("UPDATE exposition SET name=?,expo_date=?,expo_time=?,price=?,sold=?,id_theme_ref=?,tickets=? WHERE id_expo=?");
-             PreparedStatement deleteRefs = connection.prepareStatement("DELETE FROM expo_hall WHERE id_expo=?");
-             PreparedStatement insertNewRefs = connection.prepareStatement("INSERT INTO expo_hall(id_expo, id_hall) VALUES (?,?)")) {
+        try (PreparedStatement statement = connection.prepareStatement(Query.ExpoSQL.UPDATE_EXPO);
+             PreparedStatement deleteRefs = connection.prepareStatement(Query.ExpoSQL.DELETE_EXPO_FROM_EXPO_HALL_TABLE);
+             PreparedStatement insertNewRefs = connection.prepareStatement(Query.ExpoSQL.INSERT_REFS_TO_EXPO_HALL_TABLE)) {
             updatingTheExpoProcess(expo, statement, deleteRefs, insertNewRefs);
         } catch (SQLException e) {
             connectManager.rollBack(connection);
@@ -194,8 +193,8 @@ public class ExpositionDaoImpl implements ExpositionDao {
     @Override
     public Exposition add(Exposition expo) throws DaoException {
         connection = connectManager.getConnection();
-        try (PreparedStatement insertExpo = connection.prepareStatement("INSERT INTO exposition(name, expo_date, expo_time, price, sold, id_theme_ref, tickets) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-             PreparedStatement insertRefs = connection.prepareStatement("INSERT INTO expo_hall(id_expo, id_hall) VALUES (?,?)")) {
+        try (PreparedStatement insertExpo = connection.prepareStatement(Query.ExpoSQL.ADD_NEW_EXPO, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement insertRefs = connection.prepareStatement(Query.ExpoSQL.INSERT_REFS_TO_EXPO_HALL_TABLE)) {
             return addingNewExpoProcess(expo, insertExpo, insertRefs);
         } catch (SQLException e) {
             connectManager.rollBack(connection);
@@ -251,7 +250,7 @@ public class ExpositionDaoImpl implements ExpositionDao {
     @Override
     public boolean remove(long id) throws Exception {
         connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM exposition WHERE id_expo=?")) {
+        try (PreparedStatement statement = connection.prepareStatement(Query.ExpoSQL.DELETE_EXPO)) {
             statement.setLong(1, id);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -262,12 +261,12 @@ public class ExpositionDaoImpl implements ExpositionDao {
     @Override
     public boolean changeStatus(long expoId, int statusId) throws DaoException {
         connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement("UPDATE exposition SET status_id=? WHERE id_expo=?")) {
+        try (PreparedStatement statement = connection.prepareStatement(Query.ExpoSQL.UPDATE_EXPO_STATUS)) {
             statement.setInt(1, statusId);
             statement.setLong(2, expoId);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            logger.warn("Updating expo=" + expoId + " status has failed");
+            logger.warn("Updating expo = " + expoId + " status has failed");
             throw new DaoException("err.cancel_expo");
         } finally {
             connectManager.closeConnection(connection);

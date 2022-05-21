@@ -16,18 +16,20 @@ import org.junit.jupiter.api.Assertions;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class ExpositionDaoImplTest {
     private static final Exposition expo = Exposition.builder()
+            .setExpositionID(1)
             .setExpoName("Weather")
             .setExpoDate(LocalDate.parse("2022-05-13"))
             .setExpoTime(LocalTime.parse("18:44:23"))
             .setExpoPrice(BigDecimal.valueOf(135.00))
             .setExpoSoldTickets(5)
-            //.setHall(Hall.builder().setIDHall(1).build())
+            .setHallList(Collections.singletonList(Hall.builder().setIDHall(1).build()))
             .setTheme(Theme.builder().setIDTheme(2).build())
             .setTickets(25)
             .build();
@@ -37,13 +39,12 @@ public class ExpositionDaoImplTest {
             .setExpoDate(LocalDate.parse("2022-09-13"))
             .setExpoTime(LocalTime.parse("17:30:00"))
             .setExpoPrice(BigDecimal.valueOf(250.00))
-           // .setHall(Hall.builder().setIDHall(1).build())
-            .setTheme(Theme.builder().setIDTheme(2).build())
+            .setHallList(Collections.singletonList(Hall.builder().setIDHall(1).build()))
+            .setTheme(Theme.builder().setIDTheme(3).build())
             .setTickets(25)
             .build();
 
     private ExpositionDao expoDao;
-    private String q = "SELECT id_expo,e.name,expo_date,expo_time,price,sold,id_hall_ref,h.name,id_theme_ref,t.name,tickets FROM exposition as e JOIN hall as h ON id_hall_ref=h.id_hall JOIN theme as t ON id_theme_ref=t.id_theme ORDER BY id_expo DESC LIMIT ?,?";
 
     @BeforeClass
     public static void init() {
@@ -74,7 +75,20 @@ public class ExpositionDaoImplTest {
     }
 
     @Test
-    public void remove() throws Exception {
-       assertTrue(expoDao.remove(3));
+    public void changeStatus() throws DaoException {
+        assertTrue(expoDao.changeStatus(expo.getIdExpo(), 2));
     }
+
+    @Test
+    public void searchExpoByTheme() throws DaoException {
+        List<Exposition> list = expoDao.searchExpo(Query.ExpoSQL.SEARCH_BY_THEME, "Job");
+        assertEquals(1, list.size());
+    }
+
+    @Test
+    public void searchExpoByDate() throws DaoException {
+        List<Exposition> list = expoDao.searchExpo(Query.ExpoSQL.SEARCH_BY_DATE, LocalDate.of(2022, 5, 13));
+        assertEquals(3, list.size());
+    }
+
 }

@@ -21,18 +21,20 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
     private final UserDao userDao;
+    private final PassEncrypt passEncrypt;
 
     public UserServiceImpl() {
         this.userDao = new AbstractFactoryImpl().getDaoFactory().getUserDao();
+        passEncrypt = new PassEncrypt();
     }
 
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao,PassEncrypt passEncrypt) {
         this.userDao = userDao;
+        this.passEncrypt = passEncrypt;
     }
 
     @Override
     public User getUserByEmailAndPass(String email, char[] pass) throws ServiceException {
-        //todo encrypt password
         try {
             return getFoundedUser(email, pass);
         } catch (DaoException | ValidationException e) {
@@ -42,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     private User getFoundedUser(String email, char[] pass) throws DaoException, ValidationException {
         User user = userDao.getUserByEmailAndPass(email, String.valueOf(pass));
-        boolean decrypted = PassEncrypt.decryptPass(String.valueOf(user.getPassword()),"123", pass);
+        boolean decrypted = passEncrypt.decryptPass(String.valueOf(user.getPassword()),Constant.KEY, pass);
         if (!decrypted){
             throw new ValidationException("err.incorrect_password");
         }
