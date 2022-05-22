@@ -10,6 +10,8 @@ public final class Query {
         public static final String WITHDRAW_MONEY_AND_UPDATE_EXPOS_SOLD_TICKETS = "UPDATE users,exposition SET balance=?,sold=?,tickets=? WHERE id_expo=? AND id_user=?";
         public static final String UPDATE_USER_EMAIL = "UPDATE users SET email=? WHERE email=?";
         public static final String UPDATE_USER_PASS = "UPDATE users SET password=? WHERE email=?";
+        public static final String GET_ALL_USERS = "SELECT * FROM users";
+        public static final String UPDATE_USER_STATUS = "UPDATE users SET status_id=? WHERE id_user=?";
     }
 
     public final static class ExpoSQL {

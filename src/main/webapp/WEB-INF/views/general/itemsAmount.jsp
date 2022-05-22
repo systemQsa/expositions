@@ -6,7 +6,7 @@
 <div class="dropdown col-4">
     <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton2"
             data-bs-toggle="dropdown" aria-expanded="false">
-        amount
+        ${sessionScope.language['amount']}
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
         <li><a class="dropdown-item"

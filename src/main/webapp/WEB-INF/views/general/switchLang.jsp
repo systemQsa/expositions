@@ -10,8 +10,8 @@
     </a>
     <%--                        Switch Language--%>
     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-        <li><a class="dropdown-item" href="?lang=en&country=US">Eng</a></li>
-        <li><a class="dropdown-item" href="?lang=uk&country=UA">Ukr</a></li>
+        <li><a class="dropdown-item" href="?lang=en&country=US">${sessionScope.language['Eng']}</a></li>
+        <li><a class="dropdown-item" href="?lang=uk&country=UA">${sessionScope.language['Ukr']}</a></li>
     </ul>
 </li>
 </body>

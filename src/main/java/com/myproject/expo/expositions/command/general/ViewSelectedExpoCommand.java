@@ -44,8 +44,8 @@ public class ViewSelectedExpoCommand implements Command {
         List<Exposition> list = (List<Exposition>) req.getSession().getAttribute(Constant.EXPOS_LIST);
         setSelectedExpoToSession(req, list);
         try {
-            hallService.setListOfFoundedRecordsToTheSession(req.getSession(), hallService.getAllRecords(1, 25, "id"), 1, 25);
-            themeService.setListOfFoundedRecordsToTheSession(req.getSession(),themeService.getAllRecords(1,25,"id"),1,25);
+            hallService.setListOfFoundedRecordsToTheSession(req.getSession(), hallService.getAllRecords(1, 2, Constant.ID), 1, 2);
+            themeService.setListOfFoundedRecordsToTheSession(req.getSession(),themeService.getAllRecords(1,2,Constant.ID),1,2);
         } catch (ServiceException e) {
             setInformMessageToUser(20, req, e.getMessage());
             throw new CommandException(Constant.URL.FULL_ADMIN_PAGE);

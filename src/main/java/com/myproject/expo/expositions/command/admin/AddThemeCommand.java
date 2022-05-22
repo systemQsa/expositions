@@ -33,7 +33,6 @@ public class AddThemeCommand implements Command {
         User user = (User) req.getSession().getAttribute(Constant.USER_DATA);
         req.getSession().setAttribute(Constant.THEME_LIST,null);
         try {
-            //todo turn on the method!
             Theme theme = Theme.builder().setThemeName(req.getParameter(Constant.THEME_NAME)).build();
             themeService.add(theme);
             return Route.setFullRoutePath(Constant.REDIRECT + DefinePathForUser.definePath(user.getUserRole().getRole()),

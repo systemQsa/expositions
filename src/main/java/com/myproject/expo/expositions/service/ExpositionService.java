@@ -8,9 +8,9 @@ import com.myproject.expo.expositions.exception.ServiceException;
 import java.util.List;
 
 public interface ExpositionService<T> extends Service<T>, Searchable {
-    List<Exposition> getCanceledExposForUser(User user, int statusId, long page, long noOfRecords) throws ServiceException;
+    List<Exposition> getUserExpos(User user, int statusId, long page, long noOfRecords) throws ServiceException;
 
-    boolean cancelExpo(long expoId, int statusId) throws ServiceException;
+    boolean changeStatus(long expoId, int statusId) throws ServiceException;
 
     default String defineSortQueryForExpo(String str) {
         switch (str) {

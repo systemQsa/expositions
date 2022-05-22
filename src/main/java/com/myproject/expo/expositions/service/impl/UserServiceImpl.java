@@ -1,8 +1,11 @@
 package com.myproject.expo.expositions.service.impl;
 
+import com.myproject.expo.expositions.command.UtilMethods;
 import com.myproject.expo.expositions.dao.UserDao;
 import com.myproject.expo.expositions.dao.entity.Exposition;
+import com.myproject.expo.expositions.dao.entity.Status;
 import com.myproject.expo.expositions.dao.entity.User;
+import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.exception.ValidationException;
@@ -16,9 +19,10 @@ import org.apache.log4j.Logger;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UtilMethods {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
     private final UserDao userDao;
     private final PassEncrypt passEncrypt;
@@ -28,7 +32,7 @@ public class UserServiceImpl implements UserService {
         passEncrypt = new PassEncrypt();
     }
 
-    public UserServiceImpl(UserDao userDao,PassEncrypt passEncrypt) {
+    public UserServiceImpl(UserDao userDao, PassEncrypt passEncrypt) {
         this.userDao = userDao;
         this.passEncrypt = passEncrypt;
     }
@@ -44,9 +48,9 @@ public class UserServiceImpl implements UserService {
 
     private User getFoundedUser(String email, char[] pass) throws DaoException, ValidationException {
         User user = userDao.getUserByEmailAndPass(email, String.valueOf(pass));
-        boolean decrypted = passEncrypt.decryptPass(String.valueOf(user.getPassword()),Constant.KEY, pass);
-        if (!decrypted){
-            throw new ValidationException("err.incorrect_password");
+        boolean decrypted = passEncrypt.decryptPass(String.valueOf(user.getPassword()), Constant.KEY, pass);
+        if (!decrypted) {
+            throw new ValidationException(Constant.ErrMsg.INCORRECT_PASSWORD);
         }
         return user;
     }
@@ -74,13 +78,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public User buyExpo(User user, Exposition expo) throws ServiceException {
         try {
-            if(expo.getStatusId() == 2){
-                throw new DaoException("err.expo_canceled");
-            }
+            checkExpoAlreadyCanceled(expo);
             return userDao.buyExpo(user, expo);
         } catch (DaoException e) {
             logger.warn("User cannot buy the expo " + expo.getIdExpo());
             throw new ServiceException(e.getMessage());
+        }
+    }
+
+    private void checkExpoAlreadyCanceled(Exposition expo) throws DaoException {
+        if (expo.getStatusId() == 2) {
+            throw new DaoException(Constant.ErrMsg.CANCELED_EXPO);
         }
     }
 
@@ -104,4 +112,26 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e.getMessage());
         }
     }
+
+    @Override
+    public List<User> getAllUsers(long page, long noOfRecords) throws ServiceException {
+        try {
+            return Optional.ofNullable(userDao.getAllRecords(page, noOfRecords, Query.UserSQL.GET_ALL_USERS))
+                    .filter(list -> list.size() > 0)
+                    .orElseThrow(() -> new DaoException(Constant.ErrMsg.GET_ALL_USERS));
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public boolean blockUnblockUser(String command, long userId) throws ServiceException {
+        int statusId = getStatusId(command);
+        try {
+            return userDao.blockUnblockUser(statusId,userId);
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
 }

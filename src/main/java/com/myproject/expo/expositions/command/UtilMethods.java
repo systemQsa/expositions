@@ -1,23 +1,16 @@
 package com.myproject.expo.expositions.command;
 
-import com.myproject.expo.expositions.dao.entity.Exposition;
-import com.myproject.expo.expositions.dao.entity.Hall;
-import com.myproject.expo.expositions.dao.entity.Theme;
+import com.myproject.expo.expositions.dao.entity.Status;
 import com.myproject.expo.expositions.dao.entity.User;
-import com.myproject.expo.expositions.exception.ValidationException;
-import com.myproject.expo.expositions.util.Constant;
-import com.myproject.expo.expositions.validation.Validate;
-import com.myproject.expo.expositions.validation.ValidateInput;
 
+import com.myproject.expo.expositions.util.Constant;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
+import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
 public interface UtilMethods {
@@ -62,5 +55,13 @@ public interface UtilMethods {
 
     default BigDecimal parseToBigDecimal(String price) {
         return new BigDecimal(price);
+    }
+
+    default int getStatusId(String status) {
+        return Arrays.stream(Status.values())
+                .filter(item -> item.getName().equals(status))
+                .mapToInt(Status::getStatusId)
+                .findFirst()
+                .getAsInt();
     }
 }

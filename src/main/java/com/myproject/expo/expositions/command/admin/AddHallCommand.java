@@ -35,8 +35,7 @@ public class AddHallCommand implements Command {
         User user = (User) session.getAttribute(Constant.USER_DATA);
         session.setAttribute(Constant.THEME_LIST,null);
         try {
-            //todo turn on the method
-            Hall hall = Hall.builder().setHallName(req.getParameter("hallName")).build();
+            Hall hall = Hall.builder().setHallName(req.getParameter(Constant.Param.HALL_NAME)).build();
             hallService.add(hall);
             return Route.setFullRoutePath(Constant.REDIRECT + DefinePathForUser.definePath(user.getUserRole().getRole()),
                     Route.RouteType.REDIRECT);

@@ -6,6 +6,7 @@ import com.myproject.expo.expositions.dao.connection.ConnectionPool;
 import com.myproject.expo.expositions.dao.entity.Hall;
 import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
+import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -34,8 +35,8 @@ public class HallDaoImpl implements HallDao {
             statement.setString(1, hall.getName());
             return setGeneratedIdToTheHall(hall, statement);
         } catch (SQLException e) {
-            logger.warn("Cant add " + hall.getName() + " to the  DB");
-            throw new DaoException("err.add_hall");
+            logger.warn(Constant.LogMsg.ADD_HALL);
+            throw new DaoException(Constant.ErrMsg.ADD_HALL);
         } finally {
             connectManager.closeConnection(connection);
         }
@@ -48,7 +49,6 @@ public class HallDaoImpl implements HallDao {
                 hall.setIdHall(set.getLong(1));
             }
         }
-
         return hall;
     }
 
@@ -58,12 +58,11 @@ public class HallDaoImpl implements HallDao {
         try (PreparedStatement statement = connection.prepareStatement(Query.HallSQL.GET_ALL_HALLS)) {
             return createHallListFromStatement(page, noOfRecords, statement);
         } catch (SQLException e) {
-            logger.warn("Impossible to get All halls from DB");
-            throw new DaoException("err.cant_get_all_halls");
+            logger.warn(Constant.LogMsg.GET_ALL_HALLS);
+            throw new DaoException(Constant.ErrMsg.GET_ALL_HALLS);
         } finally {
             connectManager.closeConnection(connection);
         }
-
     }
 
     private List<Hall> createHallListFromStatement(long page, long noOfRecords, PreparedStatement statement) throws SQLException {
@@ -73,13 +72,16 @@ public class HallDaoImpl implements HallDao {
         statement.setLong(2, noOfRecords);
         resSet = statement.executeQuery();
         while (resSet.next()) {
-            Hall hall = Hall.builder()
-                    .setIDHall(resSet.getInt(1))
-                    .setHallName(resSet.getString(2))
-                    .build();
-            hallList.add(hall);
+            hallList.add(buildHall(resSet));
         }
         return hallList;
+    }
+
+    private Hall buildHall(ResultSet resSet) throws SQLException {
+        return Hall.builder()
+                .setIDHall(resSet.getInt(1))
+                .setHallName(resSet.getString(2))
+                .build();
     }
 
     @Override
@@ -89,8 +91,8 @@ public class HallDaoImpl implements HallDao {
             setStatementToUpdateTheHall(hall, statement);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            logger.warn("Cannot Update given Hall " + hall.getIdHall() + " in HallDaoImpl class");
-            throw new DaoException("err.cant_update_hall");
+            logger.warn(Constant.LogMsg.UPDATE_HALL + hall.getIdHall());
+            throw new DaoException(Constant.ErrMsg.UPDATE_HALL);
         } finally {
             connectManager.closeConnection(connection);
         }
@@ -108,8 +110,8 @@ public class HallDaoImpl implements HallDao {
             statement.setLong(1, idHall);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            logger.warn("Cannot delete " + idHall + " Hall");
-            throw new DaoException("err.cant_delete_hall");
+            logger.warn(Constant.LogMsg.DELETE_HALL + idHall);
+            throw new DaoException(Constant.ErrMsg.DELETE_HALL);
         } finally {
             connectManager.closeConnection(connection);
         }

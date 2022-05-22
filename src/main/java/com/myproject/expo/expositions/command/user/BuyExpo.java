@@ -42,7 +42,9 @@ public class BuyExpo implements Command {
             return Route.setFullRoutePath(Constant.URL.USER_REDIRECT, Route.RouteType.REDIRECT);
         } catch (ServiceException e) {
             setInformMessageToUser(17,req,e.getMessage());
-            throw new CommandException(Constant.URL.FULL_USER_PAGE);
+            //todo translate inform msg in session
+            req.getSession().setAttribute("infMsg","You cant buy canceled exposition");
+            throw new CommandException(Constant.URL.USER_REDIRECT);
         }
     }
 

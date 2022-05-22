@@ -35,9 +35,10 @@ public class Controller extends HttpServlet {
     private void processTheRequest(HttpServletRequest req,
                                    HttpServletResponse resp) throws ServletException, IOException {
         try {
-            sendResponseToTheClientForwardOrRedirect(req, resp, StorageCommand.getCommand(req.getParameter(Constant.ACTION)).execute(req, resp));
+            sendResponseToTheClientForwardOrRedirect(req, resp, StorageCommand
+                    .getCommand(req.getParameter(Constant.ACTION)).execute(req, resp));
         } catch (CommandException e) {
-            req.getRequestDispatcher(e.getMessage()).forward(req, resp);
+            doInCaseException(req, resp, e);
             logger.warn(Constant.LogMsg.CONTROLLER_FAILED);
         }
     }
@@ -50,6 +51,14 @@ public class Controller extends HttpServlet {
             resp.sendRedirect(route.getPathOfThePage().replaceAll(Constant.REDIRECT, Constant.URL.ROOT));
         } else {
             resp.sendRedirect(route.getPathOfThePage());
+        }
+    }
+
+    private void doInCaseException(HttpServletRequest req, HttpServletResponse resp, CommandException e) throws IOException, ServletException {
+        if (e.getMessage().contains(Constant.REDIRECT)) {
+            resp.sendRedirect(e.getMessage().replaceAll(Constant.REDIRECT, Constant.URL.ROOT));
+        } else {
+            req.getRequestDispatcher(e.getMessage()).forward(req, resp);
         }
     }
 

@@ -44,6 +44,7 @@ public class SearchExpo implements Command {
         String searchBy = req.getParameter(Constant.INLINE_RADIO_BTN);
         String searchedItem = req.getParameter(Constant.SEARCHED_ITEM);
         User user = (User) req.getSession().getAttribute(Constant.USER_DATA);
+        cleanSession(req);
         try {
             checkInputNotEmpty(searchBy, searchedItem);
             putResToSessionIfPresent(req, getSearchedExposByTheme(searchBy, searchedItem));
@@ -58,7 +59,7 @@ public class SearchExpo implements Command {
 
     private void checkInputNotEmpty(String searchBy, String searchedItem) throws ServiceException {
         if (searchBy == null || searchedItem == null) {
-            throw new ServiceException("err.incorrect_search");
+            throw new ServiceException(Constant.ErrMsg.INCORRECT_SEARCH);
         }
     }
 

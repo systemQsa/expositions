@@ -33,13 +33,13 @@
                     <!-- Email input -->
                     <div class="form-outline mb-4">
                         <input type="text" id="loginName" name="email" class="form-control" />
-                        <label class="form-label" for="loginName">Email or username</label>
+                        <label class="form-label" for="loginName">${sessionScope.language['your_email']}</label>
                     </div>
 
                     <!-- Password input -->
                     <div class="form-outline mb-4">
                         <input type="password" id="loginPassword" name="password" class="form-control" />
-                        <label class="form-label" for="loginPassword">Password</label>
+                        <label class="form-label" for="loginPassword">${sessionScope.language['Password']}</label>
                     </div>
 
                     <!-- 2 column grid layout -->
@@ -47,20 +47,20 @@
 
                         <div class="col-md-6 d-flex justify-content-center">
                             <!-- Simple link -->
-                            <a href="${pageContext.request.contextPath}/changeEmail.jsp">Change email</a>
+                            <a href="${pageContext.request.contextPath}/changeEmail.jsp">${sessionScope.language['change_email']}</a>
                         </div>
                         <div class="col-md-6 d-flex justify-content-center">
                             <!-- Simple link -->
-                            <a href="${pageContext.request.contextPath}/changePass.jsp">Forgot password?</a>
+                            <a href="${pageContext.request.contextPath}/changePass.jsp">${sessionScope.language['forgot_pass']}?</a>
                         </div>
                     </div>
 
                     <!-- Submit button -->
-                    <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+                    <button type="submit" class="btn btn-primary btn-block mb-4">${sessionScope.language['sign_in']}</button>
 
                     <!-- Register buttons -->
                     <div class="text-center">
-                        <p>Not a member? <a href="${pageContext.request.contextPath}/register.jsp">Register</a></p>
+                        <p>${sessionScope.language['not_a_member']}? <a href="${pageContext.request.contextPath}/register.jsp">${sessionScope.language['Register']}</a></p>
                     </div>
                 </form>
             </div>
@@ -70,29 +70,29 @@
                     <!-- Name input -->
                     <div class="form-outline mb-4">
                         <input type="text" id="registerName" class="form-control" />
-                        <label class="form-label" for="registerName">Name</label>
+                        <label class="form-label" for="registerName">${sessionScope.language['your_name']}</label>
                     </div>
 
                     <!-- Username input -->
                     <div class="form-outline mb-4">
                         <input type="text" id="registerUsername" class="form-control" />
-                        <label class="form-label" for="registerUsername">Username</label>
+                        <label class="form-label" for="registerUsername">${sessionScope.language['your_surname']}</label>
                     </div>
 
                     <!-- Email input -->
                     <div class="form-outline mb-4">
                         <input type="email" id="registerEmail" class="form-control" />
-                        <label class="form-label" for="registerEmail">Email</label>
+                        <label class="form-label" for="registerEmail">${sessionScope.language['your_email']}</label>
                     </div>
 
                     <!-- Password input -->
                     <div class="form-outline mb-4">
                         <input type="password" id="registerPassword" class="form-control" />
-                        <label class="form-label" for="registerPassword">Password</label>
+                        <label class="form-label" for="registerPassword">${sessionScope.language['Password']}</label>
                     </div>
 
                     <!-- Submit button -->
-                    <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
+                    <button type="submit" class="btn btn-primary btn-block mb-3">${sessionScope.language['sign_in']}</button>
                 </form>
             </div>
         </div>

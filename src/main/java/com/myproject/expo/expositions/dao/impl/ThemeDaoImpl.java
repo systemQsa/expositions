@@ -6,6 +6,7 @@ import com.myproject.expo.expositions.dao.connection.ConnectionPool;
 import com.myproject.expo.expositions.dao.entity.Theme;
 import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
+import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -32,8 +33,8 @@ public class ThemeDaoImpl implements ThemeDao {
         try (PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.GET_ALL_THEMES)) {
             return createThemeListFromStatement(statement, page, noOfRecords);
         } catch (SQLException e) {
-            logger.warn("Impossible to get All Themes from db");
-            throw new DaoException("err.all_themes");
+            logger.warn(Constant.LogMsg.GET_ALL_THEMES);
+            throw new DaoException(Constant.ErrMsg.GET_ALL_THEMES);
         } finally {
             connectManager.closeConnection(connection);
         }
@@ -65,8 +66,8 @@ public class ThemeDaoImpl implements ThemeDao {
             statement.setString(1, theme.getName());
             return setGeneratedIdToTheTheme(theme, statement);
         } catch (SQLException e) {
-            logger.warn("Cannot add new theme to the db");
-            throw new DaoException("err.add_new_theme");
+            logger.warn(Constant.LogMsg.ADD_NEW_THEME);
+            throw new DaoException(Constant.ErrMsg.ADD_NEW_THEME);
         } finally {
             connectManager.closeConnection(connection);
         }
@@ -89,7 +90,7 @@ public class ThemeDaoImpl implements ThemeDao {
             setStatementToUpdateTheTheme(theme, statement);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new DaoException("err.cannot_update_theme");
+            throw new DaoException(Constant.ErrMsg.UPDATE_THEME);
         } finally {
             connectManager.closeConnection(connection);
         }
@@ -107,7 +108,7 @@ public class ThemeDaoImpl implements ThemeDao {
             statement.setLong(1, idTheme);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new DaoException("err.delete_theme");
+            throw new DaoException(Constant.ErrMsg.DELETE_THEME);
         } finally {
             connectManager.closeConnection(connection);
         }

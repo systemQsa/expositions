@@ -1,10 +1,10 @@
 drop table if exists exposition_users;
 drop table if exists expo_hall;
 drop table if exists exposition;
-drop table if exists status;
 drop table if exists hall;
 drop table if exists theme;
 drop table if exists users;
+drop table if exists status;
 drop table if exists roles;
 
 
@@ -18,6 +18,14 @@ INSERT INTO roles (role) VALUES ('admin');
 INSERT INTO roles(role) VALUES ('user');
 INSERT INTO roles(role) VALUES ('guest');
 
+create table status(
+ status_id INT PRIMARY KEY AUTO_INCREMENT,
+ status_name VARCHAR(40)
+);
+insert into status(status_name) values ('active');
+insert into status(status_name) values ('canceled');
+insert into status(status_name) values ('blocked');
+
 create table users
 (
     id_user  BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -28,7 +36,9 @@ create table users
     phone    VARCHAR(30)         NOT NULL,
     balance  DECIMAL(10, 2) DEFAULT 0.0,
     role_id  INT            DEFAULT 2,
-    FOREIGN KEY (role_id) REFERENCES roles (id_role)
+    status_id INT DEFAULT 1,
+    FOREIGN KEY (role_id) REFERENCES roles (id_role),
+    FOREIGN KEY (status_id) REFERENCES status(status_id)
 
 );
 insert into users(name, surname, email, password, phone,balance,role_id) VALUES ('Peter','Parker','peter@gmail.com','1234','+32403567667',500.0,2);
@@ -54,13 +64,6 @@ create table hall
 insert into hall(name) values ('A1');
 insert into hall(name) values ('B2');
 insert into hall(name) values ('C3');
-
-create table status(
- status_id INT PRIMARY KEY AUTO_INCREMENT,
- status_name VARCHAR(40)
-);
-insert into status(status_name) values ('active');
-insert into status(status_name) values ('canceled');
 
 
 create table exposition
@@ -102,8 +105,8 @@ insert into expo_hall(id_expo, id_hall) VALUES (3,3);
 
 create table exposition_users
 (
-    expo_id             BIGINT,
-    user_id             BIGINT,
+    expo_id  BIGINT,
+    user_id  BIGINT,
     FOREIGN KEY (expo_id) REFERENCES exposition (id_expo),
     FOREIGN KEY (user_id) REFERENCES users (id_user) ON DELETE CASCADE
 );

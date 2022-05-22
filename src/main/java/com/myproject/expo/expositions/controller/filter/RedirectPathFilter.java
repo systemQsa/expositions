@@ -32,7 +32,10 @@ public class RedirectPathFilter implements Filter {
     private void switchPathIfRequired(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         if (PathPage.getRequiredPagePath(req) != null) {
-            req.getRequestDispatcher(PathPage.getRequiredPagePath(req)).forward(req, resp);
+            String path = PathPage.getRequiredPagePath(req);
+            logger.info("Path : " + path);
+            req.getRequestDispatcher(path).forward(req, resp);
+            return;
         }
     }
 

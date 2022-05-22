@@ -15,7 +15,7 @@
             <form method="get" action="${pageContext.request.contextPath}/controller">
                 <input type="hidden" name="action" value="prepareToAddExpo">
                 <input type="hidden" name="noOfRecords" value="10">
-                <button type="submit" class="btn btn-success btn-sm">add new</button>
+                <button type="submit" class="btn btn-success btn-sm">${sessionScope.language['add_new']}</button>
             </form>
         </div>
     </c:if>
@@ -23,15 +23,15 @@
 <table class="table table-info table-hover">
     <thead>
     <tr>
-        <th scope="col">Expos</th>
-        <th scope="col">ExpoDate</th>
-        <th scope="col">ExpoTime</th>
-        <th scope="col">Price</th>
-        <th scope="col">Sold</th>
-        <th scope="col">Hall</th>
-        <th scope="col">Theme</th>
-        <th scope="col">Tickets</th>
-        <th scope="col">Status</th>
+        <th scope="col">${sessionScope.language['Expos']}</th>
+        <th scope="col">${sessionScope.language['Expo_date']}</th>
+        <th scope="col">${sessionScope.language['Expo_time']}</th>
+        <th scope="col">${sessionScope.language['Price']}</th>
+        <th scope="col">${sessionScope.language['Sold']}</th>
+        <th scope="col">${sessionScope.language['Halls']}</th>
+        <th scope="col">${sessionScope.language['Theme']}</th>
+        <th scope="col">${sessionScope.language['Tickets']}</th>
+        <th scope="col">${sessionScope.language['Status']}</th>
     </tr>
     </thead>
     <tbody>
@@ -54,7 +54,6 @@
                 </c:forEach>
             </td>
             <td>${expo.theme.name}</td>
-                <%--            <td>${expo.tickets}</td>--%>
             <td>
                 <c:choose>
                     <c:when test="${expo.tickets == 0}">
@@ -68,10 +67,10 @@
             <td>
                 <c:choose>
                     <c:when test="${expo.statusId == 2}">
-                        canceled
+                        ${sessionScope.language['canceled']}
                     </c:when>
                     <c:when test="${expo.statusId == 1}">
-                        active
+                        ${sessionScope.language['active']}
                     </c:when>
                 </c:choose>
             </td>
@@ -81,7 +80,7 @@
                     <form method="post" action="${pageContext.request.contextPath}/controller">
                         <input type="hidden" name="action" value="buyExpo">
                         <input type="hidden" name="expoId" value="${expo.idExpo}">
-                        <button type="submit" class="btn btn-success btn-sm">Buy</button>
+                        <button type="submit" class="btn btn-success btn-sm">${sessionScope.language['buy']}</button>
                     </form>
                 </td>
             </c:if>
@@ -96,16 +95,16 @@
         <li class="page-item">
             <c:if test="${sessionScope.currentPage !=1}">
                 <a class="page-link"
-                   href="?action=viewAllExpos&command=paginate&sortBy=${sessionScope.sortBy}&page=${sessionScope.currentPage - 1}&noOfRecords=${sessionScope.noOfRecords}">prev</a>
+                   href="?action=viewAllExpos&command=paginate&sortBy=${sessionScope.sortBy}&page=${sessionScope.currentPage - 1}&noOfRecords=${sessionScope.noOfRecords}"> ${sessionScope.language['prev']}</a>
             </c:if>
         </li>
         <li class="page-item">
             <a class="page-link"
-               href="#">page ${sessionScope.currentPage}</a>
+               href="#"> ${sessionScope.language['page']} ${sessionScope.currentPage}</a>
         </li>
         <li class="page-item">
             <a class="page-link"
-               href="?action=viewAllExpos&command=paginate&sortBy=${sessionScope.sortBy}&page=${sessionScope.currentPage + 1}&noOfRecords=${sessionScope.noOfRecords}">next</a>
+               href="?action=viewAllExpos&command=paginate&sortBy=${sessionScope.sortBy}&page=${sessionScope.currentPage + 1}&noOfRecords=${sessionScope.noOfRecords}"> ${sessionScope.language['next']}</a>
         </li>
     </ul>
 </nav>

@@ -22,15 +22,17 @@ import javax.servlet.http.HttpSession;
 
 public class LoginCommand implements Command {
     private static final Logger logger = LogManager.getLogger(LoginCommand.class);
-    private final Validate validate = new ValidateInput();
+    private final Validate validate;
     private final UserService userService;
 
     public LoginCommand() {
         userService = new UserServiceImpl();
+        validate = new ValidateInput();
     }
 
-    public LoginCommand(UserService userService) {
+    public LoginCommand(UserService userService, Validate validate) {
         this.userService = userService;
+        this.validate = validate;
     }
 
     @Override
@@ -56,6 +58,7 @@ public class LoginCommand implements Command {
         isInputCorrect(req);
         CommandUtil.userIsAlreadyLogged(req);
         User user = getUserFromService(req);
+        validate.isUserBlocked(user.getStatus());
         CommandUtil.setRoleForUser(user.getEmail(), user.getUserRole().getRole(), req);
         CommandUtil.getLoggedUsers().put(user.getEmail(), user.getUserRole().getRole());
         return user;

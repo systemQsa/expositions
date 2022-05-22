@@ -52,25 +52,31 @@
                         <li class="list-group item">Status:
                             <c:choose>
                                 <c:when test="${requestScope.oneExpoData.statusId == 2}">
-                                    canceled
+                                    ${sessionScope.language['canceled']}
                                 </c:when>
                                 <c:when test="${requestScope.oneExpoData.statusId == 1}">
-                                    active
+                                    ${sessionScope.language['active']}
                                 </c:when>
                             </c:choose>
                         </li>
                         <li>
                             <form method="post" action="${pageContext.request.contextPath}/controller">
-                                <input type="hidden" name="action" value="cancelExpo">
+                                <input type="hidden" name="action" value="changeExpoStatus">
                                 <input type="hidden" name="expoId" value="${requestScope.oneExpoData.idExpo}">
-                                <input type="hidden" name="statusId" value="2">
-                                <button class="btn btn-warning btn-sm" type="submit">Cancel</button>
+                                <input type="hidden" name="status" value="canceled">
+                                <button class="btn btn-warning btn-sm" type="submit"> ${sessionScope.language['cancel']}</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form method="post" action="${pageContext.request.contextPath}/controller">
+                                <input type="hidden" name="action" value="changeExpoStatus">
+                                <input type="hidden" name="expoId" value="${requestScope.oneExpoData.idExpo}">
+                                <input type="hidden" name="status" value="active">
+                                <button class="btn btn-info btn-sm" type="submit">activate</button>
                             </form>
                         </li>
                     </ul>
                     <div class="card-body">
-
-
 
                         <div class="accordion accordion-flush" role="link" id="updateTheExpo">
                             <button class="btn btn-success btn-sm" role="link" data-bs-toggle="collapse"
@@ -91,31 +97,31 @@
                                             <div class="form-outline mb-4">
 
                                                 <input type="text" id="expoName" class="form-control" name="expoName" value="${requestScope.oneExpoData.name}" />
-                                                <label class="form-label" for="expoName">Name</label>
+                                                <label class="form-label" for="expoName">${sessionScope.language['name']}</label>
                                             </div>
 
                                             <!-- Expo Date -->
                                             <div class="form-outline mb-4">
                                                 <input type="text" id="expoDate" class="form-control" name="expoDate" value="${requestScope.oneExpoData.date.format(dateFormat)}"/>
-                                                <label class="form-label" for="expoDate">Date</label>
+                                                <label class="form-label" for="expoDate">${sessionScope.language['Expo_date']}</label>
                                             </div>
 
                                             <!-- Expo Time -->
                                             <div class="form-outline mb-4">
                                                 <input type="text" id="expoTime" class="form-control" name="expoTime" value="${requestScope.oneExpoData.time.format(timeFormat)}"/>
-                                                <label class="form-label" for="expoTime">Time</label>
+                                                <label class="form-label" for="expoTime">${sessionScope.language['Expo_time']}</label>
                                             </div>
 
                                             <!-- Expo Price -->
                                             <div class="form-outline mb-4">
                                                 <input type="text" id="expoPrice" class="form-control" name="expoPrice" value="${requestScope.oneExpoData.price}"/>
-                                                <label class="form-label" for="expoPrice">Price</label>
+                                                <label class="form-label" for="expoPrice">${sessionScope.language['Price']}</label>
                                             </div>
 
                                             <!-- Expo Sold -->
                                             <div class="form-outline mb-4">
                                                 <input type="text" id="expoSold" class="form-control" name="expoSold" value="${requestScope.oneExpoData.sold}"/>
-                                                <label class="form-label" for="expoSold">Sold</label>
+                                                <label class="form-label" for="expoSold">${sessionScope.language['Sold']}</label>
                                             </div>
 
                                             <!-- Expo Hall Name -->
@@ -124,7 +130,7 @@
                                                 <div class="dropdown col-4">
                                                     <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1"
                                                             data-bs-toggle="dropdown" aria-expanded="false">
-                                                        choose hall
+                                                        ${sessionScope.language['choose_hall']}
                                                     </button>
                                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                         <c:forEach var="hall" items="${sessionScope.hallList}">
@@ -141,15 +147,8 @@
                                                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                     </div>
                                                 </c:forEach>
-                                                <label class="form-label" for="expoHallName">Hall name</label>
+                                                <label class="form-label" for="expoHallName">${sessionScope.language['hall_name']}</label>
                                             </div>
-
-                                            <!-- Expo Theme name -->
-<%--                                            <div class="form-outline mb-4">--%>
-<%--                                                <input type="hidden" name="idTheme" value="${requestScope.oneExpoData.theme.idTheme}">--%>
-<%--                                                <input type="text" id="expoThemeName" class="form-control" name="expoThemeName" value="${requestScope.oneExpoData.theme.name}"/>--%>
-<%--                                                <label class="form-label" for="expoThemeName">Theme name</label>--%>
-<%--                                            </div>--%>
 
                                             <!-- Expo Theme name -->
                                             <div class="form-outline mb-4">
@@ -158,16 +157,16 @@
                                                         <option value="${theme.idTheme}">${theme.name}</option>
                                                     </c:forEach>
                                                 </select>
-                                                <label class="form-label">Theme name</label>
+                                                <label class="form-label">${sessionScope.language['theme_name']}</label>
                                             </div>
 
                                             <!-- Expo Tickets -->
                                             <div class="form-outline mb-4">
                                                 <input type="text" id="expoTickets" class="form-control"  name="expoTickets" value="${requestScope.oneExpoData.tickets}"/>
-                                                <label class="form-label" for="expoTickets">Tickets</label>
+                                                <label class="form-label" for="expoTickets">${sessionScope.language['Tickets']}</label>
                                             </div>
                                             <c:if test="${role.equals('admin')}">
-                                                <button class="btn btn-info btn-sm" type="submit">Update</button>
+                                                <button class="btn btn-info btn-sm" type="submit">${sessionScope.language['update']}</button>
                                             </c:if>
                                         </div>
                                     </form>

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title>Change Password</title>
+    <title>${sessionScope.language['change_pass']}</title>
     <jsp:include page="/WEB-INF/views/general/bootstrap/include_bootstap.jsp"/>
     <jsp:include page="/WEB-INF/views/general/informMsg.jsp"/>
 </head>
@@ -15,8 +15,8 @@
                     <div class="panel-body">
                         <div class="text-center">
                             <h3><i class="fa fa-lock fa-4x"></i></h3>
-                            <h2 class="text-center">Change password</h2>
-                            <p>You can change your password here.</p>
+                            <h2 class="text-center">${sessionScope.language['change_pass']}</h2>
+                            <p>${sessionScope.language['you_can_change_your_pass_here']}.</p>
                             <div class="panel-body">
 
                                 <form class="form" method="post" action="${pageContext.request.contextPath}/controller">
@@ -27,7 +27,7 @@
                                                 <span class="input-group-addon"><i
                                                         class="glyphicon glyphicon-envelope color-blue"></i></span>
 
-                                                <input id="passInput" placeholder="your email" class="form-control"
+                                                <input id="passInput" placeholder="${sessionScope.language['your_email']}" class="form-control"
                                                       name="email" type="text">
                                             </div>
                                         </div>
@@ -36,12 +36,12 @@
                                                 <span class="input-group-addon"><i
                                                         class="glyphicon glyphicon-envelope color-blue"></i></span>
 
-                                                <input id="passInput2" placeholder="new password" class="form-control"
+                                                <input id="passInput2" placeholder="${sessionScope.language['new_password']}" class="form-control"
                                                       name="newPass" type="password">
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <input class="btn btn-primary btn-block" value="change"
+                                            <input class="btn btn-primary btn-block" value="${sessionScope.language['change']}"
                                                    type="submit">
                                         </div>
                                     </fieldset>

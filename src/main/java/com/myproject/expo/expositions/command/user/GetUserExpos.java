@@ -17,33 +17,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class GetCanceledExpos implements Command {
-    private static final Logger logger = LogManager.getLogger(GetCanceledExpos.class);
+public class GetUserExpos implements Command {
+    private static final Logger logger = LogManager.getLogger(GetUserExpos.class);
     private final ExpositionService<Exposition> expoService;
     private final ServiceFactory serviceFactory;
 
-    public GetCanceledExpos() {
+    public GetUserExpos() {
         serviceFactory = new ServiceFactoryImpl();
         expoService = serviceFactory.getExpoService();
     }
 
-    public GetCanceledExpos(ServiceFactory serviceFactory, ExpositionService<Exposition> expoService) {
+    public GetUserExpos(ServiceFactory serviceFactory, ExpositionService<Exposition> expoService) {
         this.serviceFactory = serviceFactory;
         this.expoService = expoService;
     }
 
     @Override
     public Route execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
-        HttpSession session = req.getSession();
+        HttpSession session = cleanSession(req);
         User user = (User) session.getAttribute(Constant.USER_DATA);
-        session.setAttribute(Constant.SEARCHED_LIST,null);
+        long page = parseStrToLong(req.getParameter(Constant.PAGE));
+        long noOfRecords = parseStrToLong(req.getParameter(Constant.NO_OF_RECORDS));
+        int statusId = getStatusId(req.getParameter(Constant.STATUS));
         try {
-            session.setAttribute(Constant.CANCELED_EXPOS,expoService.getCanceledExposForUser(user,2,1,3));
+            session.setAttribute(Constant.CANCELED_EXPOS,expoService.getUserExpos(user,statusId,page,noOfRecords));
         } catch (ServiceException e) {
-            logger.info("GetCanceledExpos class has failed");
             setInformMessageToUser(19,req,e.getMessage());
             throw new CommandException(Constant.URL.FULL_USER_PAGE);
         }
         return Route.setFullRoutePath(Constant.URL.FULL_USER_PAGE, Route.RouteType.FORWARD);
     }
+
 }

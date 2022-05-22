@@ -9,13 +9,13 @@
 <table class="table table-info table-hover">
     <thead>
     <tr>
-        <th scope="col">Name</th>
-        <th scope="col">ExpoDate</th>
-        <th scope="col">ExpoTime</th>
-        <th scope="col">Price</th>
-        <th scope="col">Sold</th>
-        <th scope="col">Hall</th>
-        <th scope="col">Theme</th>
+        <th scope="col">${sessionScope.language['Expos']}</th>
+        <th scope="col">${sessionScope.language['Expo_date']}</th>
+        <th scope="col">${sessionScope.language['Expo_time']}</th>
+        <th scope="col">${sessionScope.language['Price']}</th>
+        <th scope="col">${sessionScope.language['Sold']}</th>
+        <th scope="col">${sessionScope.language['Halls']}</th>
+        <th scope="col">${sessionScope.language['Theme']}</th>
     </tr>
     </thead>
     <tbody>

@@ -4,6 +4,7 @@ import com.myproject.expo.expositions.dao.UserDao;
 import com.myproject.expo.expositions.dao.entity.Exposition;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.dao.impl.UserDaoImpl;
+import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.exception.ValidationException;
@@ -15,6 +16,8 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,5 +80,19 @@ public class UserServiceImplTest {
     public void changePass() {
         assertDoesNotThrow(() -> when(userDao.changePass("email@gmail.com", "123"))).thenReturn(true);
         assertDoesNotThrow(() -> userService.changePass("email@gmail.com", new char[]{'1', '2', '3'}));
+    }
+
+    @Test
+    public void getAllUsers() throws DaoException, ServiceException {
+        when(userDao.getAllRecords(1, 10, Query.UserSQL.GET_ALL_USERS)).thenReturn(Collections.singletonList(user));
+        List<User> allUsers = userService.getAllUsers(1, 10);
+        Assertions.assertEquals(1, allUsers.size());
+
+    }
+
+    @Test
+    public void blockUnblockUser() throws DaoException {
+        when(userDao.blockUnblockUser(3, 1)).thenReturn(true);
+        assertDoesNotThrow(() -> userService.blockUnblockUser("blocked", 1));
     }
 }

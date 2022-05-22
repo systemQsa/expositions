@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -55,7 +56,7 @@ public class UserDaoImplTest {
     @Test
     public void getUserByEmailAndPass() throws DaoException {
         User res = userDao.getUserByEmailAndPass("art@gmail.com", "1234");
-         Assertions.assertEquals("+56234567888", res.getPhone());
+        Assertions.assertEquals("+56234567888", res.getPhone());
     }
 
     @Test
@@ -81,7 +82,18 @@ public class UserDaoImplTest {
 
     @Test
     public void buyExpo() {
-       assertDoesNotThrow(() -> userDao.buyExpo(updateUser,expo));
+        assertDoesNotThrow(() -> userDao.buyExpo(updateUser, expo));
+    }
+
+    @Test
+    public void getAllRecords() throws DaoException {
+        List<User> users = userDao.getAllRecords(1, 3, "query");
+        assertEquals(3, users.size());
+    }
+
+    @Test
+    public void blockUnblockUser() throws DaoException {
+        Assertions.assertTrue(userDao.blockUnblockUser(3, 3));
     }
 
 }

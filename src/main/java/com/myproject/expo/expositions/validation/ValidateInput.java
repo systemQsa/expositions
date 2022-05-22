@@ -26,7 +26,6 @@ public class ValidateInput implements Validate {
 
     @Override
     public boolean isEmailValid(String email) throws ValidationException {
-        System.out.println("Емейл " + email + " \n" + Pattern.compile(EMAIL_CYRILLIC).matcher(email).matches());
         return Optional.ofNullable(email)
                 .map(mail -> (Pattern.compile(EMAIL_REGEX).matcher(mail).matches()
                         || Pattern.compile(EMAIL_CYRILLIC).matcher(mail).matches()))
@@ -97,12 +96,20 @@ public class ValidateInput implements Validate {
         return validateProperDate(date) && validateProperTime(time);
     }
 
+    @Override
+    public boolean isUserBlocked(String status) throws ValidationException {
+        if (status.equals("blocked")) {
+            throw new ValidationException(Constant.ErrMsg.BLOCKED_USER);
+        }
+        return false;
+    }
+
     private boolean validateDate(String date) throws ValidationException {
         return Optional.ofNullable(date)
                 .map(str -> (Pattern.compile(DATE_REGEX).matcher(str).matches())
                         || Pattern.compile(DATE_ENG_REGEX).matcher(date).matches())
                 .filter(str -> str)
-                .orElseThrow(() -> new ValidationException("err.date"));
+                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.DATE));
     }
 
     private boolean validateTime(String time) throws ValidationException {
@@ -110,37 +117,37 @@ public class ValidateInput implements Validate {
                 .map(str -> (Pattern.compile("\\d{1,2}:\\d{2}\\W[A-Z]{2}").matcher(time).matches())
                         || Pattern.compile(TIME_UKR_REGEX).matcher(str).matches())
                 .filter(str -> str)
-                .orElseThrow(() -> new ValidationException("err.time"));
+                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.TIME));
     }
 
     private boolean validatePrice(String price) throws ValidationException {
         return Optional.ofNullable(price)
                 .map(str -> Pattern.compile(PRICE_REGEX).matcher(str).matches())
                 .filter(str -> str)
-                .orElseThrow(() -> new ValidationException("err.price"));
+                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.PRICE));
     }
 
     private boolean containsOnlyDigits(String str) throws ValidationException {
         return Optional.ofNullable(str)
                 .map(value -> Pattern.compile(ONLY_DIGITS).matcher(value).matches())
                 .filter(value -> value)
-                .orElseThrow(() -> new ValidationException("err.only_digits"));
+                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.ONLY_DIGITS));
     }
 
     private boolean validateProperDate(LocalDate date) throws ValidationException {
-        if (date.isEqual(LocalDate.now()) || date.isAfter(LocalDate.now())){
+        if (date.isEqual(LocalDate.now()) || date.isAfter(LocalDate.now())) {
             return true;
         }
-       throw new ValidationException("err.date");
+        throw new ValidationException(Constant.ErrMsg.DATE);
     }
 
     private boolean validateProperTime(LocalTime time) throws ValidationException {
         LocalTime fromTime = LocalTime.of(9, 0);
         LocalTime toTime = LocalTime.of(21, 30);
-       if (time.isAfter(fromTime) || time.isBefore(toTime)){
-           return true;
-       }
-       throw new ValidationException("err.time");
+        if (time.isAfter(fromTime) || time.isBefore(toTime)) {
+            return true;
+        }
+        throw new ValidationException(Constant.ErrMsg.TIME);
     }
 
 }

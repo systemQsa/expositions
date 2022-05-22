@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Expositions</title>
+    <title>${sessionScope.language['expositions']}</title>
     <jsp:include page="/WEB-INF/views/general/bootstrap/include_bootstap.jsp"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -13,7 +13,7 @@
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Expos</a>
+            <a class="navbar-brand" href="#">${sessionScope.language['expositions']}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -27,14 +27,14 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            More actions
+                            ${sessionScope.language['more_options']}
                         </a>
 
                         <%--                        More actions --%>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li>
                                 <a class="dropdown-item"
-                                   href="?action=viewAllExpos&command=paginate&sortBy=id&page=1&noOfRecords=2">Expos</a>
+                                   href="?action=viewAllExpos&command=paginate&sortBy=id&page=1&noOfRecords=2">${sessionScope.language['Expos']}</a>
                             </li>
                         </ul>
                     </li>

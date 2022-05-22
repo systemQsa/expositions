@@ -8,12 +8,12 @@
 <table class="table table-info table-hover">
     <thead>
         <tr>
-            <th scope="col">Halls</th>
+            <th scope="col">${sessionScope.language['Halls']}</th>
             <th scope="col">
                 <div class="accordion accordion-flush" id="addNewHall">
                     <button class="btn btn-success btn-sm" type="button" data-bs-toggle="collapse"
                             data-bs-target="#addTheme" aria-expanded="false" aria-controls="flush-collapseThree">
-                        Add new
+                        ${sessionScope.language['add_new']}
                     </button>
 
                     <div id="addTheme" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
@@ -23,9 +23,9 @@
                                 <input type="hidden" name="action" value="addNewHall">
                                 <input type="hidden" name="sortBy" value="id">
                                 <div class="input-group mb-3">
-                                    <input type="text" name="hallName" class="form-control" placeholder="new hall"
+                                    <input type="text" name="hallName" class="form-control" placeholder="${sessionScope.language['name']}"
                                            aria-label="new hall">
-                                    <button class="btn btn-info btn-sm" type="submit">Add</button>
+                                    <button class="btn btn-info btn-sm" type="submit">${sessionScope.language['add']}</button>
                                 </div>
                             </form>
                         </div>
@@ -45,7 +45,7 @@
                         <div>
                             <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#flushTheme${hall.idHall}" aria-expanded="false">
-                                Update
+                                    ${sessionScope.language['update']}
                             </button>
                             <div id="flushTheme${hall.idHall}" class="accordion-collapse collapse"
                                  aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
@@ -57,7 +57,7 @@
                                         <div class="input-group mb-3">
                                             <input type="text" name="hallNewName" class="form-control"
                                                    placeholder="new name" aria-label="new name">
-                                            <button class="btn btn-info btn-sm" type="submit">update</button>
+                                            <button class="btn btn-info btn-sm" type="submit">${sessionScope.language['update']}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -68,7 +68,7 @@
                                 <input type="hidden" name="action" value="deleteHall">
                                 <input type="hidden" name="idHall" value="${hall.idHall}">
                                 <input type="hidden" name="sortBy" value="id">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm">${sessionScope.language['delete']}</button>
                             </form>
                         </div>
                     </div>
@@ -84,16 +84,16 @@
         <li class="page-item">
             <c:if test="${sessionScope.currentPage !=1}">
                 <a class="page-link"
-                   href="?action=viewAllHalls&command=paginate&sortBy=id&page=${sessionScope.currentPage - 1}&noOfRecords=2">prev</a>
+                   href="?action=viewAllHalls&command=paginate&sortBy=id&page=${sessionScope.currentPage - 1}&noOfRecords=2">${sessionScope.language['prev']}</a>
             </c:if>
         </li>
         <li class="page-item">
             <a class="page-link"
-               href="#">page ${sessionScope.currentPage}</a>
+               href="#">${sessionScope.language['page']} ${sessionScope.currentPage}</a>
         </li>
         <li class="page-item">
             <a class="page-link"
-               href="?action=viewAllHalls&command=paginate&sortBy=id&page=${sessionScope.currentPage + 1}&noOfRecords=2">next</a>
+               href="?action=viewAllHalls&command=paginate&sortBy=id&page=${sessionScope.currentPage + 1}&noOfRecords=2">${sessionScope.language['next']}</a>
         </li>
     </ul>
 </nav>

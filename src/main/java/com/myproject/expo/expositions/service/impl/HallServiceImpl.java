@@ -35,7 +35,6 @@ public class HallServiceImpl implements HallService, Removable {
         } catch (Exception e) {
             throw new ServiceException(e.getMessage());
         }
-
     }
 
     @Override

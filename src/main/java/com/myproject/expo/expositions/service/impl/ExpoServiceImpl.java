@@ -37,6 +37,7 @@ public class ExpoServiceImpl implements ExpositionService<Exposition> {
 
     @Override
     public boolean remove(long id) throws Exception {
+        //TODO IMPLEMENT
         return false;
     }
 
@@ -45,7 +46,7 @@ public class ExpoServiceImpl implements ExpositionService<Exposition> {
         try {
             return Optional.ofNullable(expoDao.getAllRecords(page, noOfPages, defineSortQueryForExpo(sortBy)))
                     .filter(expositions -> expositions.size() != 0)
-                    .orElseThrow(() -> new ServiceException("err.cant_get_expos"));
+                    .orElseThrow(() -> new ServiceException(Constant.ErrMsg.CANT_GET_EXPOS));
         } catch (DaoException e) {
             logger.warn("ExpoServiceImpl class has failed while getting all expos");
             throw new ServiceException(e.getMessage());
@@ -53,9 +54,9 @@ public class ExpoServiceImpl implements ExpositionService<Exposition> {
     }
 
     @Override
-    public List<Exposition> getCanceledExposForUser(User user, int statusId, long page, long noOfRecords) throws ServiceException {
+    public List<Exposition> getUserExpos(User user, int statusId, long page, long noOfRecords) throws ServiceException {
         try {
-            return expoDao.getCanceledExposForUser(user, statusId, page, noOfRecords);
+            return expoDao.getUserExpos(user, statusId, page, noOfRecords);
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -87,7 +88,7 @@ public class ExpoServiceImpl implements ExpositionService<Exposition> {
         try {
             return Optional.ofNullable(expoDao.searchExpo(searchByGetQuery(searchBy), searchedItem))
                     .filter(list -> list.size() > 0)
-                    .orElseThrow(() -> new DaoException("err.nothing_found"));
+                    .orElseThrow(() -> new DaoException(Constant.ErrMsg.NOTHING_WAS_FOUND));
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -98,14 +99,14 @@ public class ExpoServiceImpl implements ExpositionService<Exposition> {
         try {
             return Optional.ofNullable(expoDao.searchExpo(searchByGetQuery(searchBy), localDate))
                     .filter(list -> list.size() > 0)
-                    .orElseThrow(() -> new DaoException("err.nothing_found"));
+                    .orElseThrow(() -> new DaoException(Constant.ErrMsg.NOTHING_WAS_FOUND));
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage());
         }
     }
 
     @Override
-    public boolean cancelExpo(long expoId, int statusId) throws ServiceException {
+    public boolean changeStatus(long expoId, int statusId) throws ServiceException {
         try {
             return expoDao.changeStatus(expoId, statusId);
         } catch (DaoException e) {

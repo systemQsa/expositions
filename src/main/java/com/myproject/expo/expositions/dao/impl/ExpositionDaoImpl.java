@@ -9,6 +9,7 @@ import com.myproject.expo.expositions.dao.entity.Theme;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
+import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -35,20 +36,11 @@ public class ExpositionDaoImpl implements ExpositionDao {
     @Override
     public List<Exposition> getAllRecords(long page, long noOfRecords, String querySortBy) throws DaoException {
         connection = connectManager.getConnection();
-        String query = "select e.id_expo,e.name,expo_date,expo_time,price,sold,id_theme_ref,t.name,tickets,\n" +
-                "       GROUP_CONCAT(distinct hall.name separator ', ') as halls,\n" +
-                "       GROUP_CONCAT(distinct h.id_hall separator ', ') as ids\n" +
-                "from exposition as e\n" +
-                "join expo_hall as h on e.id_expo = h.id_expo\n" +
-                "join theme as t on e.id_theme_ref = t.id_theme\n" +
-                "join hall on h.id_hall= hall.id_hall\n" +
-                "group by e.id_expo\n" +
-                "ORDER BY id_expo DESC LIMIT ?,?";
         try (PreparedStatement statement = connection.prepareStatement(querySortBy)) {
             return buildListOfExpos(page, noOfRecords, statement);
         } catch (SQLException e) {
-            logger.warn("Cant get all expos in ExpositionDaoImpl class");
-            throw new DaoException("err.cant_get_expos");
+            logger.warn(Constant.LogMsg.CANT_GET_ALL_EXPOS);
+            throw new DaoException(Constant.ErrMsg.CANT_GET_EXPOS);
         } finally {
             connectManager.closeConnection(connection);
         }
@@ -70,13 +62,13 @@ public class ExpositionDaoImpl implements ExpositionDao {
     }
 
     @Override
-    public List<Exposition> getCanceledExposForUser(User user, int statusId, long page, long noOfRecords) throws DaoException {
+    public List<Exposition> getUserExpos(User user, int statusId, long page, long noOfRecords) throws DaoException {
         connection = connectManager.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(Query.ExpoSQL.GET_CANCELED_EXPOS_FOR_USER)) {
             return gettingAllCanceledExposForUser(user, statusId, statement);
         } catch (SQLException e) {
-            logger.warn("User id = " + user.getIdUser() + " can`t get all canceled expos");
-            throw new DaoException("err.get_all_canceled_expos_for_user");
+            logger.warn(Constant.LogMsg.CANT_GET_USER_EXPOS + user.getIdUser());
+            throw new DaoException(Constant.ErrMsg.GET_ALL_USER_EXPOS);
         } finally {
             connectManager.closeConnection(connection);
         }
@@ -96,14 +88,14 @@ public class ExpositionDaoImpl implements ExpositionDao {
     private Exposition createExpoFromResultSet(ResultSet resSet) throws SQLException {
         return Exposition.builder()
                 .setExpositionID(resSet.getLong(1))
-                .setExpoName(resSet.getString("name"))
-                .setExpoDate(resSet.getDate("expo_date").toLocalDate())
-                .setExpoTime(resSet.getTime("expo_time").toLocalTime())
-                .setExpoPrice(resSet.getBigDecimal("price"))
-                .setExpoSoldTickets(resSet.getLong("sold"))
+                .setExpoName(resSet.getString(Constant.Column.NAME))
+                .setExpoDate(resSet.getDate(Constant.Column.EXPO_DATE).toLocalDate())
+                .setExpoTime(resSet.getTime(Constant.Column.EXPO_TIME).toLocalTime())
+                .setExpoPrice(resSet.getBigDecimal(Constant.Column.PRICE))
+                .setExpoSoldTickets(resSet.getLong(Constant.Column.SOLD))
                 .setTheme(createThemeFromResultSet(resSet))
-                .setTickets(resSet.getLong("tickets"))
-                .setStatusId(resSet.getInt("status_id"))
+                .setTickets(resSet.getLong(Constant.Column.TICKETS))
+                .setStatusId(resSet.getInt(Constant.Column.STATUS_ID))
                 .setHallList(createHallList(resSet))
                 .build();
 
@@ -111,8 +103,8 @@ public class ExpositionDaoImpl implements ExpositionDao {
 
     private Theme createThemeFromResultSet(ResultSet resSet) throws SQLException {
         return Theme.builder()
-                .setIDTheme(resSet.getLong("id_theme_ref"))
-                .setThemeName(resSet.getString("t.name"))
+                .setIDTheme(resSet.getLong(Constant.Column.ID_THEME_REF))
+                .setThemeName(resSet.getString(Constant.Column.T_NAME))
                 .build();
     }
 
@@ -130,13 +122,13 @@ public class ExpositionDaoImpl implements ExpositionDao {
     }
 
     private List<Hall.HallBuilder> createListBuilderWithHallIds(ResultSet resSet) throws SQLException {
-        return Arrays.stream(resSet.getString("ids").split(", "))
+        return Arrays.stream(resSet.getString(Constant.Column.IDS).split(", "))
                 .map(val -> Hall.builder().setIDHall(Long.parseLong(val)))
                 .collect(Collectors.toList());
     }
 
     private List<Hall> createListWithHallNames(ResultSet resSet) throws SQLException {
-        return Arrays.stream(resSet.getString("halls").split(", "))
+        return Arrays.stream(resSet.getString(Constant.Column.HALLS).split(", "))
                 .map(value -> Hall.builder().setHallName(value).build())
                 .collect(Collectors.toList());
     }
@@ -150,7 +142,7 @@ public class ExpositionDaoImpl implements ExpositionDao {
             updatingTheExpoProcess(expo, statement, deleteRefs, insertNewRefs);
         } catch (SQLException e) {
             connectManager.rollBack(connection);
-            throw new DaoException("err.update_expo");
+            throw new DaoException(Constant.ErrMsg.UPDATE_EXPO);
         } finally {
             connectManager.closeConnection(connection);
         }
@@ -198,8 +190,8 @@ public class ExpositionDaoImpl implements ExpositionDao {
             return addingNewExpoProcess(expo, insertExpo, insertRefs);
         } catch (SQLException e) {
             connectManager.rollBack(connection);
-            logger.warn("Problem cannot add a new exposition to the table");
-            throw new DaoException("err.add_new_expo");
+            logger.warn(Constant.LogMsg.ADD_NEW_EXPO);
+            throw new DaoException(Constant.ErrMsg.ADD_NEW_EXPO);
         } finally {
             connectManager.closeConnection(connection);
         }
@@ -254,7 +246,7 @@ public class ExpositionDaoImpl implements ExpositionDao {
             statement.setLong(1, id);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new DaoException("err.delete_expo");
+            throw new DaoException(Constant.ErrMsg.DELETE_EXPO);
         }
     }
 
@@ -266,8 +258,8 @@ public class ExpositionDaoImpl implements ExpositionDao {
             statement.setLong(2, expoId);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            logger.warn("Updating expo = " + expoId + " status has failed");
-            throw new DaoException("err.cancel_expo");
+            logger.warn(Constant.LogMsg.UPDATE_EXPO_STATUS + expoId);
+            throw new DaoException(Constant.ErrMsg.CHANGE_EXPO_STATUS);
         } finally {
             connectManager.closeConnection(connection);
         }
@@ -277,23 +269,13 @@ public class ExpositionDaoImpl implements ExpositionDao {
     @Override
     public List<Exposition> searchExpo(String query, String searchedItem) throws DaoException {
         connection = connectManager.getConnection();
-        String q = "SELECT e.id_expo,e.name,expo_date,expo_time,price,sold,id_theme_ref,t.name,tickets,\n" +
-                "       GROUP_CONCAT(DISTINCT hall.name SEPARATOR ', ') AS halls,\n" +
-                "       GROUP_CONCAT(DISTINCT h.id_hall SEPARATOR ', ') AS ids\n" +
-                "FROM exposition AS e\n" +
-                "JOIN expo_hall AS h ON e.id_expo = h.id_expo\n" +
-                "JOIN theme AS t ON e.id_theme_ref = t.id_theme\n" +
-                "JOIN hall ON h.id_hall= hall.id_hall\n" +
-                "GROUP BY e.id_expo,t.name\n" +
-                "HAVING t.name=?\n" +
-                "ORDER BY e.id_expo DESC";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, searchedItem);
             ResultSet resSet = statement.executeQuery();
             return buildListOfSearchedItems(resSet);
         } catch (SQLException e) {
-            logger.warn("Searching by name has failed");
-            throw new DaoException("err.nothing_found");
+            logger.warn(Constant.LogMsg.SEARCH_BY_NAME);
+            throw new DaoException(Constant.ErrMsg.NOTHING_WAS_FOUND);
         } finally {
             connectManager.closeConnection(connection);
         }
@@ -302,23 +284,13 @@ public class ExpositionDaoImpl implements ExpositionDao {
     @Override
     public List<Exposition> searchExpo(String query, LocalDate localDate) throws DaoException {
         connection = connectManager.getConnection();
-        String q = "select e.id_expo,e.name,expo_date,expo_time,price,sold,id_theme_ref,t.name,tickets,\n" +
-                "       GROUP_CONCAT(DISTINCT hall.name separator ', ') AS halls,\n" +
-                "       GROUP_CONCAT(DISTINCT h.id_hall separator ', ') AS ids\n" +
-                "FROM exposition AS e\n" +
-                "JOIN expo_hall AS h ON e.id_expo = h.id_expo\n" +
-                "JOIN theme AS t ON e.id_theme_ref = t.id_theme\n" +
-                "JOIN hall ON h.id_hall= hall.id_hall\n" +
-                "GROUP BY e.id_expo,expo_date\n" +
-                "HAVING expo_date=?\n" +
-                "ORDER BY e.id_expo DESC";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setDate(1, Date.valueOf(localDate));
             ResultSet resultSet = statement.executeQuery();
             return buildListOfSearchedItems(resultSet);
         } catch (SQLException e) {
-            logger.warn("Searching by date has failed");
-            throw new DaoException("err.nothing_found");
+            logger.warn(Constant.LogMsg.SEARCH_BY_DATE);
+            throw new DaoException(Constant.ErrMsg.NOTHING_WAS_FOUND);
         } finally {
             connectManager.closeConnection(connection);
         }

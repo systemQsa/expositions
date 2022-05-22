@@ -5,7 +5,7 @@ import com.myproject.expo.expositions.command.admin.AddExpo;
 import com.myproject.expo.expositions.command.admin.facade.FacadeCommand;
 import com.myproject.expo.expositions.command.general.*;
 import com.myproject.expo.expositions.command.user.BuyExpo;
-import com.myproject.expo.expositions.command.user.GetCanceledExpos;
+import com.myproject.expo.expositions.command.user.GetUserExpos;
 import com.myproject.expo.expositions.command.user.TopUpBalance;
 import com.myproject.expo.expositions.service.impl.ExpoServiceImpl;
 import com.myproject.expo.expositions.service.impl.HallServiceImpl;
@@ -34,9 +34,11 @@ public enum StorageCommand {
     BUY_EXPO("buyExpo", new BuyExpo()),
     CHANGE_EMAIL("changeEmail", new ChangeEmail()),
     CHANGE_PASS("changePass", new ChangePass()),
-    CANCELED_EXPOS("canceledExpos", new GetCanceledExpos()),
+    CANCELED_EXPOS("viewMyExpos", new GetUserExpos()),
     SEARCH_EXPO("searchExpo", new SearchExpo()),
-    CANCEL_EXPO("cancelExpo",new CancelExpo());
+    CANCEL_EXPO("changeExpoStatus", new ChangeExpoStatus()),
+    ALL_USERS("viewAllUsers", new AllUsers()),
+    BLOCK_UNBLOCK_USER("blockUnblockUser", new BlockUnblockUser());
 
     private final String action;
     private final Command command;

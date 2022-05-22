@@ -104,13 +104,13 @@ public class ExpoServiceImplTest {
     @Test
     public void getCanceledExposForUser() throws DaoException {
         User user = User.builder().setIdUser(2).build();
-        when(expoDao.getCanceledExposForUser(user,2,1,5)).thenReturn(expoList);
-        assertDoesNotThrow(() -> expoService.getCanceledExposForUser(user,2,1,5));
+        when(expoDao.getUserExpos(user,2,1,5)).thenReturn(expoList);
+        assertDoesNotThrow(() -> expoService.getUserExpos(user,2,1,5));
     }
 
     @Test
     public void cancelExpo() throws DaoException {
         when(expoDao.changeStatus(1,2)).thenReturn(true);
-        assertDoesNotThrow(() -> expoService.cancelExpo(1,2));
+        assertDoesNotThrow(() -> expoService.changeStatus(1,2));
     }
 }

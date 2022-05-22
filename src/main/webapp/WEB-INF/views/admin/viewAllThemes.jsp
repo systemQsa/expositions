@@ -3,19 +3,19 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <%--    <jsp:include page="/WEB-INF/views/general/bootstrap/include_bootstap.jsp"/>--%>
+<%--        <jsp:include page="/WEB-INF/views/general/bootstrap/include_bootstap.jsp"/>--%>
 </head>
 <body>
 
 <table class="table table-info table-hover">
     <thead>
     <tr>
-        <th scope="col">Themes</th>
+        <th scope="col">${sessionScope.language['Theme']}</th>
         <th scope="col">
             <div class="accordion accordion-flush" id="addNewTheme">
                 <button class="btn btn-success btn-sm" type="button" data-bs-toggle="collapse"
                         data-bs-target="#addTheme" aria-expanded="false" aria-controls="flush-collapseThree">
-                    Add new
+                    ${sessionScope.language['add_new']}
                 </button>
 
                 <div id="addTheme" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
@@ -27,9 +27,9 @@
                             <input type="hidden" name="noOfPages" value="5">
                             <input type="hidden" name="sortBy" value="id">
                             <div class="input-group mb-3">
-                                <input type="text" name="themeName" class="form-control" placeholder="new theme"
+                                <input type="text" name="themeName" class="form-control" placeholder="${sessionScope.language['Theme']}"
                                        aria-label="new theme">
-                                <button class="btn btn-info btn-sm" type="submit">Add</button>
+                                <button class="btn btn-info btn-sm" type="submit">${sessionScope.language['add']}</button>
                             </div>
                         </form>
                     </div>
@@ -48,7 +48,7 @@
                         <div>
                             <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#flushTheme${theme.idTheme}" aria-expanded="false">
-                                Update
+                                    ${sessionScope.language['update']}
                             </button>
                             <div id="flushTheme${theme.idTheme}" class="accordion-collapse collapse"
                                  aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
@@ -59,8 +59,8 @@
                                         <input type="hidden" name="sortBy" value="id">
                                         <div class="input-group mb-3">
                                             <input type="text" name="themeNewName" class="form-control"
-                                                   placeholder="new name" aria-label="new name">
-                                            <button class="btn btn-info btn-sm" type="submit">update</button>
+                                                   placeholder="${sessionScope.language['name']}" aria-label="new name">
+                                            <button class="btn btn-info btn-sm" type="submit">${sessionScope.language['update']}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -71,7 +71,7 @@
                                 <input type="hidden" name="action" value="deleteTheme">
                                 <input type="hidden" name="idTheme" value="${theme.idTheme}">
                                 <input type="hidden" name="sortBy" value="id">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm">${sessionScope.language['delete']}</button>
                             </form>
                         </div>
                     </div>
@@ -86,16 +86,16 @@
         <li class="page-item">
             <c:if test="${sessionScope.currentPage !=1}">
                 <a class="page-link"
-                   href="?action=viewAllThemes&command=paginate&sortBy=id&page=${sessionScope.currentPage - 1}&noOfRecords=2">prev</a>
+                   href="?action=viewAllThemes&command=paginate&sortBy=id&page=${sessionScope.currentPage - 1}&noOfRecords=2">${sessionScope.language['prev']}</a>
             </c:if>
         </li>
         <li class="page-item">
             <a class="page-link"
-               href="#">page ${sessionScope.currentPage}</a>
+               href="#">${sessionScope.language['page']} ${sessionScope.currentPage}</a>
         </li>
         <li class="page-item">
             <a class="page-link"
-               href="?action=viewAllThemes&command=paginate&sortBy=id&page=${sessionScope.currentPage + 1}&noOfRecords=2">next</a>
+               href="?action=viewAllThemes&command=paginate&sortBy=id&page=${sessionScope.currentPage + 1}&noOfRecords=2">${sessionScope.language['next']}</a>
         </li>
     </ul>
 </nav>

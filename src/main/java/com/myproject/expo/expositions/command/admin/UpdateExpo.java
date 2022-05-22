@@ -58,20 +58,20 @@ public class UpdateExpo implements Command, UtilMethods {
 
     private Exposition buildExpositionFromReq(HttpServletRequest req, Validate validate) throws ValidationException {
         return Exposition.builder()
-                .setExpositionID(parseStrToLong(req.getParameter("expoId")))
-                .setExpoName(req.getParameter("expoName"))
-                .setExpoDate(parseStrToLocalDate(validate.dateValidate(req.getParameter("expoDate"))))
-                .setExpoTime(parseStrToLocalTime(validate.timeValidate(req.getParameter("expoTime"))))
-                .setExpoPrice(parseToBigDecimal(validate.priceValidate(req.getParameter("expoPrice"))))
-                .setExpoSoldTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter("expoSold"))))
+                .setExpositionID(parseStrToLong(req.getParameter(Constant.Param.EXPO_ID)))
+                .setExpoName(req.getParameter(Constant.Param.EXPO_NAME))
+                .setExpoDate(parseStrToLocalDate(validate.dateValidate(req.getParameter(Constant.Param.EXPO_DATE))))
+                .setExpoTime(parseStrToLocalTime(validate.timeValidate(req.getParameter(Constant.Param.EXPO_TIME))))
+                .setExpoPrice(parseToBigDecimal(validate.priceValidate(req.getParameter(Constant.Param.EXPO_PRICE))))
+                .setExpoSoldTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter(Constant.Param.EXPO_SOLD))))
                 .setTheme(buildTheme(req))
                 .setHallList(buildHallList(req))
-                .setTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter("expoTickets")))).build();
+                .setTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter(Constant.Param.EXPO_TICKETS)))).build();
     }
 
 
     private List<Hall> buildHallList(HttpServletRequest req) {
-        return Arrays.stream(req.getParameterValues("expoHallId"))
+        return Arrays.stream(req.getParameterValues(Constant.Param.EXPO_HALL_ID))
                 .map(val -> Hall.builder().setIDHall(parseStrToLong(val)).build())
                 .collect(Collectors.toList());
     }
@@ -79,7 +79,7 @@ public class UpdateExpo implements Command, UtilMethods {
     private Theme buildTheme(HttpServletRequest req) {
         List<Theme> list = (List<Theme>) req.getSession().getAttribute(Constant.THEME_LIST);
        return list.stream()
-                .filter(l -> l.getIdTheme() == parseStrToLong(req.getParameter("idTheme")))
+                .filter(l -> l.getIdTheme() == parseStrToLong(req.getParameter(Constant.Param.ID_THEME)))
                 .findFirst()
                 .orElse(null);
 

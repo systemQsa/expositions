@@ -59,6 +59,7 @@ public class AddExpo implements Command {
     private void addingExpoProcess(HttpServletRequest req) throws ValidationException, ServiceException {
         List<Exposition> hallList = (List<Exposition>) req.getSession().getAttribute(Constant.EXPOS_LIST);
         Exposition addedExpo = buildExpositionFromReq(req, validate);
+        validate.validateProperDatesAndTime(addedExpo.getDate(),addedExpo.getTime());
         informHallIsBusy(hallList, addedExpo);
         expoService.add(addedExpo);
         clearSessionFromAllLists(req);
@@ -66,30 +67,30 @@ public class AddExpo implements Command {
 
     private Exposition buildExpositionFromReq(HttpServletRequest req, Validate validate) throws ValidationException {
         return Exposition.builder()
-                .setExpoName(req.getParameter("expoName"))
-                .setExpoDate(parseStrToLocalDate(validate.dateValidate(req.getParameter("expoDate"))))
-                .setExpoTime(parseStrToLocalTime(validate.timeValidate(req.getParameter("expoTime"))))
-                .setExpoPrice(parseToBigDecimal(validate.priceValidate(req.getParameter("expoPrice"))))
-                .setExpoSoldTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter("expoSold"))))
+                .setExpoName(req.getParameter(Constant.Param.EXPO_NAME))
+                .setExpoDate(parseStrToLocalDate(validate.dateValidate(req.getParameter(Constant.Param.EXPO_DATE))))
+                .setExpoTime(parseStrToLocalTime(validate.timeValidate(req.getParameter(Constant.Param.EXPO_TIME))))
+                .setExpoPrice(parseToBigDecimal(validate.priceValidate(req.getParameter(Constant.Param.EXPO_PRICE))))
+                .setExpoSoldTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter(Constant.Param.EXPO_SOLD))))
                 .setHallList(buildHallList(req))
                 .setTheme(buildTheme(req))
-                .setTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter("expoTickets")))).build();
+                .setTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter(Constant.Param.EXPO_TICKETS)))).build();
     }
 
     private List<Hall> buildHallList(HttpServletRequest req) {
-        return Arrays.stream(req.getParameterValues("halls"))
+        return Arrays.stream(req.getParameterValues(Constant.Param.HALLS))
                 .map(this::parseStrToLong)
                 .map(value -> Hall.builder().setIDHall(value).build())
                 .collect(Collectors.toList());
     }
 
     private Theme buildTheme(HttpServletRequest req) {
-        return Theme.builder().setIDTheme(parseStrToLong(req.getParameter("idTheme"))).build();
+        return Theme.builder().setIDTheme(parseStrToLong(req.getParameter(Constant.Param.ID_THEME))).build();
     }
 
     private void informHallIsBusy(List<Exposition> hallList, Exposition addedExpo) throws ValidationException {
         if (isHallBusyAtTheTimeAndDate(hallList, addedExpo)) {
-            throw new ValidationException("err.hall_busy");
+            throw new ValidationException(Constant.ErrMsg.HALL_BUSY);
         }
     }
 

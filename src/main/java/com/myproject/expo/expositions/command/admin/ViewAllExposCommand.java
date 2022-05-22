@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 public class ViewAllExposCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ViewAllExposCommand.class);
@@ -32,7 +33,7 @@ public class ViewAllExposCommand implements Command {
 
     @Override
     public Route execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
-        HttpSession session = cleanSessionFromListsThemeAndHall(req);
+        HttpSession session = cleanSession(req);
         User user = (User) session.getAttribute(Constant.USER_DATA);
         long page = parseStrToLong(req.getParameter(Constant.PAGE));
         long noOfRecords = setInitNoOfRecords(req);
@@ -40,8 +41,12 @@ public class ViewAllExposCommand implements Command {
         Route route = getRouteDependOnUserRole(user);
 
         try {
+            List<Exposition> list = expoService.getAllRecords(page, noOfRecords, sortBy);
+
+            list.forEach(System.out::println);
+
             expoService.setListOfFoundedRecordsToTheSession(session,
-                    expoService.getAllRecords(page, noOfRecords, sortBy), page, noOfRecords);
+                   list , page, noOfRecords);
             session.setAttribute(Constant.SORT_BY, sortBy);
             return route;
         } catch (ServiceException e) {
@@ -60,13 +65,5 @@ public class ViewAllExposCommand implements Command {
             return DefinePathForUser.definePath(Constant.GUEST);
         }
         return PathPage.getRequiredPagePath(DefinePathForUser.definePath(user.getUserRole().getRole()));
-    }
-
-    private HttpSession cleanSessionFromListsThemeAndHall(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        session.setAttribute(Constant.THEME_LIST, null);
-        session.setAttribute(Constant.HALL_LIST, null);
-        session.setAttribute(Constant.CANCELED_EXPOS,null);
-        return session;
     }
 }

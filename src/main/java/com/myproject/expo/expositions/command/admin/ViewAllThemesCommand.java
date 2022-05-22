@@ -2,6 +2,7 @@ package com.myproject.expo.expositions.command.admin;
 
 import com.myproject.expo.expositions.command.Command;
 import com.myproject.expo.expositions.command.Route;
+import com.myproject.expo.expositions.dao.entity.Theme;
 import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.factory.impl.AbstractFactoryImpl;
@@ -13,6 +14,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 public class ViewAllThemesCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ViewAllThemesCommand.class);
@@ -30,22 +32,18 @@ public class ViewAllThemesCommand implements Command {
     public Route execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         long page = parseStrToLong(req.getParameter(Constant.PAGE));
         long noOfRecords = parseStrToLong(req.getParameter(Constant.NO_OF_RECORDS));
-        HttpSession session = cleanSessionFromListsHallAndExpos(req);
         String sortBy = req.getParameter(Constant.SORT_BY);
+        HttpSession session = cleanSession(req);
         try {
-            themeService.setListOfFoundedRecordsToTheSession(session, themeService.getAllRecords(page, noOfRecords, sortBy), page, noOfRecords);
+            List<Theme> list = themeService.getAllRecords(page, noOfRecords, sortBy);
+            list.forEach(System.out::println);
+
+            themeService.setListOfFoundedRecordsToTheSession(session, list, page, noOfRecords);
         } catch (ServiceException e) {
             createInformMessage(req, page, noOfRecords, e);
             throw new CommandException(Constant.URL.FULL_ADMIN_PAGE);
         }
         return Route.setFullRoutePath(Constant.URL.FULL_ADMIN_PAGE, Route.RouteType.FORWARD);
-    }
-
-    private HttpSession cleanSessionFromListsHallAndExpos(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        session.setAttribute(Constant.HALL_LIST, null);
-        session.setAttribute(Constant.EXPOS_LIST, null);
-        return session;
     }
 
     private void createInformMessage(HttpServletRequest req, long page, long noOrRecords, ServiceException e) {

@@ -16,6 +16,7 @@ public class User implements Serializable, Comparable<User> {
     private char[] password;
     private BigDecimal balance;
     private UserRole userRole;
+    private String status;
 
     public static class UserBuilder {
         private final User user;
@@ -61,6 +62,11 @@ public class User implements Serializable, Comparable<User> {
 
         public UserBuilder setUserRole(UserRole userRole) {
             user.userRole = userRole;
+            return this;
+        }
+
+        public UserBuilder setStatus(String status) {
+            user.status = status;
             return this;
         }
 
@@ -114,6 +120,10 @@ public class User implements Serializable, Comparable<User> {
         return new UserBuilder();
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     @Override
     public int compareTo(User o) {
         return Comparator.comparing((User user) -> user.name)
@@ -127,16 +137,18 @@ public class User implements Serializable, Comparable<User> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return idUser == user.idUser && Objects.equals(name, user.name)
-                && Objects.equals(surname, user.surname) && Objects.equals(email, user.email)
-                && Objects.equals(phone, user.phone) && Arrays.equals(password, user.password)
-                && Objects.equals(balance, user.balance);
+        return getIdUser() == user.getIdUser() && Objects.equals(getName(), user.getName())
+                && Objects.equals(getSurname(), user.getSurname()) && Objects.equals(getEmail(), user.getEmail())
+                && Objects.equals(getPhone(), user.getPhone()) && Arrays.equals(getPassword(), user.getPassword())
+                && Objects.equals(getBalance(), user.getBalance()) && getUserRole() == user.getUserRole()
+                && Objects.equals(getStatus(), user.getStatus());
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(idUser, name, surname, email, phone, balance);
-        result = 31 * result + Arrays.hashCode(password);
+        int result = Objects.hash(getIdUser(), getName(), getSurname(), getEmail(),
+                getPhone(), getBalance(), getUserRole(), getStatus());
+        result = 31 * result + Arrays.hashCode(getPassword());
         return result;
     }
 
@@ -150,6 +162,8 @@ public class User implements Serializable, Comparable<User> {
                 ", phone='" + phone + '\'' +
                 ", password=" + Arrays.toString(password) +
                 ", balance=" + balance +
+                ", userRole=" + userRole +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
