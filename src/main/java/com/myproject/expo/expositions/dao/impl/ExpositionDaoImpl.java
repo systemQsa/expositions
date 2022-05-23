@@ -35,14 +35,12 @@ public class ExpositionDaoImpl implements ExpositionDao {
 
     @Override
     public List<Exposition> getAllRecords(long page, long noOfRecords, String querySortBy) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(querySortBy)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(querySortBy)) {
             return buildListOfExpos(page, noOfRecords, statement);
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.CANT_GET_ALL_EXPOS);
             throw new DaoException(Constant.ErrMsg.CANT_GET_EXPOS);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -63,18 +61,16 @@ public class ExpositionDaoImpl implements ExpositionDao {
 
     @Override
     public List<Exposition> getUserExpos(User user, int statusId, long page, long noOfRecords) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.ExpoSQL.GET_CANCELED_EXPOS_FOR_USER)) {
-            return gettingAllCanceledExposForUser(user, statusId, statement);
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.ExpoSQL.GET_CANCELED_EXPOS_FOR_USER)) {
+            return gettingAllExposForUser(user, statusId, statement);
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.CANT_GET_USER_EXPOS + user.getIdUser());
             throw new DaoException(Constant.ErrMsg.GET_ALL_USER_EXPOS);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
-    private List<Exposition> gettingAllCanceledExposForUser(User user, int statusId, PreparedStatement statement) throws SQLException {
+    private List<Exposition> gettingAllExposForUser(User user, int statusId, PreparedStatement statement) throws SQLException {
         List<Exposition> canceledExpos = new ArrayList<>();
         statement.setLong(1, user.getIdUser());
         statement.setInt(2, statusId);
@@ -241,8 +237,8 @@ public class ExpositionDaoImpl implements ExpositionDao {
 
     @Override
     public boolean remove(long id) throws Exception {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.ExpoSQL.DELETE_EXPO)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.ExpoSQL.DELETE_EXPO)) {
             statement.setLong(1, id);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -252,47 +248,40 @@ public class ExpositionDaoImpl implements ExpositionDao {
 
     @Override
     public boolean changeStatus(long expoId, int statusId) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.ExpoSQL.UPDATE_EXPO_STATUS)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.ExpoSQL.UPDATE_EXPO_STATUS)) {
             statement.setInt(1, statusId);
             statement.setLong(2, expoId);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.UPDATE_EXPO_STATUS + expoId);
             throw new DaoException(Constant.ErrMsg.CHANGE_EXPO_STATUS);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
-
     @Override
     public List<Exposition> searchExpo(String query, String searchedItem) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, searchedItem);
             ResultSet resSet = statement.executeQuery();
             return buildListOfSearchedItems(resSet);
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.SEARCH_BY_NAME);
             throw new DaoException(Constant.ErrMsg.NOTHING_WAS_FOUND);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
     @Override
     public List<Exposition> searchExpo(String query, LocalDate localDate) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setDate(1, Date.valueOf(localDate));
             ResultSet resultSet = statement.executeQuery();
             return buildListOfSearchedItems(resultSet);
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.SEARCH_BY_DATE);
             throw new DaoException(Constant.ErrMsg.NOTHING_WAS_FOUND);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 

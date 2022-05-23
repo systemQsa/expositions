@@ -7,6 +7,7 @@
 <body>
 
 <table class="table table-info table-hover">
+    <h4 class="text-center">Searched List</h4>
     <thead>
     <tr>
         <th scope="col">${sessionScope.language['Expos']}</th>

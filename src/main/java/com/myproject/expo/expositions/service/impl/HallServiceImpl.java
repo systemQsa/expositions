@@ -41,7 +41,7 @@ public class HallServiceImpl implements HallService, Removable {
     public List<Hall> getAllRecords(long page, long noOfPages,String sortBy) throws ServiceException {
         try {
             return Optional.ofNullable(hallDao.getAllRecords(page, noOfPages,defineSortQueryForHall(sortBy)))
-                    .filter(list -> list.size() != 0)
+                    .filter(list -> list.size() > 0)
                     .orElseThrow(() -> new ServiceException(Constant.ErrMsg.NO_MORE_RECORDS));
         } catch (DaoException e) {
             logger.warn("Getting all halls in HallServiceImpl class failed");

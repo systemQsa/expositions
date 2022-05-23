@@ -7,8 +7,8 @@
 <body>
 <c:set var="dateFormat" value="${sessionScope.dateFormat}"/>
 <c:set var="timeFormat" value="${sessionScope.timeFormat}"/>
-<h4>${sessionScope.language['contact_manger']}!
 <table class="table table-info table-hover">
+    <h4 class="text-center">${requestScope.listHeader}</h4>
     <thead>
     <tr>
         <th scope="col">${sessionScope.language['Expos']}</th>
@@ -23,7 +23,7 @@
     <tbody>
     <c:set var="dateFormat" value="${sessionScope.dateFormat}"/>
     <c:set var="timeFormat" value="${sessionScope.timeFormat}"/>
-    <c:forEach var="expo" items="${sessionScope.canceledExpos}">
+    <c:forEach var="expo" items="${sessionScope.userExpos}">
         <tr>
             <th>${expo.name}</th>
             <td>${expo.date.format(dateFormat)}</td>

@@ -40,12 +40,23 @@ public class GetUserExpos implements Command {
         long noOfRecords = parseStrToLong(req.getParameter(Constant.NO_OF_RECORDS));
         int statusId = getStatusId(req.getParameter(Constant.STATUS));
         try {
-            session.setAttribute(Constant.CANCELED_EXPOS,expoService.getUserExpos(user,statusId,page,noOfRecords));
+            session.setAttribute(Constant.USER_EXPOS, expoService.getUserExpos(user, statusId, page, noOfRecords));
+            req.setAttribute(Constant.LIST_HEADER, setHeaderForActiveCanceledUserExpos(req.getParameter(Constant.STATUS), req));
         } catch (ServiceException e) {
-            setInformMessageToUser(19,req,e.getMessage());
+            setInformMessageToUser(19, req, e.getMessage());
             throw new CommandException(Constant.URL.FULL_USER_PAGE);
         }
         return Route.setFullRoutePath(Constant.URL.FULL_USER_PAGE, Route.RouteType.FORWARD);
+    }
+
+    private String setHeaderForActiveCanceledUserExpos(String viewListOf, HttpServletRequest req) {
+        if (viewListOf.equals(Constant.ACTIVE)) {
+            return translateInfoMessageToRequiredLang(Constant.InfoMsg.MY_ACTIVE_EXPOS, req);
+        } else {
+            setInformMessageToUser(22, req, Constant.InfoMsg.CONTACT_MANAGER);
+            return translateInfoMessageToRequiredLang(Constant.InfoMsg.MY_CANCELED_EXPOS, req);
+        }
+
     }
 
 }

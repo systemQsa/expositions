@@ -53,16 +53,18 @@ public final class Query {
     }
 
     public final static class ThemeSQL {
-        public static final String GET_ALL_THEMES = "SELECT * FROM theme ORDER BY id_theme DESC LIMIT ?,?";
+        public static final String GET_ALL_THEMES_PAGINATE = "SELECT * FROM theme ORDER BY id_theme DESC LIMIT ?,?";
         public static final String ADD_NEW_THEME = "INSERT INTO theme(name) VALUES (?)";
         public static final String UPDATE_THEME = "UPDATE theme SET name=? WHERE id_theme=?";
         public static final String DELETE_THEME = "DELETE FROM theme WHERE id_theme=?";
+        public static final String GET_ALL_THEMES = "SELECT * FROM theme";
     }
 
     public final static class HallSQL {
         public static final String ADD_NEW_HALL = "INSERT INTO hall(name) VALUES (?)";
-        public static final String GET_ALL_HALLS = "SELECT * FROM hall ORDER BY id_hall DESC LIMIT ?,?";
+        public static final String GET_ALL_HALLS_PAGINATE = "SELECT * FROM hall ORDER BY id_hall DESC LIMIT ?,?";
         public static final String UPDATE_HALL = "UPDATE hall SET name=? WHERE id_hall=?";
         public static final String DELETE_HALL = "DELETE FROM hall WHERE id_hall=?";
+        public static final String GET_ALL_HALLS = "SELECT * FROM hall";
     }
 }

@@ -21,6 +21,7 @@
     </c:if>
 </div>
 <table class="table table-info table-hover">
+    <h4 class="text-center">${requestScope.listHeader}</h4>
     <thead>
     <tr>
         <th scope="col">${sessionScope.language['Expos']}</th>

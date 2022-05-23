@@ -17,10 +17,6 @@ public class LangFilter implements Filter {
     private ResourceBundle bundle = ResourceBundle.getBundle(Constant.RESOURCES, Locale.ENGLISH);
 
     @Override
-    public void init(FilterConfig filterConfig) {
-    }
-
-    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -50,6 +46,10 @@ public class LangFilter implements Filter {
         session.setAttribute(Constant.LANG, lang);
         session.setAttribute(Constant.LANGUAGE, bundle);
         session.setAttribute(Constant.COUNTRY, country);
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) {
     }
 
     @Override

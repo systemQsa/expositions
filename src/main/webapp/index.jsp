@@ -36,6 +36,9 @@
                                 <a class="dropdown-item"
                                    href="?action=viewAllExpos&command=paginate&sortBy=id&page=1&noOfRecords=2">${sessionScope.language['Expos']}</a>
                             </li>
+                            <li>
+                                <a class="dropdown-item" href="?action=viewAllExpos&command=paginate&sortBy=statistic&page=1&noOfRecords=2">${sessionScope.language['Statistics']}</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>

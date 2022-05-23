@@ -1,10 +1,6 @@
 package com.myproject.expo.expositions.util;
 
 
-import sun.security.pkcs11.P11Util;
-
-import javax.swing.plaf.PanelUI;
-
 public final class Constant {
     public static final String REDIRECT = "redirect:";
     public static final String ACTION = "action";
@@ -49,7 +45,7 @@ public final class Constant {
     public static final String EXPO_ID = "expoId";
     public static final String ONE_EXPO_DATA = "oneExpoData";
     public static final String REGEX_FOR_PIECE_OF_PATH_TO_CHANGE = "[a-z]+.jsp";
-    public static final String CANCELED_EXPOS = "canceledExpos";
+    public static final String USER_EXPOS = "userExpos";
     public static final String SEARCHED_LIST = "searchedList";
     public static final String GUEST = "guest";
     public static final String SEARCHED_ITEM = "searchedItem";
@@ -63,6 +59,13 @@ public final class Constant {
     public static final String USERS_LIST = "usersList";
     public static final String STATUS = "status";
     public static final String ID = "id";
+    public static final String ACTIVE = "active";
+    public static final String CANCELED = "canceled";
+    public static final String LIST_HEADER = "listHeader";
+    public static final String STATISTIC = "statistic";
+    public static final String EXPOSITIONS = "expositions";
+    public static final String STATISTICS = "Statistics";
+
 
     public static class ErrMsg {
         public static final String REGISTER = "err.register";
@@ -108,10 +111,13 @@ public final class Constant {
         public static final String CANCELED_EXPO = "err.expo_canceled";
         public static final String HALL_BUSY = "err.hall_busy";
         public static final String INCORRECT_SEARCH = "err.incorrect_search";
+        public static final String CANCELED_EXPO_CANT_BUY = "err.canceled_expo";
     }
 
     public static class InfoMsg {
-
+        public static final String CONTACT_MANAGER = "contact_manager";
+        public static final String MY_ACTIVE_EXPOS = "my_active_expos";
+        public static final String MY_CANCELED_EXPOS = "my_canceled_expos";
     }
 
     public static class LogMsg {
@@ -142,6 +148,7 @@ public final class Constant {
         public static final String CHANGE_EMAIL = "User can`t update the email.The user email = ";
         public static final String CHANGE_PASSWORD = "User with can`t update the pass. User email is ";
         public static final String GET_ALL_USERS = "Cannot get all registered users from DB";
+        public static final String BUY_EXPO = "BuyExpo class failed. User cannot buy the exposition";
     }
 
     public static class URL {

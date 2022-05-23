@@ -8,10 +8,8 @@ import com.myproject.expo.expositions.dao.entity.Exposition;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.exception.ServiceException;
-import com.myproject.expo.expositions.factory.ServiceFactory;
-import com.myproject.expo.expositions.factory.impl.ServiceFactoryImpl;
-import com.myproject.expo.expositions.service.HallService;
-import com.myproject.expo.expositions.service.ThemeService;
+import com.myproject.expo.expositions.service.AllThemeHallService;
+import com.myproject.expo.expositions.service.impl.AllThemeHallServiceImpl;
 import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -22,20 +20,14 @@ import java.util.List;
 
 public class ViewSelectedExpoCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ViewSelectedExpoCommand.class);
-    private final HallService hallService;
-    private final ServiceFactory serviceFactory;
-    private ThemeService themeService;
+    private final AllThemeHallService allThemeHallService;
 
     public ViewSelectedExpoCommand() {
-        serviceFactory = new ServiceFactoryImpl();
-        hallService = serviceFactory.getHallService();
-        themeService = serviceFactory.gerThemeService();
+        allThemeHallService = new AllThemeHallServiceImpl();
     }
 
-    public ViewSelectedExpoCommand(ServiceFactory serviceFactory, HallService hallService) {
-        this.serviceFactory = serviceFactory;
-        this.hallService = hallService;
-
+    public ViewSelectedExpoCommand(AllThemeHallService allThemeHallService) {
+        this.allThemeHallService = allThemeHallService;
     }
 
     @Override
@@ -44,15 +36,13 @@ public class ViewSelectedExpoCommand implements Command {
         List<Exposition> list = (List<Exposition>) req.getSession().getAttribute(Constant.EXPOS_LIST);
         setSelectedExpoToSession(req, list);
         try {
-            hallService.setListOfFoundedRecordsToTheSession(req.getSession(), hallService.getAllRecords(1, 2, Constant.ID), 1, 2);
-            themeService.setListOfFoundedRecordsToTheSession(req.getSession(),themeService.getAllRecords(1,2,Constant.ID),1,2);
+            req.getSession().setAttribute(Constant.HALL_LIST, allThemeHallService.allHalls());
+            req.getSession().setAttribute(Constant.THEME_LIST, allThemeHallService.allThemes());
         } catch (ServiceException e) {
             setInformMessageToUser(20, req, e.getMessage());
             throw new CommandException(Constant.URL.FULL_ADMIN_PAGE);
         }
-        return Route.setFullRoutePath(PathPage.getRequiredPagePath(DefinePathForUser.definePath(user.getUserRole()
-                        .getRole())).replaceAll(Constant.REGEX_FOR_PIECE_OF_PATH_TO_CHANGE, Constant.URL.SEE_ONE_EXPO_REPLACEMENT),
-                Route.RouteType.FORWARD);
+        return getRouteBack(user);
     }
 
     private void setSelectedExpoToSession(HttpServletRequest req, List<Exposition> list) {
@@ -62,5 +52,11 @@ public class ViewSelectedExpoCommand implements Command {
                         .filter(expo -> expo.getIdExpo() == expoId)
                         .findFirst()
                         .orElse(null));
+    }
+
+    private Route getRouteBack(User user) {
+        return Route.setFullRoutePath(PathPage.getRequiredPagePath(DefinePathForUser.definePath(user.getUserRole()
+                        .getRole())).replaceAll(Constant.REGEX_FOR_PIECE_OF_PATH_TO_CHANGE, Constant.URL.SEE_ONE_EXPO_REPLACEMENT),
+                Route.RouteType.FORWARD);
     }
 }

@@ -8,8 +8,10 @@ import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.factory.AbstractFactory;
 import com.myproject.expo.expositions.factory.ServiceFactory;
 import com.myproject.expo.expositions.factory.impl.AbstractFactoryImpl;
+import com.myproject.expo.expositions.service.AllThemeHallService;
 import com.myproject.expo.expositions.service.HallService;
 import com.myproject.expo.expositions.service.ThemeService;
+import com.myproject.expo.expositions.service.impl.AllThemeHallServiceImpl;
 import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -20,36 +22,25 @@ import javax.servlet.http.HttpSession;
 
 public class PrepareToAddExpo implements Command {
     private static final Logger logger = LogManager.getLogger(PrepareToAddExpo.class);
-    private final HallService hallService;
-    private final ThemeService themeService;
-    private final ServiceFactory serviceFactory;
+    private final AllThemeHallService allThemeHallService;
 
     public PrepareToAddExpo() {
-        serviceFactory = new AbstractFactoryImpl().getServiceFactory();
-        hallService = serviceFactory.getHallService();
-        themeService = serviceFactory.gerThemeService();
-
+        allThemeHallService = new AllThemeHallServiceImpl();
     }
 
-    public PrepareToAddExpo(ServiceFactory serviceFactory, HallService hallService, ThemeService themeService) {
-        this.serviceFactory = serviceFactory;
-        this.hallService = hallService;
-        this.themeService = themeService;
-
+    public PrepareToAddExpo(AllThemeHallService allThemeHallService) {
+        this.allThemeHallService = allThemeHallService;
     }
 
     @Override
     public Route execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
-        long noOfRecords = parseStrToLong(req.getParameter(Constant.NO_OF_RECORDS));
-        String sortBy = setInitSortBy(req);
-        HttpSession session = req.getSession();
         try {
-            hallService.setListOfFoundedRecordsToTheSession(session,hallService.getAllRecords(1,noOfRecords,sortBy),1,noOfRecords);
-            themeService.setListOfFoundedRecordsToTheSession(session,themeService.getAllRecords(1,noOfRecords,sortBy),1,noOfRecords);
+            req.getSession().setAttribute(Constant.HALL_LIST, allThemeHallService.allHalls());
+            req.getSession().setAttribute(Constant.THEME_LIST, allThemeHallService.allThemes());
         } catch (ServiceException e) {
             logger.info("PrepareToAddExpo failed");
-            setInformMessageToUser(14,req,e.getMessage());
-          throw new CommandException(Constant.URL.ADD_NEW_EXPO_FULL_PATH);
+            setInformMessageToUser(14, req, e.getMessage());
+            throw new CommandException(Constant.URL.ADD_NEW_EXPO_FULL_PATH);
         }
         return Route.setFullRoutePath(Constant.URL.ADD_EXPO_REDIRECT, Route.RouteType.REDIRECT);
     }

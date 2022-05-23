@@ -39,20 +39,28 @@ public class ViewAllExposCommand implements Command {
         long noOfRecords = setInitNoOfRecords(req);
         String sortBy = setInitSortBy(req);
         Route route = getRouteDependOnUserRole(user);
-
         try {
-            List<Exposition> list = expoService.getAllRecords(page, noOfRecords, sortBy);
-
-            list.forEach(System.out::println);
-
-            expoService.setListOfFoundedRecordsToTheSession(session,
-                   list , page, noOfRecords);
-            session.setAttribute(Constant.SORT_BY, sortBy);
+            gettingAllExposProcess(req, session, page, noOfRecords, sortBy);
             return route;
         } catch (ServiceException e) {
             logger.warn("ViewAllExposCommand has failed");
             setInformMessageToUser(12, req, e.getMessage());
             throw new CommandException(route.getPathOfThePage());
+        }
+    }
+
+    private void gettingAllExposProcess(HttpServletRequest req, HttpSession session, long page, long noOfRecords, String sortBy) throws ServiceException {
+        List<Exposition> list = expoService.getAllRecords(page, noOfRecords, sortBy);
+        expoService.setListOfFoundedRecordsToTheSession(session, list , page, noOfRecords);
+        session.setAttribute(Constant.SORT_BY, sortBy);
+        req.setAttribute(Constant.LIST_HEADER,setHeaderForTableList(req, sortBy));
+    }
+
+    private String setHeaderForTableList(HttpServletRequest req, String sortBy) {
+        if (sortBy.equals(Constant.STATISTIC)){
+            return translateInfoMessageToRequiredLang(Constant.STATISTICS, req);
+        }else {
+           return translateInfoMessageToRequiredLang(Constant.EXPOSITIONS, req);
         }
     }
 

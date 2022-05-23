@@ -17,7 +17,6 @@ import java.util.List;
 public class ThemeDaoImpl implements ThemeDao {
     private static final Logger logger = LogManager.getLogger(ThemeDaoImpl.class);
     private final ConnectManager connectManager;
-    private Connection connection;
 
     public ThemeDaoImpl() {
         connectManager = ConnectionPool.getInstance();
@@ -29,14 +28,12 @@ public class ThemeDaoImpl implements ThemeDao {
 
     @Override
     public List<Theme> getAllRecords(long page, long noOfRecords, String querySortBy) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.GET_ALL_THEMES)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.GET_ALL_THEMES_PAGINATE)) {
             return createThemeListFromStatement(statement, page, noOfRecords);
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.GET_ALL_THEMES);
             throw new DaoException(Constant.ErrMsg.GET_ALL_THEMES);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -61,15 +58,13 @@ public class ThemeDaoImpl implements ThemeDao {
 
     @Override
     public Theme add(Theme theme) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.ADD_NEW_THEME, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.ADD_NEW_THEME, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, theme.getName());
             return setGeneratedIdToTheTheme(theme, statement);
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.ADD_NEW_THEME);
             throw new DaoException(Constant.ErrMsg.ADD_NEW_THEME);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -85,14 +80,12 @@ public class ThemeDaoImpl implements ThemeDao {
 
     @Override
     public boolean update(Theme theme) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.UPDATE_THEME)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.UPDATE_THEME)) {
             setStatementToUpdateTheTheme(theme, statement);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(Constant.ErrMsg.UPDATE_THEME);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -103,14 +96,12 @@ public class ThemeDaoImpl implements ThemeDao {
 
     @Override
     public boolean remove(long idTheme) throws Exception {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.DELETE_THEME)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.DELETE_THEME)) {
             statement.setLong(1, idTheme);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(Constant.ErrMsg.DELETE_THEME);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 }

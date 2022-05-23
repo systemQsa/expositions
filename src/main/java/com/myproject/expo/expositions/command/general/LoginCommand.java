@@ -40,7 +40,7 @@ public class LoginCommand implements Command {
         try {
             User user = authenticationAndAuthorization(req);
             setUserToTheSession(req, user);
-            cleanSessionFromAllLists(req);
+            cleanSession(req);
             return Route.setFullRoutePath(Constant.REDIRECT + DefinePathForUser
                     .definePath(user.getUserRole().getRole()), Route.RouteType.REDIRECT);
         } catch (ValidationException | ServiceException e) {
@@ -72,13 +72,5 @@ public class LoginCommand implements Command {
     private boolean isInputCorrect(HttpServletRequest req) throws ValidationException {
         return validate.isEmailValid(req.getParameter(Constant.EMAIL))
                 && validate.isPasswordValid(req.getParameter(Constant.PASSWORD));
-    }
-
-    private HttpSession cleanSessionFromAllLists(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        session.setAttribute(Constant.THEME_LIST, null);
-        session.setAttribute(Constant.EXPOS_LIST, null);
-        session.setAttribute(Constant.HALL_LIST, null);
-        return session;
     }
 }

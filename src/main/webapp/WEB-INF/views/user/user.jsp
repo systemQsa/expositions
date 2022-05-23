@@ -62,6 +62,9 @@
                                 <a class="dropdown-item"
                                    href="?action=viewMyExpos&status=active&command=paginate&sortBy=id&page=1&noOfRecords=2">my active</a>
                             </li>
+                            <li>
+                                <a class="dropdown-item" href="?action=viewAllExpos&command=paginate&sortBy=statistic&page=1&noOfRecords=2"> ${sessionScope.language['Statistics']}</a>
+                            </li>
                         </ul>
                     </li>
 
@@ -96,8 +99,8 @@
         <jsp:include page="/WEB-INF/views/admin/viewAllExpos.jsp"/>
     </c:if>
 
-    <c:if test="${not empty sessionScope.canceledExpos}">
-        <jsp:include page="/WEB-INF/views/user/canceledExpos.jsp"/>
+    <c:if test="${not empty sessionScope.userExpos}">
+        <jsp:include page="/WEB-INF/views/user/userExpos.jsp"/>
     </c:if>
 
     <c:if test="${not empty sessionScope.searchedList}">

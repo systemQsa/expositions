@@ -66,16 +66,18 @@ public class UtilMethodsTest {
     @Test
     public void getNoOfRecordsFromSession() {
         when(req.getSession().getAttribute("noOfRecords")).thenReturn(5);
-        Assertions.assertEquals(5,command.getNoOfRecordsFromSession(req));
+        Assertions.assertEquals(5, command.getNoOfRecordsFromSession(req));
     }
 
     @Test
     public void translateInfoMessageToRequiredLang() {
-         Assertions.assertEquals("some string returned",command.translateInfoMessageToRequiredLang("String",dummyBundle));
+        when(req.getSession()).thenReturn(session);
+        when(session.getAttribute("language")).thenReturn(dummyBundle);
+        Assertions.assertEquals("some string returned", command.translateInfoMessageToRequiredLang("String", req));
     }
 
     @Test
     public void parseStrToInt() {
-       Assertions.assertEquals(123,command.parseStrToLong("123"));
+        Assertions.assertEquals(123, command.parseStrToLong("123"));
     }
 }

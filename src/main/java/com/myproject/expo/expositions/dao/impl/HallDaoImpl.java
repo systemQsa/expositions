@@ -30,15 +30,13 @@ public class HallDaoImpl implements HallDao {
 
     @Override
     public Hall add(Hall hall) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.HallSQL.ADD_NEW_HALL, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.HallSQL.ADD_NEW_HALL, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, hall.getName());
             return setGeneratedIdToTheHall(hall, statement);
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.ADD_HALL);
             throw new DaoException(Constant.ErrMsg.ADD_HALL);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -54,14 +52,12 @@ public class HallDaoImpl implements HallDao {
 
     @Override
     public List<Hall> getAllRecords(long page, long noOfRecords, String querySortBy) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.HallSQL.GET_ALL_HALLS)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.HallSQL.GET_ALL_HALLS_PAGINATE)) {
             return createHallListFromStatement(page, noOfRecords, statement);
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.GET_ALL_HALLS);
             throw new DaoException(Constant.ErrMsg.GET_ALL_HALLS);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -86,15 +82,13 @@ public class HallDaoImpl implements HallDao {
 
     @Override
     public boolean update(Hall hall) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.HallSQL.UPDATE_HALL)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.HallSQL.UPDATE_HALL)) {
             setStatementToUpdateTheHall(hall, statement);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.UPDATE_HALL + hall.getIdHall());
             throw new DaoException(Constant.ErrMsg.UPDATE_HALL);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -105,15 +99,13 @@ public class HallDaoImpl implements HallDao {
 
     @Override
     public boolean remove(long idHall) throws Exception {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.HallSQL.DELETE_HALL)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.HallSQL.DELETE_HALL)) {
             statement.setLong(1, idHall);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.DELETE_HALL + idHall);
             throw new DaoException(Constant.ErrMsg.DELETE_HALL);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 }

@@ -14,8 +14,10 @@ import java.sql.SQLException;
 public class ConnectionPool implements ConnectManager {
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
     private static volatile ConnectionPool instance;
+    private Connection connection;
 
-    private ConnectionPool() {}
+    private ConnectionPool() {
+    }
 
     public static ConnectionPool getInstance() {
         ConnectionPool localInstance = instance;
@@ -29,10 +31,9 @@ public class ConnectionPool implements ConnectManager {
         }
         return localInstance;
     }
-
     @Override
-    public Connection getConnection()  {
-        Connection connection = null;
+    public Connection getConnection() {
+      //  Connection connection = null;
         try {
             Context contextInit = new InitialContext();
             Context contextLookUp = (Context) contextInit.lookup(Constant.LOOK_UP_ENV);
@@ -44,8 +45,8 @@ public class ConnectionPool implements ConnectManager {
     }
 
     @Override
-    public void closeConnection(Connection connection)  {
-        if (connection != null){
+    public void closeConnection(Connection connection) {
+        if (connection != null) {
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -55,13 +56,19 @@ public class ConnectionPool implements ConnectManager {
     }
 
     @Override
-    public void rollBack(Connection connection)  {
-       if (connection != null){
-           try {
-               connection.rollback();
-           } catch (SQLException e) {
-               logger.warn(Constant.LogMsg.CANNOT_ROLLBACK_COMMIT);
-           }
-       }
+    public void rollBack(Connection connection) {
+        if (connection != null) {
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                logger.warn(Constant.LogMsg.CANNOT_ROLLBACK_COMMIT);
+            }
+        }
     }
+
+    @Override
+    public void close() throws Exception {
+        connection.close();
+    }
+
 }

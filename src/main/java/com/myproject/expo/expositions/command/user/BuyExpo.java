@@ -36,14 +36,13 @@ public class BuyExpo implements Command {
     public Route execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         User user = (User) req.getSession().getAttribute(Constant.USER_DATA);
         try {
-            userService.buyExpo(user,findRequiredExpoToBuy(req));
-            req.getSession().setAttribute(Constant.USER_DATA,user);
-            req.getSession().setAttribute(Constant.EXPOS_LIST,null);
+            userService.buyExpo(user, findRequiredExpoToBuy(req));
+            req.getSession().setAttribute(Constant.USER_DATA, user);
+            cleanSession(req);
             return Route.setFullRoutePath(Constant.URL.USER_REDIRECT, Route.RouteType.REDIRECT);
         } catch (ServiceException e) {
-            setInformMessageToUser(17,req,e.getMessage());
-            //todo translate inform msg in session
-            req.getSession().setAttribute("infMsg","You cant buy canceled exposition");
+            setInfMSGToSession(e.getMessage(), req);
+            logger.info(Constant.LogMsg.BUY_EXPO);
             throw new CommandException(Constant.URL.USER_REDIRECT);
         }
     }

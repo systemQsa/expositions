@@ -23,7 +23,6 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
     private final ConnectManager connectManager;
-    private Connection connection;
 
     public UserDaoImpl() {
         connectManager = ConnectionPool.getInstance();
@@ -35,15 +34,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User add(User user) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement ps =
-                     connection.prepareStatement(Query.UserSQL.REGISTER_USER, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement ps = connection.prepareStatement(Query.UserSQL.REGISTER_USER, Statement.RETURN_GENERATED_KEYS)) {
             user.setIdUser(getRoleIdForUserAfterRegister(setStatementForRegistration(ps, user)));
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.PROBLEM_REGISTER_USER_IN_DAO);
             throw new DaoException(Constant.ErrMsg.REGISTER);
-        } finally {
-            connectManager.closeConnection(connection);
         }
         return user;
     }
@@ -71,15 +67,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserByEmailAndPass(String email, String pass) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(Query.UserSQL.GET_USER_BY_EMAIL)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement ps = connection.prepareStatement(Query.UserSQL.GET_USER_BY_EMAIL)) {
             return extractFoundedUserFromResultSet(setStatementToFindUser(ps, email))
                     .filter(obj -> obj.getEmail() != null)
                     .orElseThrow(() -> new DaoException(Constant.ErrMsg.CANNOT_FIND_SUCH_USER));
         } catch (SQLException e) {
             throw new DaoException(Constant.ErrMsg.CANNOT_FIND_SUCH_USER);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -94,30 +88,28 @@ public class UserDaoImpl implements UserDao {
         User.UserBuilder user = User.builder();
         if (resSet.next()) {
             user.setIdUser(resSet.getLong(1))
-            .setName(resSet.getString(Constant.Column.NAME))
-            .setSurname(resSet.getString(Constant.Column.SURNAME))
-            .setEmail(resSet.getString(Constant.Column.EMAIL))
-            .setPassword(resSet.getString(Constant.Column.PASSWORD).toCharArray())
-            .setPhone(resSet.getString(Constant.Column.PHONE))
-            .setBalance(resSet.getBigDecimal(Constant.Column.BALANCE))
-            .setUserRole(UserRole.defineUserRole(resSet.getInt(Constant.Column.ROLE_ID)))
-            .setStatus(defineStatus(resSet.getInt(Constant.Column.STATUS_ID)));
+                    .setName(resSet.getString(Constant.Column.NAME))
+                    .setSurname(resSet.getString(Constant.Column.SURNAME))
+                    .setEmail(resSet.getString(Constant.Column.EMAIL))
+                    .setPassword(resSet.getString(Constant.Column.PASSWORD).toCharArray())
+                    .setPhone(resSet.getString(Constant.Column.PHONE))
+                    .setBalance(resSet.getBigDecimal(Constant.Column.BALANCE))
+                    .setUserRole(UserRole.defineUserRole(resSet.getInt(Constant.Column.ROLE_ID)))
+                    .setStatus(defineStatus(resSet.getInt(Constant.Column.STATUS_ID)));
         }
         return Optional.ofNullable(user.build());
     }
 
     @Override
     public User updateBalance(User user, BigDecimal price) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_BALANCE)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_BALANCE)) {
             prepareStatementToTopUpUserBalance(user.getIdUser(), setNewUserBalance(user, price), statement);
             statement.executeUpdate();
             return user;
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.TOP_UP_BALANCE + user.getIdUser());
             throw new DaoException(Constant.ErrMsg.TOP_UP_BALANCE);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -133,7 +125,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User buyExpo(User user, Exposition expo) throws DaoException {
-        connection = connectManager.getConnection();
+        Connection connection = connectManager.getConnection();
         try (PreparedStatement updateUserBalance = connection.prepareStatement(Query.UserSQL.WITHDRAW_MONEY_AND_UPDATE_EXPOS_SOLD_TICKETS);
              PreparedStatement tieUserWithExpo = connection.prepareStatement(Query.UserSQL.INSERT_REFS_EXPO_USER)) {
             connection.setAutoCommit(false);
@@ -144,7 +136,7 @@ public class UserDaoImpl implements UserDao {
             connectManager.rollBack(connection);
             logger.warn("User " + user.getIdUser() + " cannot buy expo " + expo.getIdExpo());
             throw new DaoException(e.getMessage());
-        } finally {
+        }finally {
             connectManager.closeConnection(connection);
         }
         return user;
@@ -180,35 +172,31 @@ public class UserDaoImpl implements UserDao {
             statement.setLong(3, expo.getTickets() - 1);
             statement.setLong(4, expo.getIdExpo());
             statement.setLong(5, user.getIdUser());
-            statement.executeUpdate();
+           return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(Constant.ErrMsg.SET_BALANCE);
         }
-        return true;
     }
 
     private boolean setStatementToReferExpoUser(User user, Exposition expo, PreparedStatement statement2) throws DaoException {
         try {
             statement2.setLong(1, expo.getIdExpo());
             statement2.setLong(2, user.getIdUser());
-            statement2.executeUpdate();
+           return statement2.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(Constant.ErrMsg.SET_REFS_EXPO_USER);
         }
-        return true;
     }
 
     @Override
     public boolean changeEmail(String oldEmail, String newEmail) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_EMAIL)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_EMAIL)) {
             setStatementToUpdateTheEmail(oldEmail, newEmail, statement);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.CHANGE_EMAIL + oldEmail);
             throw new DaoException(Constant.ErrMsg.CHANGE_EMAIL);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -219,15 +207,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean changePass(String email, String password) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_PASS)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_PASS)) {
             setStatementToUpdateThePass(email, password, statement);
             return executeUpdatingUserPass(statement);
         } catch (SQLException | DaoException e) {
             logger.warn(Constant.LogMsg.CHANGE_PASSWORD + email);
             throw new DaoException(Constant.ErrMsg.CHANGE_PASSWORD);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -246,14 +232,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAllRecords(long page, long noOfRecords, String query) throws DaoException {
-        connection = connectManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             return createListOfUsers(statement.executeQuery());
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.GET_ALL_USERS);
             throw new DaoException(Constant.ErrMsg.GET_ALL_USERS);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 
@@ -279,16 +263,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean blockUnblockUser(int newStatus, long userId) throws DaoException {
-        connection = connectManager.getConnection();
         checkStatusNotZero(newStatus);
-        try (PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_STATUS)) {
+        try (Connection connection = connectManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_STATUS)) {
             statement.setInt(1, newStatus);
             statement.setLong(2, userId);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(Constant.ErrMsg.BLOCK_UNBLOCK_USER);
-        } finally {
-            connectManager.closeConnection(connection);
         }
     }
 

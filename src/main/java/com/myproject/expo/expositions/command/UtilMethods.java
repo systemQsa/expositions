@@ -2,7 +2,6 @@ package com.myproject.expo.expositions.command;
 
 import com.myproject.expo.expositions.dao.entity.Status;
 import com.myproject.expo.expositions.dao.entity.User;
-
 import com.myproject.expo.expositions.util.Constant;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -25,12 +24,16 @@ public interface UtilMethods {
 
     default boolean setInformMessageToUser(int infoNum, HttpServletRequest req, String message) {
         req.setAttribute("infoNum", infoNum);
-        req.setAttribute("infoMsg", translateInfoMessageToRequiredLang(message,
-                (ResourceBundle) req.getSession().getAttribute("language")));
+        req.setAttribute("infoMsg", translateInfoMessageToRequiredLang(message, req));
         return true;
     }
 
-    default String translateInfoMessageToRequiredLang(String message, ResourceBundle bundle) {
+    default void setInfMSGToSession(String message, HttpServletRequest req) {
+        req.getSession().setAttribute("infMsg", translateInfoMessageToRequiredLang(message, req));
+    }
+
+    default String translateInfoMessageToRequiredLang(String message, HttpServletRequest req) {
+        ResourceBundle bundle = ((ResourceBundle) req.getSession().getAttribute("language"));
         return bundle.getString(message);
     }
 
@@ -44,13 +47,15 @@ public interface UtilMethods {
     default LocalDate parseStrToLocalDate(String date) {
         final DateTimeFormatter datePatternEng = DateTimeFormatter.ofPattern("M/dd/yy");
         final DateTimeFormatter datePatternUkr = DateTimeFormatter.ofPattern("dd.MM.yy");
-        return LocalDate.parse(date, Pattern.compile("\\d{1,2}/\\d{2}/\\d{2}").matcher(date).matches() ? datePatternEng : datePatternUkr);
+        return LocalDate.parse(date, Pattern.compile("\\d{1,2}/\\d{2}/\\d{2}").matcher(date).matches()
+                ? datePatternEng : datePatternUkr);
     }
 
     default LocalTime parseStrToLocalTime(String time) {
         final DateTimeFormatter timePatternEng = DateTimeFormatter.ofPattern("h:mm a");
         final DateTimeFormatter timePatternUkr = DateTimeFormatter.ofPattern("HH:mm");
-        return LocalTime.parse(time, Pattern.compile("\\d{1,2}:\\d{2}\\W[A-Z]{2}").matcher(time).matches() ? timePatternEng : timePatternUkr);
+        return LocalTime.parse(time, Pattern.compile("\\d{1,2}:\\d{2}\\W[A-Z]{2}").matcher(time).matches()
+                ? timePatternEng : timePatternUkr);
     }
 
     default BigDecimal parseToBigDecimal(String price) {
@@ -62,6 +67,6 @@ public interface UtilMethods {
                 .filter(item -> item.getName().equals(status))
                 .mapToInt(Status::getStatusId)
                 .findFirst()
-                .getAsInt();
+                .orElse(0);
     }
 }

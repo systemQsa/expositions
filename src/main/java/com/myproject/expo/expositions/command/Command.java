@@ -26,9 +26,10 @@ public interface Command extends UtilMethods {
         HttpSession session = req.getSession();
         session.setAttribute(Constant.THEME_LIST, null);
         session.setAttribute(Constant.HALL_LIST, null);
-        session.setAttribute(Constant.CANCELED_EXPOS,null);
+        session.setAttribute(Constant.USER_EXPOS,null);
         session.setAttribute(Constant.EXPOS_LIST,null);
         session.setAttribute(Constant.SEARCHED_LIST,null);
+        session.setAttribute(Constant.USERS_LIST,null);
         return session;
     }
 }

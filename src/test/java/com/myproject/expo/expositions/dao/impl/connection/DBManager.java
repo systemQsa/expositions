@@ -81,4 +81,9 @@ public class DBManager implements ConnectManager {
         }
         return properties.getProperty("connection.url");
     }
+
+    @Override
+    public void close() throws Exception {
+        connection.close();
+    }
 }

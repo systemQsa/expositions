@@ -33,9 +33,7 @@ public class UpdateThemeCommand implements Command {
         User user = (User) req.getSession().getAttribute(Constant.USER_DATA);
         req.getSession().setAttribute(Constant.THEME_LIST,null);
         try {
-            Theme theme = Theme.builder().setIDTheme(parseStrToLong(req.getParameter(Constant.ID_THEME)))
-                    .setThemeName(req.getParameter(Constant.THEME_NEW_NAME)).build();
-            themeService.update(theme);
+            themeService.update(buildThemeFromReq(req));
             return Route.setFullRoutePath(Constant.REDIRECT + DefinePathForUser.definePath(user.getUserRole().getRole()),
                     Route.RouteType.REDIRECT);
         } catch (ServiceException e) {
@@ -43,5 +41,10 @@ public class UpdateThemeCommand implements Command {
             setInformMessageToUser(6, req, e.getMessage());
             throw new CommandException(Constant.URL.FULL_ADMIN_PAGE);
         }
+    }
+
+    private Theme buildThemeFromReq(HttpServletRequest req) {
+        return Theme.builder().setIDTheme(parseStrToLong(req.getParameter(Constant.ID_THEME)))
+                .setThemeName(req.getParameter(Constant.THEME_NEW_NAME)).build();
     }
 }

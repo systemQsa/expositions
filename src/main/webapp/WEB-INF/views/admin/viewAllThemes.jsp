@@ -8,6 +8,7 @@
 <body>
 
 <table class="table table-info table-hover">
+    <h4 class="text-center">All Themes</h4>
     <thead>
     <tr>
         <th scope="col">${sessionScope.language['Theme']}</th>
