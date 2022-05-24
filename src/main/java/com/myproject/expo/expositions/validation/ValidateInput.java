@@ -92,13 +92,13 @@ public class ValidateInput implements Validate {
     }
 
     @Override
-    public boolean validateProperDatesAndTime(LocalDate date, LocalTime time) throws ValidationException {
+    public boolean validateProperDateAndTime(LocalDate date, LocalTime time) throws ValidationException {
         return validateProperDate(date) && validateProperTime(time);
     }
 
     @Override
     public boolean isUserBlocked(String status) throws ValidationException {
-        if (status.equals("blocked")) {
+        if (status.equals(Constant.BLOCKED)) {
             throw new ValidationException(Constant.ErrMsg.BLOCKED_USER);
         }
         return false;

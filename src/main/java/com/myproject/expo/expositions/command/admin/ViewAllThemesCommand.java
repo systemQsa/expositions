@@ -38,7 +38,8 @@ public class ViewAllThemesCommand implements Command {
             List<Theme> list = themeService.getAllRecords(page, noOfRecords, sortBy);
             list.forEach(System.out::println);
 
-            themeService.setListOfFoundedRecordsToTheSession(session, list, page, noOfRecords);
+            themeService.setListOfFoundedRecordsToTheSession(session, list);
+            themeService.setCurrPageAndNoOfRecordsToSession(session,page,noOfRecords);
         } catch (ServiceException e) {
             createInformMessage(req, page, noOfRecords, e);
             throw new CommandException(Constant.URL.FULL_ADMIN_PAGE);

@@ -69,12 +69,8 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public void setListOfFoundedRecordsToTheSession(HttpSession session, List<Theme> list, long currPage, long noOfRecords) {
+    public void setListOfFoundedRecordsToTheSession(HttpSession session, List<Theme> list) {
         Optional.ofNullable(list)
-                .ifPresent(records -> {
-                    session.setAttribute(Constant.THEME_LIST, new CopyOnWriteArrayList<>(records));
-                    session.setAttribute(Constant.CURRENT_PAGE, currPage);
-                    session.setAttribute(Constant.NO_OF_RECORDS, noOfRecords);
-                });
+                .ifPresent(records -> session.setAttribute(Constant.THEME_LIST, new CopyOnWriteArrayList<>(records)));
     }
 }

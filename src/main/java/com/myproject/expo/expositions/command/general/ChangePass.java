@@ -38,9 +38,9 @@ public class ChangePass implements Command {
     @Override
     public Route execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         String email = req.getParameter(Constant.EMAIL);
-        String newPass = req.getParameter(Constant.NEW_PASS);
         try {
-            String encrypt = passEncrypt.encrypt(String.valueOf(req.getParameter(Constant.NEW_PASS)).getBytes(StandardCharsets.UTF_8), Constant.KEY);
+            String encrypt = passEncrypt.encrypt(String.valueOf(req.getParameter(Constant.NEW_PASS)).getBytes(StandardCharsets.UTF_8),
+                    Constant.KEY);
             userService.changePass(email,encrypt.toCharArray());
         } catch (ServiceException | ValidationException e) {
             setInformMessageToUser(18,req,e.getMessage());

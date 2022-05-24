@@ -37,7 +37,8 @@ public class ViewAllHallsCommand implements Command {
         try {
             List<Hall> list = hallService.getAllRecords(page, noOfRecords,sortBy);
             list.forEach(System.out::println);
-            hallService.setListOfFoundedRecordsToTheSession(session, list, page, noOfRecords);
+            hallService.setListOfFoundedRecordsToTheSession(session, list);
+            hallService.setCurrPageAndNoOfRecordsToSession(session,page,noOfRecords);
         } catch (ServiceException e) {
             logger.warn("Cannot get List<Hall>. ViewAllHallsCommand class failed");
             setInformMessageToUser(7, req, e.getMessage());

@@ -51,7 +51,8 @@ public class ViewAllExposCommand implements Command {
 
     private void gettingAllExposProcess(HttpServletRequest req, HttpSession session, long page, long noOfRecords, String sortBy) throws ServiceException {
         List<Exposition> list = expoService.getAllRecords(page, noOfRecords, sortBy);
-        expoService.setListOfFoundedRecordsToTheSession(session, list , page, noOfRecords);
+        expoService.setListOfFoundedRecordsToTheSession(session, list);
+        expoService.setCurrPageAndNoOfRecordsToSession(session,page,noOfRecords);
         session.setAttribute(Constant.SORT_BY, sortBy);
         req.setAttribute(Constant.LIST_HEADER,setHeaderForTableList(req, sortBy));
     }

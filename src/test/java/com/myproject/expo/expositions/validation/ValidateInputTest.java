@@ -101,7 +101,7 @@ public class ValidateInputTest {
 
     @Test(expected = ValidationException.class)
     public void validateProperDatesAndTime() throws ValidationException {
-        validate.validateProperDatesAndTime(LocalDate.of(2022, 2, 19), LocalTime.of(17, 30));
+        validate.validateProperDateAndTime(LocalDate.of(2022, 2, 19), LocalTime.of(17, 30));
     }
 
     @Test(expected = ValidationException.class)

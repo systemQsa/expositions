@@ -30,7 +30,8 @@ public class FacadeCommand<T> implements Command {
         String sortBy = req.getParameter(Constant.SORT_BY);
         try {
             Route route = command.execute(req, resp);
-            service.setListOfFoundedRecordsToTheSession(session,service.getAllRecords(1, noOfRecords,sortBy), 1,noOfRecords);
+            service.setListOfFoundedRecordsToTheSession(session,service.getAllRecords(1, noOfRecords,sortBy));
+            service.setCurrPageAndNoOfRecordsToSession(session,1,noOfRecords);
             return route;
         } catch (ServiceException | CommandException e) {
             logger.warn("By some reason failed FacadeCommand Class" + e.getMessage());

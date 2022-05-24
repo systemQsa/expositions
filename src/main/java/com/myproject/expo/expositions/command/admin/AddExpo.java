@@ -19,13 +19,9 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class AddExpo implements Command {
     private static final Logger logger = LogManager.getLogger(AddExpo.class);
@@ -58,11 +54,11 @@ public class AddExpo implements Command {
 
     private void addingExpoProcess(HttpServletRequest req) throws ValidationException, ServiceException {
         List<Exposition> hallList = (List<Exposition>) req.getSession().getAttribute(Constant.EXPOS_LIST);
+        cleanSession(req);
         Exposition addedExpo = buildExpositionFromReq(req, validate);
-        validate.validateProperDatesAndTime(addedExpo.getDate(),addedExpo.getTime());
+        validate.validateProperDateAndTime(addedExpo.getDate(),addedExpo.getTime());
         informHallIsBusy(hallList, addedExpo);
         expoService.add(addedExpo);
-        clearSessionFromAllLists(req);
     }
 
     private Exposition buildExpositionFromReq(HttpServletRequest req, Validate validate) throws ValidationException {
@@ -101,12 +97,5 @@ public class AddExpo implements Command {
                         .anyMatch(elem -> expo.getHallList().stream()
                                 .anyMatch(val -> val.getIdHall() == elem.getIdHall())))
                 .anyMatch(exposition -> expo.getDate().compareTo(exposition.getDate()) == 0);
-    }
-
-    private void clearSessionFromAllLists(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        session.setAttribute(Constant.HALL_LIST, null);
-        session.setAttribute(Constant.THEME_LIST, null);
-        session.setAttribute(Constant.EXPOS_LIST, null);
     }
 }

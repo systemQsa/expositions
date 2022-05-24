@@ -33,7 +33,6 @@ public class ConnectionPool implements ConnectManager {
     }
     @Override
     public Connection getConnection() {
-      //  Connection connection = null;
         try {
             Context contextInit = new InitialContext();
             Context contextLookUp = (Context) contextInit.lookup(Constant.LOOK_UP_ENV);

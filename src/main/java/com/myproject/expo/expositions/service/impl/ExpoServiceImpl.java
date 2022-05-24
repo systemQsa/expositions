@@ -65,7 +65,7 @@ public class ExpoServiceImpl implements ExpositionService<Exposition> {
     @Override
     public Exposition add(Exposition expo) throws ServiceException {
         try {
-            validate.validateProperDatesAndTime(expo.getDate(), expo.getTime());
+            validate.validateProperDateAndTime(expo.getDate(), expo.getTime());
             return expoDao.add(expo);
         } catch (DaoException | ValidationException e) {
             logger.warn("ExpoServiceImpl class has failed while adding a new exposition");
@@ -115,12 +115,8 @@ public class ExpoServiceImpl implements ExpositionService<Exposition> {
     }
 
     @Override
-    public void setListOfFoundedRecordsToTheSession(HttpSession session, List<Exposition> list, long currPage, long noOfRecords) {
+    public void setListOfFoundedRecordsToTheSession(HttpSession session, List<Exposition> list) {
         Optional.ofNullable(list)
-                .ifPresent(records -> {
-                    session.setAttribute(Constant.EXPOS_LIST, new CopyOnWriteArrayList<>(records));
-                    session.setAttribute(Constant.CURRENT_PAGE, currPage);
-                    session.setAttribute(Constant.NO_OF_RECORDS, noOfRecords);
-                });
+                .ifPresent(records -> session.setAttribute(Constant.EXPOS_LIST, new CopyOnWriteArrayList<>(records)));
     }
 }

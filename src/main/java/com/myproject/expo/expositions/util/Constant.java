@@ -65,6 +65,7 @@ public final class Constant {
     public static final String STATISTIC = "statistic";
     public static final String EXPOSITIONS = "expositions";
     public static final String STATISTICS = "Statistics";
+    public static final String BLOCKED = "blocked";
 
 
     public static class ErrMsg {

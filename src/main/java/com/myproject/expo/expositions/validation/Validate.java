@@ -24,7 +24,7 @@ public interface Validate {
 
     String onlyDigitsValidate(String str) throws ValidationException;
 
-    boolean validateProperDatesAndTime(LocalDate date, LocalTime time) throws ValidationException;
+    boolean validateProperDateAndTime(LocalDate date, LocalTime time) throws ValidationException;
 
     boolean isUserBlocked(String status) throws ValidationException;
 }
