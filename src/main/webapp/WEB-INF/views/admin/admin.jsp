@@ -85,6 +85,7 @@
     <c:if test="${not empty sessionScope.usersList}">
         <jsp:include page="/WEB-INF/views/admin/allUsers.jsp"/>
     </c:if>
+    <jsp:include page="/WEB-INF/views/general/footer.jsp"/>
     </div>
 
 <%--   All data about user--%>
@@ -98,7 +99,6 @@
 <%--        <p>${sessionScope.userData.idUser}</p>--%>
 <%--        <p>${sessionScope.userData.userRole.role}</p>--%>
 <%--    </c:if>--%>
-
 </div>
 </body>
 </html>

@@ -5,8 +5,10 @@ import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -17,7 +19,7 @@ public class ValidateInput implements Validate {
     private static final String EMAIL_CYRILLIC = "^(([\\p{IsCyrillic}]+)@([\\w]+)\\.([\\p{Lower}]{2,8}))$";
     private static final String REGEX_ONLY_WORDS = "^(\\p{L}+){3,17}$";
     private static final String REGEX_PHONE = "^[+]?[\\d]{7,14}$";
-    private static final String DATE_ENG_REGEX = "\\d{1,2}/\\d{2}/\\d{2}";
+    private static final String DATE_ENG_REGEX = "\\d{1,2}/\\d{1,2}/\\d{2}";
     private static final String DATE_REGEX = "\\d{2}.\\d{2}.\\d{2}";
     private static final String TIME_ENG_REGEX = "\\d{1,2}:\\d{2}\\W[A-Z]{2}";
     private static final String TIME_UKR_REGEX = "\\d{2}:\\d{2}";
@@ -104,6 +106,14 @@ public class ValidateInput implements Validate {
         return false;
     }
 
+    @Override
+    public String notEmptyStr(HttpServletRequest req,String param) throws ValidationException {
+        return   Optional.ofNullable(req.getParameter(param))
+                .filter(Objects::nonNull)
+                .filter(str -> !str.isEmpty())
+                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.EMPTY_STR_INPUT));
+    }
+
     private boolean validateDate(String date) throws ValidationException {
         return Optional.ofNullable(date)
                 .map(str -> (Pattern.compile(DATE_REGEX).matcher(str).matches())
@@ -149,5 +159,7 @@ public class ValidateInput implements Validate {
         }
         throw new ValidationException(Constant.ErrMsg.TIME);
     }
+
+
 
 }

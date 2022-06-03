@@ -66,7 +66,7 @@ public final class Constant {
     public static final String EXPOSITIONS = "expositions";
     public static final String STATISTICS = "Statistics";
     public static final String BLOCKED = "blocked";
-
+    public static final String WHOLE_EXPO_LIST = "wholeExpoList";
 
     public static class ErrMsg {
         public static final String REGISTER = "err.register";
@@ -113,12 +113,14 @@ public final class Constant {
         public static final String HALL_BUSY = "err.hall_busy";
         public static final String INCORRECT_SEARCH = "err.incorrect_search";
         public static final String CANCELED_EXPO_CANT_BUY = "err.canceled_expo";
+        public static final String EMPTY_STR_INPUT = "err.empty_input";
     }
 
     public static class InfoMsg {
         public static final String CONTACT_MANAGER = "contact_manager";
         public static final String MY_ACTIVE_EXPOS = "my_active_expos";
         public static final String MY_CANCELED_EXPOS = "my_canceled_expos";
+        public static final String BUY_SUCCESS = "buy.success";
     }
 
     public static class LogMsg {
@@ -163,10 +165,11 @@ public final class Constant {
         public static final String FULL_USER_PAGE = "/WEB-INF/views/user/user.jsp";
         public static final String USER_REDIRECT = "redirect:/views/user/user.jsp";
         public static final String ADMIN_REDIRECT = "redirect:/views/admin/admin.jsp";
-        public static final String ROOT_FULL_PATH = "/expo/login.js";
+        public static final String ROOT_FULL_PATH = "/expo/login.jsp";
         public static final String ADD_NEW_EXPO_FULL_PATH = "/WEB-INF/views/admin/addNewExpo.jsp";
         public static final String ADD_EXPO_REDIRECT = "redirect:/views/admin/addNewExpo.jsp";
-        public static final String SEE_ONE_EXPO_FULL_PATH = "/WEB-INF/views/admin/seeOneExpo.jsp";
+        public static final String SEE_ONE_EXPO_FULL_PATH_ADMIN = "/WEB-INF/views/admin/seeOneExpo.jsp";
+        public static final String SEE_ONE_EXPO_FULL_PATH_USER = "/WEB-INF/views/user/seeOneExpo.jsp";
     }
 
     public static class Column {

@@ -16,9 +16,14 @@ public class AllThemeHallServiceImpl implements AllThemeHallService {
     private static final Logger logger = LogManager.getLogger(AllThemeHallServiceImpl.class);
     private final AllThemeHallDao allThemeHallDao;
 
-    public AllThemeHallServiceImpl(){
+    public AllThemeHallServiceImpl() {
         allThemeHallDao = new AllThemeHallDaoImpl();
     }
+
+    public AllThemeHallServiceImpl(AllThemeHallDao allThemeHallDao) {
+        this.allThemeHallDao = allThemeHallDao;
+    }
+
     @Override
     public List<Hall> allHalls() throws ServiceException {
         try {

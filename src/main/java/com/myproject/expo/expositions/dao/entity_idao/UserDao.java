@@ -1,5 +1,7 @@
-package com.myproject.expo.expositions.dao;
+package com.myproject.expo.expositions.dao.entity_idao;
 
+import com.myproject.expo.expositions.dao.ChangeEmailPassDao;
+import com.myproject.expo.expositions.dao.GeneralDao;
 import com.myproject.expo.expositions.dao.entity.Exposition;
 import com.myproject.expo.expositions.dao.entity.Status;
 import com.myproject.expo.expositions.dao.entity.User;

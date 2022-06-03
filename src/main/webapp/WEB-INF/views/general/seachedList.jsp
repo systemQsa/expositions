@@ -25,9 +25,10 @@
     <c:forEach var="expo" items="${sessionScope.searchedList}">
         <tr>
             <td>
-                <a href="?action=viewSelectedExpo&command=lookAtMe&expoId=${expo.idExpo}">
-                        ${expo.name}
-                </a>
+<%--                <a href="?action=viewSelectedExpo&command=lookAtMe&expoId=${expo.idExpo}">--%>
+<%--                        ${expo.name}--%>
+<%--                </a>--%>
+            ${expo.name}
             </td>
             <td>${expo.date.format(dateFormat)}</td>
             <td>${expo.time.format(timeFormat)}</td>
@@ -39,6 +40,15 @@
                 </c:forEach>
             </td>
             <td>${expo.theme.name}</td>
+            <c:if test="${role.equals('user')}">
+                <td>
+                    <form method="post" action="${pageContext.request.contextPath}/controller">
+                        <input type="hidden" name="action" value="buyExpo">
+                        <input type="hidden" name="expoId" value="${expo.idExpo}">
+                        <button type="submit" class="btn btn-success btn-sm">${sessionScope.language['buy']}</button>
+                    </form>
+                </td>
+            </c:if>
         </tr>
     </c:forEach>
     </tbody>

@@ -17,7 +17,6 @@
         ${requestScope.oneExpoData.time.format(timeFormat)}
         ${requestScope.oneExpoData.price}
         ${requestScope.oneExpoData.sold}
-<%--        ${requestScope.oneExpoData.hall.name}--%>
         ${requestScope.oneExpoData.theme.name}
         ${requestScope.oneExpoData.tickets}
     </c:when>
@@ -40,14 +39,22 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">${sessionScope.language['Sold']} ${requestScope.oneExpoData.sold}</li>
-<%--                    <li class="list-group-item">${sessionScope.language['Halls']} ${requestScope.oneExpoData.hall.name}</li>--%>
                     <li class="list-group-item">${sessionScope.language['Theme']} ${requestScope.oneExpoData.theme.name}</li>
                     <li class="list-group-item">${sessionScope.language['Tickets']} ${requestScope.oneExpoData.tickets}</li>
+                    <li class="list-group item">Status:
+                        <c:choose>
+                            <c:when test="${requestScope.oneExpoData.statusId == 2}">
+                                ${sessionScope.language['canceled']}
+                            </c:when>
+                            <c:when test="${requestScope.oneExpoData.statusId == 1}">
+                                ${sessionScope.language['active']}
+                            </c:when>
+                        </c:choose>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 </div>
-
 </body>
 </html>

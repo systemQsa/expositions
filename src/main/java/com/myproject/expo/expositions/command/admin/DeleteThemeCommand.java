@@ -6,7 +6,7 @@ import com.myproject.expo.expositions.command.util.DefinePathForUser;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.factory.impl.AbstractFactoryImpl;
-import com.myproject.expo.expositions.service.ThemeService;
+import com.myproject.expo.expositions.service.entity_iservice.ThemeService;
 import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

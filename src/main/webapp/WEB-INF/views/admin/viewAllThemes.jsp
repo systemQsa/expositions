@@ -72,7 +72,7 @@
                                 <input type="hidden" name="action" value="deleteTheme">
                                 <input type="hidden" name="idTheme" value="${theme.idTheme}">
                                 <input type="hidden" name="sortBy" value="id">
-                                <button type="submit" class="btn btn-danger btn-sm">${sessionScope.language['delete']}</button>
+                                <button type="button" class="btn btn-danger btn-sm">${sessionScope.language['delete']}</button>
                             </form>
                         </div>
                     </div>

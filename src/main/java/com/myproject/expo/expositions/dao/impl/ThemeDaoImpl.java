@@ -1,6 +1,6 @@
 package com.myproject.expo.expositions.dao.impl;
 
-import com.myproject.expo.expositions.dao.ThemeDao;
+import com.myproject.expo.expositions.dao.entity_idao.ThemeDao;
 import com.myproject.expo.expositions.dao.connection.ConnectManager;
 import com.myproject.expo.expositions.dao.connection.ConnectionPool;
 import com.myproject.expo.expositions.dao.entity.Theme;

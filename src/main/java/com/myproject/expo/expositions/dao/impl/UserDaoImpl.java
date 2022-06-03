@@ -1,10 +1,9 @@
 package com.myproject.expo.expositions.dao.impl;
 
-import com.myproject.expo.expositions.dao.UserDao;
+import com.myproject.expo.expositions.dao.entity_idao.UserDao;
 import com.myproject.expo.expositions.dao.connection.ConnectManager;
 import com.myproject.expo.expositions.dao.connection.ConnectionPool;
 import com.myproject.expo.expositions.dao.entity.Exposition;
-import com.myproject.expo.expositions.dao.entity.Status;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.dao.entity.UserRole;
 import com.myproject.expo.expositions.dao.sql.Query;

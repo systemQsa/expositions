@@ -1,9 +1,10 @@
 package com.myproject.expo.expositions.dao.impl;
 
-import com.myproject.expo.expositions.dao.UserDao;
+import com.myproject.expo.expositions.dao.entity_idao.UserDao;
 import com.myproject.expo.expositions.dao.entity.Exposition;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.dao.impl.connection.DBManager;
+import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -14,8 +15,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 public class UserDaoImplTest {
     private UserDao userDao;
@@ -87,7 +86,7 @@ public class UserDaoImplTest {
 
     @Test
     public void getAllRecords() throws DaoException {
-        List<User> users = userDao.getAllRecords(1, 3, "query");
+        List<User> users = userDao.getAllRecords(1, 3,  Query.UserSQL.GET_ALL_USERS);
         assertEquals(3, users.size());
     }
 

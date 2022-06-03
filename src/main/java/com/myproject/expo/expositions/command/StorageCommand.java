@@ -1,12 +1,12 @@
 package com.myproject.expo.expositions.command;
 
 import com.myproject.expo.expositions.command.admin.*;
-import com.myproject.expo.expositions.command.admin.AddExpo;
+import com.myproject.expo.expositions.command.admin.AddExpoCommand;
 import com.myproject.expo.expositions.command.admin.facade.FacadeCommand;
 import com.myproject.expo.expositions.command.general.*;
-import com.myproject.expo.expositions.command.user.BuyExpo;
-import com.myproject.expo.expositions.command.user.GetUserExpos;
-import com.myproject.expo.expositions.command.user.TopUpBalance;
+import com.myproject.expo.expositions.command.user.BuyExpoCommand;
+import com.myproject.expo.expositions.command.user.GetUserExposCommand;
+import com.myproject.expo.expositions.command.user.TopUpBalanceCommand;
 import com.myproject.expo.expositions.service.impl.ExpoServiceImpl;
 import com.myproject.expo.expositions.service.impl.HallServiceImpl;
 import com.myproject.expo.expositions.service.impl.ThemeServiceImpl;
@@ -27,18 +27,18 @@ public enum StorageCommand {
     DELETE_HALL("deleteHall", new FacadeCommand<>(new DeleteHallCommand(), new HallServiceImpl())),
     VIEW_ALL_EXPOS("viewAllExpos", new ViewAllExposCommand()),
     SEE_ONE_EXPO("viewSelectedExpo", new ViewSelectedExpoCommand()),
-    UPDATE_EXPO("updateExpo", new FacadeCommand<>(new UpdateExpo(), new ExpoServiceImpl())),
-    PREPARE_TO_ADD_EXPO("prepareToAddExpo", new PrepareToAddExpo()),
-    ADD_EXPO("addExpo", new AddExpo()),
-    TOP_UP_BALANCE("topUpBalance", new TopUpBalance()),
-    BUY_EXPO("buyExpo", new BuyExpo()),
-    CHANGE_EMAIL("changeEmail", new ChangeEmail()),
-    CHANGE_PASS("changePass", new ChangePass()),
-    CANCELED_EXPOS("viewMyExpos", new GetUserExpos()),
-    SEARCH_EXPO("searchExpo", new SearchExpo()),
-    CANCEL_EXPO("changeExpoStatus", new ChangeExpoStatus()),
-    ALL_USERS("viewAllUsers", new AllUsers()),
-    BLOCK_UNBLOCK_USER("blockUnblockUser", new BlockUnblockUser());
+    UPDATE_EXPO("updateExpo", new FacadeCommand<>(new UpdateExpoCommand(), new ExpoServiceImpl())),
+    PREPARE_TO_ADD_EXPO("prepareToAddExpo", new PrepareToAddExpoCommand()),
+    ADD_EXPO("addExpo", new AddExpoCommand()),
+    TOP_UP_BALANCE("topUpBalance", new TopUpBalanceCommand()),
+    BUY_EXPO("buyExpo", new BuyExpoCommand()),
+    CHANGE_EMAIL("changeEmail", new ChangeEmailCommand()),
+    CHANGE_PASS("changePass", new ChangePassCommand()),
+    CANCELED_EXPOS("viewMyExpos", new GetUserExposCommand()),
+    SEARCH_EXPO("searchExpo", new SearchExpoCommand()),
+    CANCEL_EXPO("changeExpoStatus", new ChangeExpoStatusCommand()),
+    ALL_USERS("viewAllUsers", new AllUsersCommand()),
+    BLOCK_UNBLOCK_USER("blockUnblockUser", new BlockUnblockUserCommand());
 
     private final String action;
     private final Command command;

@@ -15,7 +15,7 @@ public interface Command extends UtilMethods {
     Route execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException;
 
     default String setInitSortBy(HttpServletRequest req) {
-        return req.getParameter(Constant.SORT_BY) == null ? "id" : req.getParameter(Constant.SORT_BY);
+        return req.getParameter(Constant.SORT_BY) == null ? Constant.ID : req.getParameter(Constant.SORT_BY);
     }
 
     default long setInitNoOfRecords(HttpServletRequest req) {

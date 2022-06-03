@@ -1,11 +1,11 @@
 package com.myproject.expo.expositions.service.impl;
 
-import com.myproject.expo.expositions.dao.ThemeDao;
+import com.myproject.expo.expositions.dao.entity_idao.ThemeDao;
 import com.myproject.expo.expositions.dao.entity.Theme;
 import com.myproject.expo.expositions.exception.DaoException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.factory.impl.AbstractFactoryImpl;
-import com.myproject.expo.expositions.service.ThemeService;
+import com.myproject.expo.expositions.service.entity_iservice.ThemeService;
 import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

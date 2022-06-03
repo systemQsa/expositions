@@ -12,7 +12,7 @@ import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.exception.ValidationException;
 import com.myproject.expo.expositions.factory.impl.AbstractFactoryImpl;
-import com.myproject.expo.expositions.service.ExpositionService;
+import com.myproject.expo.expositions.service.entity_iservice.ExpositionService;
 import com.myproject.expo.expositions.util.Constant;
 import com.myproject.expo.expositions.validation.Validate;
 import com.myproject.expo.expositions.validation.ValidateInput;
@@ -26,17 +26,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class UpdateExpo implements Command, UtilMethods {
-    private static final Logger logger = LogManager.getLogger(UpdateExpo.class);
+public class UpdateExpoCommand implements Command, UtilMethods {
+    private static final Logger logger = LogManager.getLogger(UpdateExpoCommand.class);
     private final ExpositionService<Exposition> expoService;
     private Validate validate;
 
-    public UpdateExpo() {
+    public UpdateExpoCommand() {
         expoService = new AbstractFactoryImpl().getServiceFactory().getExpoService();
         validate = new ValidateInput();
     }
 
-    public UpdateExpo(ExpositionService<Exposition> expoService) {
+    public UpdateExpoCommand(ExpositionService<Exposition> expoService) {
         this.expoService = expoService;
     }
 
@@ -45,8 +45,9 @@ public class UpdateExpo implements Command, UtilMethods {
         User user = (User) req.getSession().getAttribute(Constant.USER_DATA);
         try {
             Exposition expo = buildExpositionFromReq(req, validate);
-             expoService.update(expo);
-             req.getSession().setAttribute(Constant.HALL_LIST,null);
+            expoService.update(expo);
+            //req.getSession().setAttribute(Constant.HALL_LIST, null);
+            cleanSession(req);
             return Route.setFullRoutePath(Constant.REDIRECT + DefinePathForUser.definePath(user.getUserRole().getRole()),
                     Route.RouteType.REDIRECT);
         } catch (ValidationException | ServiceException e) {
@@ -57,18 +58,19 @@ public class UpdateExpo implements Command, UtilMethods {
     }
 
     private Exposition buildExpositionFromReq(HttpServletRequest req, Validate validate) throws ValidationException {
+        validateExpoInput(req, validate);
         return Exposition.builder()
                 .setExpositionID(parseStrToLong(req.getParameter(Constant.Param.EXPO_ID)))
                 .setExpoName(req.getParameter(Constant.Param.EXPO_NAME))
-                .setExpoDate(parseStrToLocalDate(validate.dateValidate(req.getParameter(Constant.Param.EXPO_DATE))))
-                .setExpoTime(parseStrToLocalTime(validate.timeValidate(req.getParameter(Constant.Param.EXPO_TIME))))
-                .setExpoPrice(parseToBigDecimal(validate.priceValidate(req.getParameter(Constant.Param.EXPO_PRICE))))
-                .setExpoSoldTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter(Constant.Param.EXPO_SOLD))))
+                .setExpoDate(parseStrToLocalDate(req.getParameter(Constant.Param.EXPO_DATE).trim()))
+                .setExpoTime(parseStrToLocalTime(req.getParameter(Constant.Param.EXPO_TIME)))
+                .setExpoPrice(parseToBigDecimal(req.getParameter(Constant.Param.EXPO_PRICE)))
+                .setExpoSoldTickets(parseStrToLong(req.getParameter(Constant.Param.EXPO_SOLD)))
                 .setTheme(buildTheme(req))
                 .setHallList(buildHallList(req))
-                .setTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter(Constant.Param.EXPO_TICKETS)))).build();
+                .setTickets(parseStrToLong(req.getParameter(Constant.Param.EXPO_TICKETS)))
+                .build();
     }
-
 
     private List<Hall> buildHallList(HttpServletRequest req) {
         return Arrays.stream(req.getParameterValues(Constant.Param.EXPO_HALL_ID))
@@ -78,7 +80,7 @@ public class UpdateExpo implements Command, UtilMethods {
 
     private Theme buildTheme(HttpServletRequest req) {
         List<Theme> list = (List<Theme>) req.getSession().getAttribute(Constant.THEME_LIST);
-       return list.stream()
+        return list.stream()
                 .filter(l -> l.getIdTheme() == parseStrToLong(req.getParameter(Constant.Param.ID_THEME)))
                 .findFirst()
                 .orElse(null);

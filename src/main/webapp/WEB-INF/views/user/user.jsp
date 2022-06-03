@@ -118,6 +118,7 @@
 <%--        <p>${sessionScope.userData.phone}</p>--%>
 <%--        <p>${sessionScope.userData.idUser}</p>--%>
 <%--    </c:if>--%>
+<jsp:include page="/WEB-INF/views/general/footer.jsp"/>
 </div>
 </body>
 </html>

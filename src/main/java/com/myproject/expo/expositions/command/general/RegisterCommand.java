@@ -6,7 +6,7 @@ import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.exception.ValidationException;
-import com.myproject.expo.expositions.service.UserService;
+import com.myproject.expo.expositions.service.entity_iservice.UserService;
 import com.myproject.expo.expositions.service.encrypt.PassEncrypt;
 import com.myproject.expo.expositions.service.impl.UserServiceImpl;
 import com.myproject.expo.expositions.util.Constant;

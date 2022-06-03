@@ -2,6 +2,7 @@ package com.myproject.expo.expositions.validation;
 
 import com.myproject.expo.expositions.exception.ValidationException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -27,4 +28,6 @@ public interface Validate {
     boolean validateProperDateAndTime(LocalDate date, LocalTime time) throws ValidationException;
 
     boolean isUserBlocked(String status) throws ValidationException;
+
+    String notEmptyStr(HttpServletRequest req,String param) throws ValidationException;
 }

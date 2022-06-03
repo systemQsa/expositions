@@ -10,7 +10,7 @@ import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.factory.ServiceFactory;
 import com.myproject.expo.expositions.factory.impl.ServiceFactoryImpl;
-import com.myproject.expo.expositions.service.ExpositionService;
+import com.myproject.expo.expositions.service.entity_iservice.ExpositionService;
 import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -21,20 +21,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-public class SearchExpo implements Command {
-    private static final Logger logger = LogManager.getLogger(SearchExpo.class);
+public class SearchExpoCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(SearchExpoCommand.class);
     private static final String REGEX_ONLY_WORDS = "^(\\p{L}+){3,}$";
-    private static final String REGEX_DATE_ENG = "\\d{1,2}/\\d{2}/\\d{2}";
+    private static final String REGEX_DATE_ENG = "\\d{1,2}/\\d{1,2}/\\d{2}";
     private static final String REGEX_DATE_UKR = "\\d{1,2}\\.\\d{2}\\.\\d{2}";
     private final ExpositionService<Exposition> expoService;
     private final ServiceFactory serviceFactory;
 
-    public SearchExpo() {
+    public SearchExpoCommand() {
         serviceFactory = new ServiceFactoryImpl();
         expoService = serviceFactory.getExpoService();
     }
 
-    public SearchExpo(ServiceFactory serviceFactory, ExpositionService<Exposition> expoService) {
+    public SearchExpoCommand(ServiceFactory serviceFactory, ExpositionService<Exposition> expoService) {
         this.serviceFactory = serviceFactory;
         this.expoService = expoService;
     }
@@ -47,18 +47,18 @@ public class SearchExpo implements Command {
         cleanSession(req);
         try {
             checkInputNotEmpty(searchBy, searchedItem);
-            putResToSessionIfPresent(req, getSearchedExposByTheme(searchBy, searchedItem));
-            putResToSessionIfPresent(req, getSearchedExposByDates(searchBy, searchedItem));
+            putResToSessionIfPresent(req, getSearchedExposByTheme(searchBy.trim(), searchedItem.trim()));
+            putResToSessionIfPresent(req, getSearchedExposByDates(searchBy.trim(), searchedItem.trim()));
             return Route.setFullRoutePath(defineRoute(user), Route.RouteType.FORWARD);
         } catch (ServiceException e) {
-            logger.info("Searching the item" + searchedItem + " was failed");
+            logger.info("Searching the item was failed");
             setInformMessageToUser(10, req, e.getMessage());
             throw new CommandException(defineRoute(user));
         }
     }
 
     private void checkInputNotEmpty(String searchBy, String searchedItem) throws ServiceException {
-        if (searchBy == null || searchedItem == null) {
+        if ((searchBy == null || searchedItem == null) || (searchBy.isEmpty() || searchedItem.isEmpty())) {
             throw new ServiceException(Constant.ErrMsg.INCORRECT_SEARCH);
         }
     }

@@ -24,18 +24,19 @@ public class Main {
 
         String d = "5/13/22";
         String t = "11.02.22";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/dd/yy");
+        String f = "7/2/22";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy");
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd.MM.yy");
-        //System.out.println(LocalDate.parse(d,formatter));
+        System.out.println(LocalDate.parse(f,formatter));
 
        // System.out.println(Pattern.compile("\\d{1,2}/\\d{2}/\\d{2}").matcher(d).matches());
 
-        System.out.println(Pattern.compile(EMAIL_CYRILLIC).matcher("саша@gmail.com").matches());
-        System.out.println("саша@gmail.com");
-
-        FileReader file = new FileReader("test/plain.txt");
-        BufferedReader reader =  new BufferedReader(file);
-        String str = reader.readLine();
-        System.out.println(str);
+//        System.out.println(Pattern.compile(EMAIL_CYRILLIC).matcher("саша@gmail.com").matches());
+//        System.out.println("саша@gmail.com");
+//
+//        FileReader file = new FileReader("test/plain.txt");
+//        BufferedReader reader =  new BufferedReader(file);
+//        String str = reader.readLine();
+//        System.out.println(str);
     }
 }

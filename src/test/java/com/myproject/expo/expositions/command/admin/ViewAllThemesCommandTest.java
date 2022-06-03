@@ -4,7 +4,7 @@ import com.myproject.expo.expositions.command.Command;
 import com.myproject.expo.expositions.dao.entity.Theme;
 import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.exception.ServiceException;
-import com.myproject.expo.expositions.service.ThemeService;
+import com.myproject.expo.expositions.service.entity_iservice.ThemeService;
 import com.myproject.expo.expositions.service.impl.ThemeServiceImpl;
 import org.junit.BeforeClass;
 import org.junit.Test;

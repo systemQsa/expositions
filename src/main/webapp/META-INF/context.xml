@@ -1,4 +1,5 @@
 <Context>
+    <Parameter name="username" value="${username}"/>
     <Resource name="jdbc/Data"
               auth="Container"
               type="javax.sql.DataSource"

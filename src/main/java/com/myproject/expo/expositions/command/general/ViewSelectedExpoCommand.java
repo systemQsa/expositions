@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Optional;
 
 public class ViewSelectedExpoCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ViewSelectedExpoCommand.class);
@@ -33,7 +34,7 @@ public class ViewSelectedExpoCommand implements Command {
     @Override
     public Route execute(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         User user = (User) req.getSession().getAttribute(Constant.USER_DATA);
-        List<Exposition> list = (List<Exposition>) req.getSession().getAttribute(Constant.EXPOS_LIST);
+        List<Exposition> list = (List<Exposition>) req.getSession().getAttribute(Constant.WHOLE_EXPO_LIST);
         setSelectedExpoToSession(req, list);
         try {
             req.getSession().setAttribute(Constant.HALL_LIST, allThemeHallService.allHalls());
@@ -55,8 +56,11 @@ public class ViewSelectedExpoCommand implements Command {
     }
 
     private Route getRouteBack(User user) {
-        return Route.setFullRoutePath(PathPage.getRequiredPagePath(DefinePathForUser.definePath(user.getUserRole()
-                        .getRole())).replaceAll(Constant.REGEX_FOR_PIECE_OF_PATH_TO_CHANGE, Constant.URL.SEE_ONE_EXPO_REPLACEMENT),
-                Route.RouteType.FORWARD);
+        return Optional.ofNullable(user)
+                .filter(person -> person.getUserRole().getRole() != null)
+                .map(person -> Route.setFullRoutePath(PathPage.getRequiredPagePath(DefinePathForUser.definePath(person.getUserRole()
+                                .getRole())).replaceAll(Constant.REGEX_FOR_PIECE_OF_PATH_TO_CHANGE, Constant.URL.SEE_ONE_EXPO_REPLACEMENT),
+                        Route.RouteType.FORWARD))
+                .orElseGet(() -> Route.setFullRoutePath(Constant.URL.SEE_ONE_EXPO_FULL_PATH_USER, Route.RouteType.FORWARD));
     }
 }

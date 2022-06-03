@@ -6,7 +6,7 @@ import com.myproject.expo.expositions.util.Constant;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-public interface Service<T> extends GeneralService<T>, Removable {
+public interface Service<T> extends GeneralService<T>{
 
     void setListOfFoundedRecordsToTheSession(HttpSession session, List<T> list);
 

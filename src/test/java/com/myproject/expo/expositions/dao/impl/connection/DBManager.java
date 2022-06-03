@@ -64,8 +64,8 @@ public class DBManager implements ConnectManager {
         try (Connection connection = DriverManager.getConnection(url)) {
             ScriptRunner scriptRunner = new ScriptRunner(connection);
             Reader reader = new BufferedReader(new FileReader("database/testdb.sql"));
+            scriptRunner.setLogWriter(null);
             scriptRunner.runScript(reader);
-
         } catch (SQLException | FileNotFoundException e) {
             e.printStackTrace();
         }

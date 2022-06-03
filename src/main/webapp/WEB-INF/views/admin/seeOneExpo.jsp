@@ -5,7 +5,6 @@
 <head>
     <jsp:include page="/WEB-INF/views/general/bootstrap/include_bootstap.jsp"/>
     <jsp:include page="/WEB-INF/views/general/informMsg.jsp"/>
-
 </head>
 <body>
 <c:set var="role" value="${sessionScope.userData.userRole.role}"/>

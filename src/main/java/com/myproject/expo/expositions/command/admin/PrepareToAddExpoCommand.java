@@ -2,15 +2,9 @@ package com.myproject.expo.expositions.command.admin;
 
 import com.myproject.expo.expositions.command.Command;
 import com.myproject.expo.expositions.command.Route;
-import com.myproject.expo.expositions.dao.entity.Hall;
 import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.exception.ServiceException;
-import com.myproject.expo.expositions.factory.AbstractFactory;
-import com.myproject.expo.expositions.factory.ServiceFactory;
-import com.myproject.expo.expositions.factory.impl.AbstractFactoryImpl;
 import com.myproject.expo.expositions.service.AllThemeHallService;
-import com.myproject.expo.expositions.service.HallService;
-import com.myproject.expo.expositions.service.ThemeService;
 import com.myproject.expo.expositions.service.impl.AllThemeHallServiceImpl;
 import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
@@ -18,17 +12,16 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-public class PrepareToAddExpo implements Command {
-    private static final Logger logger = LogManager.getLogger(PrepareToAddExpo.class);
+public class PrepareToAddExpoCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(PrepareToAddExpoCommand.class);
     private final AllThemeHallService allThemeHallService;
 
-    public PrepareToAddExpo() {
+    public PrepareToAddExpoCommand() {
         allThemeHallService = new AllThemeHallServiceImpl();
     }
 
-    public PrepareToAddExpo(AllThemeHallService allThemeHallService) {
+    public PrepareToAddExpoCommand(AllThemeHallService allThemeHallService) {
         this.allThemeHallService = allThemeHallService;
     }
 

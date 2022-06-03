@@ -10,7 +10,7 @@ import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.exception.ValidationException;
 import com.myproject.expo.expositions.factory.ServiceFactory;
 import com.myproject.expo.expositions.factory.impl.ServiceFactoryImpl;
-import com.myproject.expo.expositions.service.ExpositionService;
+import com.myproject.expo.expositions.service.entity_iservice.ExpositionService;
 import com.myproject.expo.expositions.util.Constant;
 import com.myproject.expo.expositions.validation.Validate;
 import com.myproject.expo.expositions.validation.ValidateInput;
@@ -23,19 +23,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AddExpo implements Command {
-    private static final Logger logger = LogManager.getLogger(AddExpo.class);
+public class AddExpoCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(AddExpoCommand.class);
     private final Validate validate;
     private final ExpositionService<Exposition> expoService;
     private final ServiceFactory serviceFactory;
 
-    public AddExpo() {
+    public AddExpoCommand() {
         validate = new ValidateInput();
         serviceFactory = new ServiceFactoryImpl();
         expoService = serviceFactory.getExpoService();
     }
 
-    public AddExpo(Validate validate, ServiceFactory serviceFactory, ExpositionService<Exposition> expoService) {
+    public AddExpoCommand(Validate validate, ServiceFactory serviceFactory, ExpositionService<Exposition> expoService) {
         this.validate = validate;
         this.serviceFactory = serviceFactory;
         this.expoService = expoService;
@@ -56,21 +56,23 @@ public class AddExpo implements Command {
         List<Exposition> hallList = (List<Exposition>) req.getSession().getAttribute(Constant.EXPOS_LIST);
         cleanSession(req);
         Exposition addedExpo = buildExpositionFromReq(req, validate);
-        validate.validateProperDateAndTime(addedExpo.getDate(),addedExpo.getTime());
+        validate.validateProperDateAndTime(addedExpo.getDate(), addedExpo.getTime());
         informHallIsBusy(hallList, addedExpo);
         expoService.add(addedExpo);
     }
 
     private Exposition buildExpositionFromReq(HttpServletRequest req, Validate validate) throws ValidationException {
+        validateExpoInput(req, validate);
         return Exposition.builder()
                 .setExpoName(req.getParameter(Constant.Param.EXPO_NAME))
-                .setExpoDate(parseStrToLocalDate(validate.dateValidate(req.getParameter(Constant.Param.EXPO_DATE))))
-                .setExpoTime(parseStrToLocalTime(validate.timeValidate(req.getParameter(Constant.Param.EXPO_TIME))))
-                .setExpoPrice(parseToBigDecimal(validate.priceValidate(req.getParameter(Constant.Param.EXPO_PRICE))))
-                .setExpoSoldTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter(Constant.Param.EXPO_SOLD))))
+                .setExpoDate(parseStrToLocalDate(req.getParameter(Constant.Param.EXPO_DATE)))
+                .setExpoTime(parseStrToLocalTime(req.getParameter(Constant.Param.EXPO_TIME)))
+                .setExpoPrice(parseToBigDecimal(req.getParameter(Constant.Param.EXPO_PRICE)))
+                .setExpoSoldTickets(parseStrToLong(req.getParameter(Constant.Param.EXPO_SOLD)))
                 .setHallList(buildHallList(req))
                 .setTheme(buildTheme(req))
-                .setTickets(parseStrToLong(validate.onlyDigitsValidate(req.getParameter(Constant.Param.EXPO_TICKETS)))).build();
+                .setTickets(parseStrToLong(req.getParameter(Constant.Param.EXPO_TICKETS)))
+                .build();
     }
 
     private List<Hall> buildHallList(HttpServletRequest req) {

@@ -3,8 +3,10 @@ package com.myproject.expo.expositions.command;
 import com.myproject.expo.expositions.command.admin.AddThemeCommand;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.dao.entity.UserRole;
-import com.myproject.expo.expositions.service.ThemeService;
+import com.myproject.expo.expositions.service.entity_iservice.ThemeService;
 import com.myproject.expo.expositions.service.impl.ThemeServiceImpl;
+import com.myproject.expo.expositions.validation.Validate;
+import com.myproject.expo.expositions.validation.ValidateInput;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,7 +20,6 @@ import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -26,6 +27,7 @@ public class UtilMethodsTest {
     private static HttpServletRequest req;
     private static Command command;
     private static HttpSession session;
+    private static Validate validate;
     private static final User user = User.builder()
             .setUserRole(UserRole.ADMIN)
             .setEmail("admin@gmail.com")
@@ -46,8 +48,9 @@ public class UtilMethodsTest {
     @BeforeClass
     public static void init() {
         req = mock(HttpServletRequest.class);
+        validate = mock(ValidateInput.class);
         ThemeService themeService = mock(ThemeServiceImpl.class);
-        command = new AddThemeCommand(themeService);
+        command = new AddThemeCommand(themeService,validate);
         session = mock(HttpSession.class);
     }
 

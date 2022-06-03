@@ -1,13 +1,13 @@
 package com.myproject.expo.expositions.service.impl;
 
-import com.myproject.expo.expositions.dao.ExpositionDao;
+import com.myproject.expo.expositions.dao.entity_idao.ExpositionDao;
 import com.myproject.expo.expositions.dao.entity.Exposition;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.exception.DaoException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.exception.ValidationException;
 import com.myproject.expo.expositions.factory.impl.AbstractFactoryImpl;
-import com.myproject.expo.expositions.service.ExpositionService;
+import com.myproject.expo.expositions.service.entity_iservice.ExpositionService;
 import com.myproject.expo.expositions.util.Constant;
 import com.myproject.expo.expositions.validation.Validate;
 import com.myproject.expo.expositions.validation.ValidateInput;
@@ -33,12 +33,6 @@ public class ExpoServiceImpl implements ExpositionService<Exposition> {
     public ExpoServiceImpl(ExpositionDao expoDao, Validate validate) {
         this.expoDao = expoDao;
         this.validate = validate;
-    }
-
-    @Override
-    public boolean remove(long id) throws Exception {
-        //TODO IMPLEMENT
-        return false;
     }
 
     @Override
@@ -117,6 +111,10 @@ public class ExpoServiceImpl implements ExpositionService<Exposition> {
     @Override
     public void setListOfFoundedRecordsToTheSession(HttpSession session, List<Exposition> list) {
         Optional.ofNullable(list)
-                .ifPresent(records -> session.setAttribute(Constant.EXPOS_LIST, new CopyOnWriteArrayList<>(records)));
+                .ifPresent(records -> {
+                            session.setAttribute(Constant.EXPOS_LIST, new CopyOnWriteArrayList<>(records));
+                            session.setAttribute(Constant.WHOLE_EXPO_LIST, new CopyOnWriteArrayList<>(records));
+                        }
+                );
     }
 }

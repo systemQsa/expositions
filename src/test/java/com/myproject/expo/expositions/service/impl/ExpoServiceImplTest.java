@@ -1,15 +1,13 @@
 package com.myproject.expo.expositions.service.impl;
 
-import com.myproject.expo.expositions.dao.ExpositionDao;
+import com.myproject.expo.expositions.dao.entity_idao.ExpositionDao;
 import com.myproject.expo.expositions.dao.entity.Exposition;
-import com.myproject.expo.expositions.dao.entity.Hall;
 import com.myproject.expo.expositions.dao.entity.Theme;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.dao.impl.ExpositionDaoImpl;
 import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
-import com.myproject.expo.expositions.exception.ServiceException;
-import com.myproject.expo.expositions.service.ExpositionService;
+import com.myproject.expo.expositions.service.entity_iservice.ExpositionService;
 import com.myproject.expo.expositions.validation.Validate;
 import com.myproject.expo.expositions.validation.ValidateInput;
 import org.junit.BeforeClass;
@@ -30,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ExpoServiceImplTest {
     private static ExpositionDao expoDao;
     private static ExpositionService<Exposition> expoService;
-    private static Validate validate;
     private static final List<Exposition> expoList = Arrays.asList(
             Exposition.builder()
                     .setExpositionID(10)
@@ -55,12 +52,13 @@ public class ExpoServiceImplTest {
     @BeforeClass
     public static void init() {
         expoDao = mock(ExpositionDaoImpl.class);
-        validate = mock(ValidateInput.class);
-        expoService = new ExpoServiceImpl(expoDao,validate);
+        Validate validate = mock(ValidateInput.class);
+        expoService = new ExpoServiceImpl(expoDao, validate);
     }
 
-    @Test
+
     public void remove() throws Exception {
+        //todo check if needed!
         when(expoDao.remove(1)).thenReturn(true);
         assertDoesNotThrow(() -> expoService.remove(1));
 

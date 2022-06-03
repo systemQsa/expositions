@@ -1,6 +1,6 @@
 package com.myproject.expo.expositions.service.impl;
 
-import com.myproject.expo.expositions.dao.UserDao;
+import com.myproject.expo.expositions.dao.entity_idao.UserDao;
 import com.myproject.expo.expositions.dao.entity.Exposition;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.dao.impl.UserDaoImpl;
@@ -8,7 +8,7 @@ import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.exception.ValidationException;
-import com.myproject.expo.expositions.service.UserService;
+import com.myproject.expo.expositions.service.entity_iservice.UserService;
 import com.myproject.expo.expositions.service.encrypt.PassEncrypt;
 import com.myproject.expo.expositions.util.Constant;
 import org.junit.BeforeClass;
@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

@@ -9,7 +9,7 @@ import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.factory.impl.AbstractFactoryImpl;
-import com.myproject.expo.expositions.service.ExpositionService;
+import com.myproject.expo.expositions.service.entity_iservice.ExpositionService;
 import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -52,16 +52,16 @@ public class ViewAllExposCommand implements Command {
     private void gettingAllExposProcess(HttpServletRequest req, HttpSession session, long page, long noOfRecords, String sortBy) throws ServiceException {
         List<Exposition> list = expoService.getAllRecords(page, noOfRecords, sortBy);
         expoService.setListOfFoundedRecordsToTheSession(session, list);
-        expoService.setCurrPageAndNoOfRecordsToSession(session,page,noOfRecords);
+        expoService.setCurrPageAndNoOfRecordsToSession(session, page, noOfRecords);
         session.setAttribute(Constant.SORT_BY, sortBy);
-        req.setAttribute(Constant.LIST_HEADER,setHeaderForTableList(req, sortBy));
+        req.setAttribute(Constant.LIST_HEADER, setHeaderForTableList(req, sortBy));
     }
 
     private String setHeaderForTableList(HttpServletRequest req, String sortBy) {
-        if (sortBy.equals(Constant.STATISTIC)){
+        if (sortBy.equals(Constant.STATISTIC)) {
             return translateInfoMessageToRequiredLang(Constant.STATISTICS, req);
-        }else {
-           return translateInfoMessageToRequiredLang(Constant.EXPOSITIONS, req);
+        } else {
+            return translateInfoMessageToRequiredLang(Constant.EXPOSITIONS, req);
         }
     }
 

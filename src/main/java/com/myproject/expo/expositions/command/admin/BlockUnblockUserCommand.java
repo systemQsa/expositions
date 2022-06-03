@@ -6,7 +6,7 @@ import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.factory.ServiceFactory;
 import com.myproject.expo.expositions.factory.impl.ServiceFactoryImpl;
-import com.myproject.expo.expositions.service.UserService;
+import com.myproject.expo.expositions.service.entity_iservice.UserService;
 import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -14,17 +14,17 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class BlockUnblockUser implements Command {
-    private static final Logger logger = LogManager.getLogger(BlockUnblockUser.class);
+public class BlockUnblockUserCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(BlockUnblockUserCommand.class);
     private final UserService userService;
     private final ServiceFactory serviceFactory;
 
-    public BlockUnblockUser() {
+    public BlockUnblockUserCommand() {
         serviceFactory = new ServiceFactoryImpl();
         userService = serviceFactory.getUserService();
     }
 
-    public BlockUnblockUser(ServiceFactory serviceFactory, UserService userService) {
+    public BlockUnblockUserCommand(ServiceFactory serviceFactory, UserService userService) {
         this.serviceFactory = serviceFactory;
         this.userService = userService;
     }

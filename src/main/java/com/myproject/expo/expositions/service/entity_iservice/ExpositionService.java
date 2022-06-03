@@ -1,9 +1,11 @@
-package com.myproject.expo.expositions.service;
+package com.myproject.expo.expositions.service.entity_iservice;
 
 import com.myproject.expo.expositions.dao.entity.Exposition;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.ServiceException;
+import com.myproject.expo.expositions.service.Searchable;
+import com.myproject.expo.expositions.service.Service;
 
 import java.util.List;
 

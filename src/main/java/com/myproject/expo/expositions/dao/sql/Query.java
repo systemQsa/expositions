@@ -66,5 +66,6 @@ public final class Query {
         public static final String UPDATE_HALL = "UPDATE hall SET name=? WHERE id_hall=?";
         public static final String DELETE_HALL = "DELETE FROM hall WHERE id_hall=?";
         public static final String GET_ALL_HALLS = "SELECT * FROM hall";
+        public static final String CHECK_HALL_PRESENT_IN_EXPO = "SELECT id_expo FROM expo_hall WHERE id_hall=?";
     }
 }

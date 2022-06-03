@@ -4,7 +4,7 @@ import com.myproject.expo.expositions.command.Command;
 import com.myproject.expo.expositions.dao.entity.Hall;
 import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.exception.ServiceException;
-import com.myproject.expo.expositions.service.HallService;
+import com.myproject.expo.expositions.service.entity_iservice.HallService;
 import com.myproject.expo.expositions.service.impl.HallServiceImpl;
 import org.junit.BeforeClass;
 import org.junit.Test;

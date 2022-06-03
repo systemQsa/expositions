@@ -8,7 +8,7 @@ import com.myproject.expo.expositions.exception.CommandException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.factory.ServiceFactory;
 import com.myproject.expo.expositions.factory.impl.ServiceFactoryImpl;
-import com.myproject.expo.expositions.service.ExpositionService;
+import com.myproject.expo.expositions.service.entity_iservice.ExpositionService;
 import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -17,17 +17,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class GetUserExpos implements Command {
-    private static final Logger logger = LogManager.getLogger(GetUserExpos.class);
+public class GetUserExposCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(GetUserExposCommand.class);
     private final ExpositionService<Exposition> expoService;
     private final ServiceFactory serviceFactory;
 
-    public GetUserExpos() {
+    public GetUserExposCommand() {
         serviceFactory = new ServiceFactoryImpl();
         expoService = serviceFactory.getExpoService();
     }
 
-    public GetUserExpos(ServiceFactory serviceFactory, ExpositionService<Exposition> expoService) {
+    public GetUserExposCommand(ServiceFactory serviceFactory, ExpositionService<Exposition> expoService) {
         this.serviceFactory = serviceFactory;
         this.expoService = expoService;
     }

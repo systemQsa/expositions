@@ -1,12 +1,12 @@
 package com.myproject.expo.expositions.service.impl;
 
-import com.myproject.expo.expositions.dao.HallDao;
+import com.myproject.expo.expositions.dao.entity_idao.HallDao;
 import com.myproject.expo.expositions.dao.Removable;
 import com.myproject.expo.expositions.dao.entity.Hall;
 import com.myproject.expo.expositions.exception.DaoException;
 import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.factory.impl.AbstractFactoryImpl;
-import com.myproject.expo.expositions.service.HallService;
+import com.myproject.expo.expositions.service.entity_iservice.HallService;
 import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

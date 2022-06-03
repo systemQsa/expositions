@@ -2,7 +2,10 @@ package com.myproject.expo.expositions.command;
 
 import com.myproject.expo.expositions.dao.entity.Status;
 import com.myproject.expo.expositions.dao.entity.User;
+import com.myproject.expo.expositions.exception.ValidationException;
 import com.myproject.expo.expositions.util.Constant;
+import com.myproject.expo.expositions.validation.Validate;
+
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -45,9 +48,9 @@ public interface UtilMethods {
     }
 
     default LocalDate parseStrToLocalDate(String date) {
-        final DateTimeFormatter datePatternEng = DateTimeFormatter.ofPattern("M/dd/yy");
+        final DateTimeFormatter datePatternEng = DateTimeFormatter.ofPattern("M/d/yy");
         final DateTimeFormatter datePatternUkr = DateTimeFormatter.ofPattern("dd.MM.yy");
-        return LocalDate.parse(date, Pattern.compile("\\d{1,2}/\\d{2}/\\d{2}").matcher(date).matches()
+        return LocalDate.parse(date, Pattern.compile("\\d{1,2}/\\d{1,2}/\\d{2}").matcher(date).matches()
                 ? datePatternEng : datePatternUkr);
     }
 
@@ -68,5 +71,14 @@ public interface UtilMethods {
                 .mapToInt(Status::getStatusId)
                 .findFirst()
                 .orElse(0);
+    }
+
+    default void validateExpoInput(HttpServletRequest req, Validate validate) throws ValidationException {
+        validate.notEmptyStr(req,Constant.Param.EXPO_NAME);
+        validate.dateValidate(req.getParameter(Constant.Param.EXPO_DATE));
+        validate.timeValidate(req.getParameter(Constant.Param.EXPO_TIME));
+        validate.priceValidate(req.getParameter(Constant.Param.EXPO_PRICE));
+        validate.onlyDigitsValidate(req.getParameter(Constant.Param.EXPO_SOLD));
+        validate.onlyDigitsValidate(req.getParameter(Constant.Param.EXPO_TICKETS));
     }
 }

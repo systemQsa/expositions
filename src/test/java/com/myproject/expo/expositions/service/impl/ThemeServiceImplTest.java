@@ -1,11 +1,11 @@
 package com.myproject.expo.expositions.service.impl;
 
-import com.myproject.expo.expositions.dao.ThemeDao;
+import com.myproject.expo.expositions.dao.entity_idao.ThemeDao;
 import com.myproject.expo.expositions.dao.entity.Theme;
 import com.myproject.expo.expositions.dao.impl.ThemeDaoImpl;
 import com.myproject.expo.expositions.exception.DaoException;
 import com.myproject.expo.expositions.exception.ServiceException;
-import com.myproject.expo.expositions.service.ThemeService;
+import com.myproject.expo.expositions.service.entity_iservice.ThemeService;
 import org.junit.Before;
 import org.junit.Test;
 

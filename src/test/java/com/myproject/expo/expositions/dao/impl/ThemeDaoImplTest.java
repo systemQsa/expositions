@@ -1,6 +1,6 @@
 package com.myproject.expo.expositions.dao.impl;
 
-import com.myproject.expo.expositions.dao.ThemeDao;
+import com.myproject.expo.expositions.dao.entity_idao.ThemeDao;
 import com.myproject.expo.expositions.dao.connection.ConnectManager;
 import com.myproject.expo.expositions.dao.entity.Theme;
 import com.myproject.expo.expositions.dao.impl.connection.DBManager;
@@ -16,7 +16,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ThemeDaoImplTest {
     private static ThemeDao themeDao;
-    private final Theme themeJobbing = Theme.builder().setIDTheme(2).setThemeName("jobbing").build();
+    private final Theme themeJobbing = Theme.builder()
+            .setIDTheme(2)
+            .setThemeName("jobbing")
+            .build();
 
     @BeforeClass
     public static void init() {
@@ -32,7 +35,7 @@ public class ThemeDaoImplTest {
 
     @Test
     public void getAllRecords() throws DaoException {
-        List<Theme> allRecords = themeDao.getAllRecords(1, 4,"");
+        List<Theme> allRecords = themeDao.getAllRecords(1, 4, "");
         assertEquals(4, allRecords.size());
 
     }
@@ -46,7 +49,7 @@ public class ThemeDaoImplTest {
     public void update() throws DaoException {
         assertThat(themeDao.update(themeJobbing)).isTrue();
     }
-    
+
     public void remove() {
         assertDoesNotThrow(() -> themeDao.remove(4));
     }

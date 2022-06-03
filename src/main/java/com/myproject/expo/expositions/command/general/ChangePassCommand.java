@@ -7,7 +7,7 @@ import com.myproject.expo.expositions.exception.ServiceException;
 import com.myproject.expo.expositions.exception.ValidationException;
 import com.myproject.expo.expositions.factory.ServiceFactory;
 import com.myproject.expo.expositions.factory.impl.ServiceFactoryImpl;
-import com.myproject.expo.expositions.service.UserService;
+import com.myproject.expo.expositions.service.entity_iservice.UserService;
 import com.myproject.expo.expositions.service.encrypt.PassEncrypt;
 import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
@@ -17,19 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 
-public class ChangePass implements Command {
-    private static final Logger logger = LogManager.getLogger(ChangePass.class);
+public class ChangePassCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(ChangePassCommand.class);
     private final UserService userService;
     private final ServiceFactory serviceFactory;
     private final PassEncrypt passEncrypt;
 
-    public ChangePass() {
+    public ChangePassCommand() {
         serviceFactory = new ServiceFactoryImpl();
         userService = serviceFactory.getUserService();
         passEncrypt = new PassEncrypt();
     }
 
-    public ChangePass(ServiceFactory serviceFactory, UserService userService,PassEncrypt passEncrypt) {
+    public ChangePassCommand(ServiceFactory serviceFactory, UserService userService, PassEncrypt passEncrypt) {
         this.serviceFactory = serviceFactory;
         this.userService = userService;
         this.passEncrypt = passEncrypt;
