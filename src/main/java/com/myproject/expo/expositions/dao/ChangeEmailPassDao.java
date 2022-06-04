@@ -2,8 +2,10 @@ package com.myproject.expo.expositions.dao;
 
 import com.myproject.expo.expositions.exception.DaoException;
 
-public interface ChangeEmailPassDao {
-    boolean changeEmail(String oldEmail, String newEmail) throws DaoException;
+import java.sql.Connection;
 
-    boolean changePass(String email, String password) throws DaoException;
+public interface ChangeEmailPassDao {
+    boolean changeEmail(String oldEmail, String newEmail, Connection connection) throws DaoException;
+
+    boolean changePass(String email, String password,Connection connection) throws DaoException;
 }

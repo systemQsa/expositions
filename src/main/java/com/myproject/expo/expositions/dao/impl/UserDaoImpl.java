@@ -1,11 +1,11 @@
 package com.myproject.expo.expositions.dao.impl;
 
-import com.myproject.expo.expositions.dao.entity_idao.UserDao;
 import com.myproject.expo.expositions.dao.connection.ConnectManager;
 import com.myproject.expo.expositions.dao.connection.ConnectionPool;
 import com.myproject.expo.expositions.dao.entity.Exposition;
 import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.dao.entity.UserRole;
+import com.myproject.expo.expositions.dao.entity_idao.UserDao;
 import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
 import com.myproject.expo.expositions.util.Constant;
@@ -32,13 +32,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User add(User user) throws DaoException {
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement ps = connection.prepareStatement(Query.UserSQL.REGISTER_USER, Statement.RETURN_GENERATED_KEYS)) {
+    public User add(User user,Connection connection) throws DaoException {
+        try (PreparedStatement ps = connection.prepareStatement(Query.UserSQL.REGISTER_USER, Statement.RETURN_GENERATED_KEYS)) {
             user.setIdUser(getRoleIdForUserAfterRegister(setStatementForRegistration(ps, user)));
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.PROBLEM_REGISTER_USER_IN_DAO);
             throw new DaoException(Constant.ErrMsg.REGISTER);
+        }finally {
+            connectManager.closeConnection(connection);
         }
         return user;
     }
@@ -65,21 +66,20 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByEmailAndPass(String email, String pass) throws DaoException {
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement ps = connection.prepareStatement(Query.UserSQL.GET_USER_BY_EMAIL)) {
+    public User getUserByEmailAndPass(String email, String pass, Connection connection) throws DaoException {
+        try (PreparedStatement ps = connection.prepareStatement(Query.UserSQL.GET_USER_BY_EMAIL)) {
             return extractFoundedUserFromResultSet(setStatementToFindUser(ps, email))
                     .filter(obj -> obj.getEmail() != null)
                     .orElseThrow(() -> new DaoException(Constant.ErrMsg.CANNOT_FIND_SUCH_USER));
         } catch (SQLException e) {
             throw new DaoException(Constant.ErrMsg.CANNOT_FIND_SUCH_USER);
+        }finally {
+            connectManager.closeConnection(connection);
         }
     }
 
     private ResultSet setStatementToFindUser(PreparedStatement statement, String email) throws SQLException {
         statement.setString(1, email);
-        //TODO redone a little bit
-        //  statement.setString(2, pass);
         return statement.executeQuery();
     }
 
@@ -100,15 +100,16 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User updateBalance(User user, BigDecimal price) throws DaoException {
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_BALANCE)) {
+    public User updateBalance(User user, BigDecimal price,Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_BALANCE)) {
             prepareStatementToTopUpUserBalance(user.getIdUser(), setNewUserBalance(user, price), statement);
             statement.executeUpdate();
             return user;
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.TOP_UP_BALANCE + user.getIdUser());
             throw new DaoException(Constant.ErrMsg.TOP_UP_BALANCE);
+        }finally {
+            connectManager.closeConnection(connection);
         }
     }
 
@@ -123,8 +124,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User buyExpo(User user, Exposition expo) throws DaoException {
-        Connection connection = connectManager.getConnection();
+    public User buyExpo(User user, Exposition expo, Connection connection) throws DaoException {
         try (PreparedStatement updateUserBalance = connection.prepareStatement(Query.UserSQL.WITHDRAW_MONEY_AND_UPDATE_EXPOS_SOLD_TICKETS);
              PreparedStatement tieUserWithExpo = connection.prepareStatement(Query.UserSQL.INSERT_REFS_EXPO_USER)) {
             connection.setAutoCommit(false);
@@ -188,14 +188,15 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean changeEmail(String oldEmail, String newEmail) throws DaoException {
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_EMAIL)) {
+    public boolean changeEmail(String oldEmail, String newEmail,Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_EMAIL)) {
             setStatementToUpdateTheEmail(oldEmail, newEmail, statement);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.CHANGE_EMAIL + oldEmail);
             throw new DaoException(Constant.ErrMsg.CHANGE_EMAIL);
+        }finally {
+            connectManager.closeConnection(connection);
         }
     }
 
@@ -205,14 +206,15 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean changePass(String email, String password) throws DaoException {
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_PASS)) {
+    public boolean changePass(String email, String password, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_PASS)) {
             setStatementToUpdateThePass(email, password, statement);
             return executeUpdatingUserPass(statement);
         } catch (SQLException | DaoException e) {
             logger.warn(Constant.LogMsg.CHANGE_PASSWORD + email);
             throw new DaoException(Constant.ErrMsg.CHANGE_PASSWORD);
+        }finally {
+            connectManager.closeConnection(connection);
         }
     }
 
@@ -230,13 +232,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAllRecords(long page, long noOfRecords, String query) throws DaoException {
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+    public List<User> getAllRecords(long page, long noOfRecords, String query,Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
             return createListOfUsers(statement.executeQuery());
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.GET_ALL_USERS);
             throw new DaoException(Constant.ErrMsg.GET_ALL_USERS);
+        }finally {
+            connectManager.closeConnection(connection);
         }
     }
 
@@ -261,15 +264,16 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean blockUnblockUser(int newStatus, long userId) throws DaoException {
+    public boolean blockUnblockUser(int newStatus, long userId,Connection connection) throws DaoException {
         checkStatusNotZero(newStatus);
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_STATUS)) {
+        try (PreparedStatement statement = connection.prepareStatement(Query.UserSQL.UPDATE_USER_STATUS)) {
             statement.setInt(1, newStatus);
             statement.setLong(2, userId);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DaoException(Constant.ErrMsg.BLOCK_UNBLOCK_USER);
+        }finally {
+            connectManager.closeConnection(connection);
         }
     }
 

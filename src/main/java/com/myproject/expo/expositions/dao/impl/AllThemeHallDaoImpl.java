@@ -20,7 +20,7 @@ import java.util.List;
 
 public class AllThemeHallDaoImpl implements AllThemeHallDao {
     private static final Logger logger = LogManager.getLogger(AllThemeHallDaoImpl.class);
-    private final ConnectManager connectManager;
+    private ConnectManager connectManager;
 
     public AllThemeHallDaoImpl() {
         connectManager = ConnectionPool.getInstance();
@@ -31,12 +31,13 @@ public class AllThemeHallDaoImpl implements AllThemeHallDao {
     }
 
     @Override
-    public List<Hall> allHalls() throws DaoException {
-        try (Connection connection = connectManager.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(Query.HallSQL.GET_ALL_HALLS);
+    public List<Hall> allHalls(Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(Query.HallSQL.GET_ALL_HALLS)) {
             return createHallList(statement.executeQuery());
         } catch (SQLException e) {
-             throw new DaoException(Constant.ErrMsg.GET_ALL_HALLS);
+            throw new DaoException(Constant.ErrMsg.GET_ALL_HALLS);
+        }finally {
+            connectManager.closeConnection(connection);
         }
     }
 
@@ -56,18 +57,19 @@ public class AllThemeHallDaoImpl implements AllThemeHallDao {
     }
 
     @Override
-    public List<Theme> allThemes() throws DaoException {
-        try (Connection connection = connectManager.getConnection();
-                PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.GET_ALL_THEMES)) {
-             return createThemeList(statement.executeQuery());
+    public List<Theme> allThemes(Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.GET_ALL_THEMES)) {
+            return createThemeList(statement.executeQuery());
         } catch (SQLException e) {
-             throw new DaoException(Constant.ErrMsg.GET_ALL_THEMES);
+            throw new DaoException(Constant.ErrMsg.GET_ALL_THEMES);
+        }finally {
+            connectManager.closeConnection(connection);
         }
     }
 
     private List<Theme> createThemeList(ResultSet resSet) throws SQLException {
         List<Theme> list = new ArrayList<>();
-        while (resSet.next()){
+        while (resSet.next()) {
             list.add(buildTheme(resSet));
         }
         return list;

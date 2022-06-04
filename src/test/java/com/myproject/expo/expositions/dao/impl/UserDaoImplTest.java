@@ -1,98 +1,117 @@
 package com.myproject.expo.expositions.dao.impl;
 
+import com.myproject.expo.expositions.dao.connection.ConnectManager;
+import com.myproject.expo.expositions.dao.connection.ConnectionPool;
 import com.myproject.expo.expositions.dao.entity_idao.UserDao;
-import com.myproject.expo.expositions.dao.entity.Exposition;
-import com.myproject.expo.expositions.dao.entity.User;
-import com.myproject.expo.expositions.dao.impl.connection.DBManager;
 import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
+import com.myproject.expo.expositions.generator.TestEntity;
+import com.myproject.expo.expositions.util.Constant;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.sql.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.*;
 
 public class UserDaoImplTest {
-    private UserDao userDao;
-    private final User user = User.builder()
-            .setName("name")
-            .setSurname("surname")
-            .setEmail("user23@gmail.com")
-            .setPassword(new char[]{'1', '2', '3'})
-            .setPhone("+234567823")
-            .build();
-    private final User updateUser = User.builder()
-            .setIdUser(2)
-            .setName("Jessica")
-            .setSurname("Thompson")
-            .setEmail("jess@gmail.com")
-            .setPhone("+1234567888")
-            .setBalance(new BigDecimal("500.0"))
-            .build();
-    private static final Exposition expo = Exposition.builder()
-            .setExpositionID(2)
-            .setTickets(45)
-            .setExpoPrice(new BigDecimal("300.50"))
-            .setExpoSoldTickets(15)
-            .build();
-
+    private static UserDao userDao;
+    private static Connection connection;
+    private static PreparedStatement statement;
+    private static ResultSet resSet;
 
     @BeforeClass
     public static void init() {
-        DBManager.getInstance().loadScript();
+        connection = mock(Connection.class);
+        ConnectManager connectManager = mock(ConnectionPool.class);
+        statement = mock(PreparedStatement.class);
+        resSet = mock(ResultSet.class);
+        userDao = new UserDaoImpl(connectManager);
     }
 
     @Before
-    public void beforeEach() {
-        DBManager dbManager = DBManager.getInstance();
-        userDao = new UserDaoImpl(dbManager);
+    public void before() throws SQLException {
+        when(connection.prepareStatement(anyString())).thenReturn(statement);
+        when(statement.executeUpdate()).thenReturn(1);
     }
 
     @Test
+    public void add() throws SQLException {
+        mocksAddUser();
+        assertDoesNotThrow(() -> userDao.add(TestEntity.UserTest.user, connection));
+    }
+
+    private void mocksAddUser() throws SQLException {
+        when(connection.prepareStatement(Query.UserSQL.REGISTER_USER,
+                Statement.RETURN_GENERATED_KEYS)).thenReturn(statement);
+        when(statement.executeUpdate()).thenReturn(1);
+        when(statement.getGeneratedKeys()).thenReturn(resSet);
+        when(resSet.next()).thenReturn(true);
+        when(resSet.getLong(1)).thenReturn(1L);
+    }
+
+    @Test
+    public void getAllRecords() throws DaoException, SQLException {
+        mockWhenGetAllUsers();
+        Assertions.assertEquals(1, userDao.getAllRecords(1,
+                5, Query.UserSQL.GET_ALL_USERS, connection).size());
+    }
+
+    private void mockWhenGetAllUsers() throws SQLException {
+        when(statement.executeQuery()).thenReturn(resSet);
+        when(resSet.next()).thenReturn(true).thenReturn(false);
+        when(resSet.getLong(1)).thenReturn(1L);
+        mockResultSetUsers();
+    }
+
+    private void mockResultSetUsers() throws SQLException {
+        when(resSet.getString(Constant.Column.NAME)).thenReturn("Harry");
+        when(resSet.getString(Constant.Column.SURNAME)).thenReturn("Potter");
+        when(resSet.getString(Constant.Column.EMAIL)).thenReturn("some@gmail.com");
+        when(resSet.getString(Constant.Column.PHONE)).thenReturn("+380903456123");
+        when(resSet.getInt(Constant.Column.ROLE_ID)).thenReturn(2);
+        when(resSet.getInt(Constant.Column.STATUS_ID)).thenReturn(1);
+    }
+
+    @Test(expected = DaoException.class)
     public void getUserByEmailAndPass() throws DaoException {
-        User res = userDao.getUserByEmailAndPass("art@gmail.com", "1234");
-        Assertions.assertEquals("+56234567888", res.getPhone());
-    }
-
-    @Test
-    public void add() {
-        assertDoesNotThrow(() -> userDao.add(user));
+        try {
+            when(statement.executeQuery()).thenReturn(resSet);
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        userDao.getUserByEmailAndPass("some@gmail.com", "1234", connection);
     }
 
     @Test
     public void updateBalance() throws DaoException {
-        User resUser = userDao.updateBalance(updateUser, new BigDecimal(100));
-        Assertions.assertEquals(BigDecimal.valueOf(600.0), resUser.getBalance());
+        Assertions.assertEquals(BigDecimal.valueOf(550.0), userDao.updateBalance(TestEntity.UserTest.updateUser,
+                BigDecimal.valueOf(50.0), connection).getBalance());
     }
 
     @Test
-    public void changeEmail() {
-        assertDoesNotThrow(() -> userDao.changeEmail("peter@gmail.com", "peter1@gmail.com"));
+    public void buyExpo() throws DaoException {
+        Assertions.assertEquals(String.format("%.2f", 200.),
+                String.valueOf(userDao.buyExpo(TestEntity.UserTest.user, TestEntity.UserTest.buyExpo, connection).getBalance()));
     }
 
-    @Test(expected = DaoException.class)
+    @Test
     public void changePass() throws DaoException {
-        userDao.changePass("peter123@gmail.com", "2345");
+        Assertions.assertTrue(userDao.changePass("peter123@gmail.com", "2345", connection));
     }
 
     @Test
-    public void buyExpo() {
-        assertDoesNotThrow(() -> userDao.buyExpo(updateUser, expo));
-    }
-
-    @Test
-    public void getAllRecords() throws DaoException {
-        List<User> users = userDao.getAllRecords(1, 3,  Query.UserSQL.GET_ALL_USERS);
-        assertEquals(3, users.size());
+    public void changeEmail() throws DaoException {
+        Assertions.assertTrue(userDao.changeEmail("peter@gmail.com", "Potter@gmail.com", connection));
     }
 
     @Test
     public void blockUnblockUser() throws DaoException {
-        Assertions.assertTrue(userDao.blockUnblockUser(3, 3));
+        Assertions.assertTrue(userDao.blockUnblockUser(3, 3, connection));
     }
 
 }

@@ -1,9 +1,9 @@
 package com.myproject.expo.expositions.dao.impl;
 
-import com.myproject.expo.expositions.dao.entity_idao.HallDao;
 import com.myproject.expo.expositions.dao.connection.ConnectManager;
 import com.myproject.expo.expositions.dao.connection.ConnectionPool;
 import com.myproject.expo.expositions.dao.entity.Hall;
+import com.myproject.expo.expositions.dao.entity_idao.HallDao;
 import com.myproject.expo.expositions.dao.sql.Query;
 import com.myproject.expo.expositions.exception.DaoException;
 import com.myproject.expo.expositions.util.Constant;
@@ -17,7 +17,6 @@ import java.util.List;
 public class HallDaoImpl implements HallDao {
     private static final Logger logger = LogManager.getLogger(HallDaoImpl.class);
     private final ConnectManager connectManager;
-    private Connection connection;
 
     public HallDaoImpl() {
         connectManager = ConnectionPool.getInstance();
@@ -28,14 +27,15 @@ public class HallDaoImpl implements HallDao {
     }
 
     @Override
-    public Hall add(Hall hall) throws DaoException {
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(Query.HallSQL.ADD_NEW_HALL, Statement.RETURN_GENERATED_KEYS)) {
+    public Hall add(Hall hall, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(Query.HallSQL.ADD_NEW_HALL, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, hall.getName());
             return setGeneratedIdToTheHall(hall, statement);
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.ADD_HALL);
             throw new DaoException(Constant.ErrMsg.ADD_HALL);
+        }finally {
+            connectManager.closeConnection(connection);
         }
     }
 
@@ -50,13 +50,14 @@ public class HallDaoImpl implements HallDao {
     }
 
     @Override
-    public List<Hall> getAllRecords(long page, long noOfRecords, String querySortBy) throws DaoException {
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(Query.HallSQL.GET_ALL_HALLS_PAGINATE)) {
+    public List<Hall> getAllRecords(long page, long noOfRecords, String querySortBy, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(Query.HallSQL.GET_ALL_HALLS_PAGINATE)) {
             return createHallListFromStatement(page, noOfRecords, statement);
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.GET_ALL_HALLS);
             throw new DaoException(Constant.ErrMsg.GET_ALL_HALLS);
+        }finally {
+            connectManager.closeConnection(connection);
         }
     }
 
@@ -80,14 +81,15 @@ public class HallDaoImpl implements HallDao {
     }
 
     @Override
-    public boolean update(Hall hall) throws DaoException {
-        try (Connection connection = connectManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(Query.HallSQL.UPDATE_HALL)) {
+    public boolean update(Hall hall, Connection connection) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(Query.HallSQL.UPDATE_HALL)) {
             setStatementToUpdateTheHall(hall, statement);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.UPDATE_HALL + hall.getIdHall());
             throw new DaoException(Constant.ErrMsg.UPDATE_HALL);
+        }finally {
+            connectManager.closeConnection(connection);
         }
     }
 
@@ -97,34 +99,33 @@ public class HallDaoImpl implements HallDao {
     }
 
     @Override
-    public boolean remove(long idHall) throws Exception {
-        connection = connectManager.getConnection();
+    public boolean remove(long idHall, Connection connection) throws Exception {
         try (PreparedStatement checkHallPresenceInExpo = connection.prepareStatement(Query.HallSQL.CHECK_HALL_PRESENT_IN_EXPO);
              PreparedStatement statement = connection.prepareStatement(Query.HallSQL.DELETE_HALL)) {
-            return deletingHallProcess(idHall, checkHallPresenceInExpo, statement,connection);
+            return deletingHallProcess(idHall, checkHallPresenceInExpo, statement, connection);
         } catch (SQLException e) {
             logger.warn(Constant.LogMsg.DELETE_HALL + idHall);
             throw new DaoException(Constant.ErrMsg.DELETE_HALL);
-        }finally {
+        } finally {
             connectManager.closeConnection(connection);
         }
     }
 
-    private boolean deletingHallProcess(long idHall, PreparedStatement checkHallPresenceInExpo, PreparedStatement statement,Connection connection) throws SQLException {
+    private boolean deletingHallProcess(long idHall, PreparedStatement checkHallPresenceInExpo, PreparedStatement statement, Connection connection) throws SQLException {
         connection.setAutoCommit(false);
         connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
         checkHallPresenceInExpo.setLong(1, idHall);
         ResultSet resSet = checkHallPresenceInExpo.executeQuery();
-        deleteHall(idHall, statement, resSet,connection);
+        deleteHall(idHall, statement, resSet, connection);
         connection.commit();
         return true;
     }
 
-    private boolean deleteHall(long idHall, PreparedStatement statement, ResultSet resSet,Connection connection) throws SQLException {
-        if(!resSet.next()){
+    private boolean deleteHall(long idHall, PreparedStatement statement, ResultSet resSet, Connection connection) throws SQLException {
+        if (!resSet.next()) {
             statement.setLong(1, idHall);
             return statement.executeUpdate() > 0;
-        }else {
+        } else {
             connection.rollback();
             throw new SQLException("");
         }

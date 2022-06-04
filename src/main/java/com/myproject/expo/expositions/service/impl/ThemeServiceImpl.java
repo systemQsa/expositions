@@ -1,5 +1,7 @@
 package com.myproject.expo.expositions.service.impl;
 
+import com.myproject.expo.expositions.dao.connection.ConnectManager;
+import com.myproject.expo.expositions.dao.connection.ConnectionPool;
 import com.myproject.expo.expositions.dao.entity_idao.ThemeDao;
 import com.myproject.expo.expositions.dao.entity.Theme;
 import com.myproject.expo.expositions.exception.DaoException;
@@ -18,19 +20,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ThemeServiceImpl implements ThemeService {
     private static final Logger logger = LogManager.getLogger(ThemeServiceImpl.class);
     private final ThemeDao themeDao;
-
+   private final ConnectManager manager;
     public ThemeServiceImpl() {
         themeDao = new AbstractFactoryImpl().getDaoFactory().getThemeDao();
+        manager = ConnectionPool.getInstance();
     }
 
-    public ThemeServiceImpl(ThemeDao themeDao) {
+    public ThemeServiceImpl(ThemeDao themeDao,ConnectManager manager) {
         this.themeDao = themeDao;
+        this.manager = manager;
     }
 
     @Override
     public List<Theme> getAllRecords(long page, long noOfPages,String sortBy) throws ServiceException {
         try {
-            return Optional.ofNullable(themeDao.getAllRecords(page, noOfPages,defineSortQueryForTheme(sortBy)))
+            return Optional.ofNullable(themeDao.getAllRecords(page, noOfPages,defineSortQueryForTheme(sortBy), manager.getConnection()))
                     .filter(res -> res.size() != 0)
                     .orElseThrow(() -> new ServiceException(Constant.ErrMsg.NO_MORE_RECORDS));
         } catch (DaoException e) {
@@ -42,7 +46,7 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public Theme add(Theme theme) throws ServiceException {
         try {
-            return themeDao.add(theme);
+            return themeDao.add(theme, manager.getConnection());
         } catch (DaoException e) {
             logger.warn("Cant add a new theme in ThemeService class");
             throw new ServiceException(e.getMessage());
@@ -52,7 +56,7 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public boolean update(Theme theme) throws ServiceException {
         try {
-            return themeDao.update(theme);
+            return themeDao.update(theme, manager.getConnection());
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -61,7 +65,7 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public boolean remove(long id) throws ServiceException {
         try {
-            return themeDao.remove(id);
+            return themeDao.remove(id, manager.getConnection());
         } catch (Exception e) {
             logger.warn("Cannot remove the given theme in ThemeServiceImpl class");
             throw new ServiceException(e.getMessage());

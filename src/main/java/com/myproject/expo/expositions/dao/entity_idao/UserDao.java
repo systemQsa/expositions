@@ -8,16 +8,17 @@ import com.myproject.expo.expositions.dao.entity.User;
 import com.myproject.expo.expositions.exception.DaoException;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.Arrays;
 
 public interface UserDao extends GeneralDao<User>, ChangeEmailPassDao {
-    User getUserByEmailAndPass(String email, String pass) throws DaoException;
+    User getUserByEmailAndPass(String email, String pass, Connection connection) throws DaoException;
 
-    User updateBalance(User user, BigDecimal price) throws DaoException;
+    User updateBalance(User user, BigDecimal price,Connection connection) throws DaoException;
 
-    User buyExpo(User user, Exposition expo) throws DaoException;
+    User buyExpo(User user, Exposition expo,Connection connection) throws DaoException;
 
-    boolean blockUnblockUser(int newStatus,long userId) throws DaoException;
+    boolean blockUnblockUser(int newStatus,long userId,Connection connection) throws DaoException;
 
        default String defineStatus(int statusId) {
         return Arrays.stream(Status.values())

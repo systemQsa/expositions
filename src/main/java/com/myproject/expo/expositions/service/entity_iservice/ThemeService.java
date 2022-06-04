@@ -1,17 +1,18 @@
 package com.myproject.expo.expositions.service.entity_iservice;
 
-import com.myproject.expo.expositions.dao.Removable;
 import com.myproject.expo.expositions.dao.entity.Theme;
+import com.myproject.expo.expositions.dao.sql.Query;
+import com.myproject.expo.expositions.service.RemovableService;
 import com.myproject.expo.expositions.service.Service;
 
-public interface ThemeService extends Service<Theme>, Removable {
+public interface ThemeService extends Service<Theme>, RemovableService {
 
     default String defineSortQueryForTheme(String str) {
         switch (str) {
             case "byName":
-                return "SELECT * FROM theme ORDER BY name DESC LIMIT ?,?";
+                return Query.ThemeSQL.GET_THEMES_BY_NAME;
             default:
-                return "SELECT * FROM theme ORDER BY id_theme DESC LIMIT ?,?";
+                return Query.ThemeSQL.GET_ALL_THEMES_DEFAULT;
         }
     }
 }
