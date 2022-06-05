@@ -73,9 +73,11 @@
         <jsp:include page="/WEB-INF/views/general/seachedList.jsp"/>
     </c:if>
 
+<a href="picker.jsp">picker</a>
 <%--    <img src="imgs/logo.jpg" alt="anime">--%>
 <%--    Footer--%>
 <jsp:include page="/WEB-INF/views/general/footer.jsp"/>
 </div>
+
 </body>
 </html>

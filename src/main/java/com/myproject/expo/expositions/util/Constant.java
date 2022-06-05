@@ -67,6 +67,8 @@ public final class Constant {
     public static final String STATISTICS = "Statistics";
     public static final String BLOCKED = "blocked";
     public static final String WHOLE_EXPO_LIST = "wholeExpoList";
+    public static final String USER = "user";
+    public static final String ADMIN = "admin";
 
     public static class ErrMsg {
         public static final String REGISTER = "err.register";
@@ -170,6 +172,7 @@ public final class Constant {
         public static final String ADD_EXPO_REDIRECT = "redirect:/views/admin/addNewExpo.jsp";
         public static final String SEE_ONE_EXPO_FULL_PATH_ADMIN = "/WEB-INF/views/admin/seeOneExpo.jsp";
         public static final String SEE_ONE_EXPO_FULL_PATH_USER = "/WEB-INF/views/user/seeOneExpo.jsp";
+        public static final String NOT_FOUND_PAGE = "/404.jsp";
     }
 
     public static class Column {

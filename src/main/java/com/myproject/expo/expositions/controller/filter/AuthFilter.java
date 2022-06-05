@@ -23,12 +23,17 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
+        System.out.println("URI " + req.getRequestURI());
+        System.out.println("URL " + req.getRequestURL());
+        System.out.println("Servlet " + req.getServletPath());
+
+
         redirectRequestToControllerIfRequired(req, resp);
-        if (logoutInCaseBackArrowPressed(req, resp)) {
+        if (logoutInCaseBackArrowPressed(req)) {
             resp.sendRedirect(new LogOutCommand().execute(req, resp).getPathOfThePage());
         }
 
-        if (caseAfterLogoutPressedBackArrowAgain(req)){
+        if (caseAfterLogoutPressedBackArrowAgain(req)) {
             resp.sendRedirect(Constant.URL.ROOT_FULL_PATH);
             return;
         }
@@ -50,15 +55,15 @@ public class AuthFilter implements Filter {
         return URI.contains(Constant.URL.LOGIN) || URI.contains(Constant.URL.REGISTER) && role != null;
     }
 
-    private boolean logoutInCaseBackArrowPressed(HttpServletRequest req, HttpServletResponse resp) {
+    private boolean logoutInCaseBackArrowPressed(HttpServletRequest req) {
         String URI = req.getRequestURI();
         String role = (String) req.getSession().getAttribute(Constant.ROLE);
         return checkURLAndRoleContainsRequiredPathAndRole(URI, role) && checkIfURIAndRoleNotNull(URI, role);
     }
 
-    private boolean caseAfterLogoutPressedBackArrowAgain(HttpServletRequest req){
+    private boolean caseAfterLogoutPressedBackArrowAgain(HttpServletRequest req) {
         User user = (User) req.getSession().getAttribute(Constant.USER_DATA);
-        return  user == null && Arrays.stream(PathPage.values())
+        return user == null && Arrays.stream(PathPage.values())
                 .anyMatch(val -> req.getRequestURI().equals(val.getURI()));
     }
 

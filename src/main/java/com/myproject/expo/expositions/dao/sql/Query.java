@@ -60,6 +60,7 @@ public final class Query {
         public static final String GET_ALL_THEMES = "SELECT * FROM theme";
         public static final String GET_THEMES_BY_NAME = "SELECT * FROM theme ORDER BY name DESC LIMIT ?,?";
         public static final String GET_ALL_THEMES_DEFAULT = "SELECT * FROM theme ORDER BY id_theme DESC LIMIT ?,?";
+        public static final String CHECK_THEME_PRESENT_IN_EXPO = "SELECT id_expo FROM exposition WHERE id_theme_ref=?";
     }
 
     public final static class HallSQL {

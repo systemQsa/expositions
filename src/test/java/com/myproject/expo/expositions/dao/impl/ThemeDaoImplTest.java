@@ -22,12 +22,14 @@ public class ThemeDaoImplTest {
     private static ThemeDao themeDao;
     private Connection connection;
     private static PreparedStatement statement;
+    private static PreparedStatement checkIfThemePresentInExpo;
     private static ResultSet resSet;
 
     @BeforeClass
     public static void init() {
         ConnectManager connectManager = mock(ConnectionPool.class);
         statement = mock(PreparedStatement.class);
+        checkIfThemePresentInExpo = mock(PreparedStatement.class);
         resSet = mock(ResultSet.class);
         themeDao = new ThemeDaoImpl();
     }
@@ -75,6 +77,13 @@ public class ThemeDaoImplTest {
 
     @Test
     public void remove() throws Exception {
+        removeThemeMockMethods();
         Assertions.assertTrue(themeDao.remove(23, connection));
+    }
+
+    private void removeThemeMockMethods() throws SQLException {
+        when(connection.prepareStatement(anyString())).thenReturn(checkIfThemePresentInExpo);
+        when(checkIfThemePresentInExpo.executeQuery()).thenReturn(resSet);
+        when(resSet.next()).thenReturn(false);
     }
 }

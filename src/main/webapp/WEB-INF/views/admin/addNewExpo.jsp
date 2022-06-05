@@ -15,31 +15,31 @@
                 <input type="hidden" name="action" value="addExpo">
                 <!-- Expo name -->
                 <div class="form-outline mb-4">
-                    <input type="text" id="expoName" class="form-control" name="expoName"/>
+                    <input type="text" id="expoName" class="form-control" name="expoName" placeholder="new expo name"/>
                     <label class="form-label" for="expoName">Expo name</label>
                 </div>
 
                 <!-- Expo Date -->
                 <div class="form-outline mb-4">
-                    <input type="text" id="expoDate" class="form-control" name="expoDate"/>
+                    <input type="text" id="expoDate" class="form-control" name="expoDate" placeholder="m/dd/yy"/>
                     <label class="form-label" for="expoDate">Expo Date</label>
                 </div>
 
                 <!-- Expo Time -->
                 <div class="form-outline mb-4">
-                    <input type="text" id="expoTime" class="form-control" name="expoTime"/>
+                    <input type="text" id="expoTime" class="form-control" name="expoTime" placeholder="9:00 AM"/>
                     <label class="form-label" for="expoTime">Expo time</label>
                 </div>
 
                 <!-- Expo Price -->
                 <div class="form-outline mb-4">
-                    <input type="text" id="expoPrice" class="form-control" name="expoPrice"/>
+                    <input type="text" id="expoPrice" class="form-control" name="expoPrice" placeholder="100.00"/>
                     <label class="form-label" for="expoPrice">Expo price</label>
                 </div>
 
                 <!-- Expo Sold -->
                 <div class="form-outline mb-4">
-                    <input type="text" id="expoSold" class="form-control" name="expoSold"/>
+                    <input type="text" id="expoSold" class="form-control" name="expoSold" placeholder="0"/>
                     <label class="form-label" for="expoSold">ExpoSold</label>
                 </div>
 
@@ -75,7 +75,7 @@
 
                 <!-- Expo Tickets -->
                 <div class="form-outline mb-4">
-                    <input type="text" id="expoTickets" class="form-control" name="expoTickets"/>
+                    <input type="text" id="expoTickets" class="form-control" name="expoTickets" placeholder="100"/>
                     <label class="form-label" for="expoTickets">Amount of tickets</label>
                 </div>
 
