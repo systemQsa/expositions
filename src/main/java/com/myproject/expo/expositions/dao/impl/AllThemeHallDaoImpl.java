@@ -20,7 +20,7 @@ import java.util.List;
 
 public class AllThemeHallDaoImpl implements AllThemeHallDao {
     private static final Logger logger = LogManager.getLogger(AllThemeHallDaoImpl.class);
-    private ConnectManager connectManager;
+    private final ConnectManager connectManager;
 
     public AllThemeHallDaoImpl() {
         connectManager = ConnectionPool.getInstance();

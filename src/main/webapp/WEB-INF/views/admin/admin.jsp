@@ -87,18 +87,6 @@
     </c:if>
     <jsp:include page="/WEB-INF/views/general/footer.jsp"/>
     </div>
-
-<%--   All data about user--%>
-
-<%--    <c:if test="${not empty sessionScope.userData}">--%>
-<%--        <p>${sessionScope.userData.name}</p>--%>
-<%--        <p>${sessionScope.userData.surname}</p>--%>
-<%--        <p>${sessionScope.userData.email}</p>--%>
-<%--        <p>${sessionScope.userData.balance}</p>--%>
-<%--        <p>${sessionScope.userData.phone}</p>--%>
-<%--        <p>${sessionScope.userData.idUser}</p>--%>
-<%--        <p>${sessionScope.userData.userRole.role}</p>--%>
-<%--    </c:if>--%>
 </div>
 </body>
 </html>

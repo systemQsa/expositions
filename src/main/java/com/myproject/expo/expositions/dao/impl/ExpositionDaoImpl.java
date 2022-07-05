@@ -97,6 +97,14 @@ public class ExpositionDaoImpl implements ExpositionDao {
 
     }
 
+    private Exposition.ExpositionBuilder setAmountBoughtTickets(Exposition.ExpositionBuilder expo, ResultSet resultSet) throws SQLException {
+        return expo.setExpoSoldTickets(resultSet.getLong("amount"));
+    }
+
+    private Exposition.ExpositionBuilder setSoldTickets(Exposition.ExpositionBuilder expo, ResultSet resultSet) throws SQLException {
+        return expo.setExpoSoldTickets(resultSet.getLong(Constant.Column.SOLD));
+    }
+
     private Theme createThemeFromResultSet(ResultSet resSet) throws SQLException {
         return Theme.builder()
                 .setIDTheme(resSet.getLong(Constant.Column.ID_THEME_REF))

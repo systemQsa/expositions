@@ -49,6 +49,17 @@ public final class Query {
         public static final String ADD_NEW_EXPO = "INSERT INTO exposition(name, expo_date, expo_time, price, sold, id_theme_ref, tickets) VALUES (?,?,?,?,?,?,?)";
         public static final String UPDATE_EXPO_STATUS = "UPDATE exposition SET status_id=? WHERE id_expo=?";
         public static final String DELETE_EXPO = "DELETE FROM exposition WHERE id_expo=?";
+        public static final String GET_AMOUNT_BOUGHT_TICKETS_PER_PERSON = "SELECT e.id_expo,user_id,\n" +
+                " (select count(ha.expo_id) from exposition_users\n" +
+                " as ha where ha.expo_id = e.id_expo AND ha.user_id=exp.user_id) as expos\n" +
+                "  FROM exposition AS e\n" +
+                " JOIN expo_hall as eh on e.id_expo = eh.id_expo\n" +
+                " JOIN hall AS h ON eh.id_hall = h.id_hall\n" +
+                " JOIN theme AS t ON e.id_theme_ref = t.id_theme\n" +
+                " JOIN exposition_users AS exp ON e.id_expo = exp.expo_id\n" +
+                " WHERE user_id=? AND status_id=?\n" +
+                " GROUP BY e.id_expo\n" +
+                "ORDER BY id_expo DESC";
 
     }
 

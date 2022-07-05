@@ -48,7 +48,7 @@ drop table if exists hall_exposition;
 create table roles
 (
     id_role INT PRIMARY KEY AUTO_INCREMENT,
-    role    VARCHAR(35)
+    role    VARCHAR(35) UNIQUE
 );
 
 INSERT INTO roles (role)
@@ -84,7 +84,7 @@ create table theme
 create table hall
 (
     id_hall      INT PRIMARY KEY AUTO_INCREMENT,
-    name         VARCHAR(150),
+    name         VARCHAR(150) UNIQUE,
     theme_id_ref INT,
     FOREIGN KEY (theme_id_ref) REFERENCES theme (id_theme)
 );

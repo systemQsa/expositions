@@ -10,28 +10,11 @@
 <c:set var="role" value="${sessionScope.userData.userRole.role}"/>
 <c:set var="dateFormat" value="${sessionScope.dateFormat}"/>
 <c:set var="timeFormat" value="${sessionScope.timeFormat}"/>
-<c:choose>
-    <c:when test="${not empty requestScope.oneExpoData}">
-        ${requestScope.oneExpoData.name}
-        ${requestScope.oneExpoData.date.format(dateFormat)}
-        ${requestScope.oneExpoData.time.format(timeFormat)}
-        ${requestScope.oneExpoData.price}
-        ${requestScope.oneExpoData.sold}
-<%--        ${requestScope.oneExpoData.hall.name}--%>
-        ${requestScope.oneExpoData.theme.name}
-        ${requestScope.oneExpoData.tickets}
-
-    </c:when>
-    <c:otherwise>
-        <p>No Information was found!</p>
-    </c:otherwise>
-</c:choose>
-
 
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-                <div class="card text-white bg-success" style="width: 22rem;margin-left: 30%;">
+                <div class="card text-white bg-success" style="width: 25rem;margin-left: 30%;">
                     <img class="picture" src="https://ichef.bbci.co.uk/news/999/cpsprodpb/6D5A/production/_119449972_10.jpg" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">${requestScope.oneExpoData.name}</h5>
@@ -164,9 +147,11 @@
                                                 <input type="text" id="expoTickets" class="form-control"  name="expoTickets" value="${requestScope.oneExpoData.tickets}"/>
                                                 <label class="form-label" for="expoTickets">${sessionScope.language['Tickets']}</label>
                                             </div>
-                                            <c:if test="${role.equals('admin')}">
-                                                <button class="btn btn-info btn-sm" type="submit">${sessionScope.language['update']}</button>
-                                            </c:if>
+                                            <div>
+                                                <c:if test="${role.equals('admin')}">
+                                                    <button class="btn btn-info btn-sm" type="submit">${sessionScope.language['update']}</button>
+                                                </c:if>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>

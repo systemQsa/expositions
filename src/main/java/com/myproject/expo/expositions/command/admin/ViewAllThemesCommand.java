@@ -36,8 +36,6 @@ public class ViewAllThemesCommand implements Command {
         HttpSession session = cleanSession(req);
         try {
             List<Theme> list = themeService.getAllRecords(page, noOfRecords, sortBy);
-            list.forEach(System.out::println);
-
             themeService.setListOfFoundedRecordsToTheSession(session, list);
             themeService.setCurrPageAndNoOfRecordsToSession(session,page,noOfRecords);
         } catch (ServiceException e) {

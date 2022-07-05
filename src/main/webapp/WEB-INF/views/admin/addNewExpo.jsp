@@ -10,7 +10,7 @@
 <body>
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
+        <div class="container-fluid" style="margin-left: 35%">
             <form action="${pageContext.request.contextPath}/controller" method="post">
                 <input type="hidden" name="action" value="addExpo">
                 <!-- Expo name -->

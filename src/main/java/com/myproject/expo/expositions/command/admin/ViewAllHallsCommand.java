@@ -36,7 +36,6 @@ public class ViewAllHallsCommand implements Command {
         HttpSession session = cleanSession(req);
         try {
             List<Hall> list = hallService.getAllRecords(page, noOfRecords,sortBy);
-            list.forEach(System.out::println);
             hallService.setListOfFoundedRecordsToTheSession(session, list);
             hallService.setCurrPageAndNoOfRecordsToSession(session,page,noOfRecords);
         } catch (ServiceException e) {

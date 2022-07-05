@@ -95,6 +95,10 @@ public class Exposition implements Serializable, Comparable<Exposition> {
         this.idExpo = idExpo;
     }
 
+    public void setSold(long sold) {
+        this.sold = sold;
+    }
+
     public long getIdExpo() {
         return idExpo;
     }

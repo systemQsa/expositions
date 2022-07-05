@@ -22,12 +22,6 @@ public class AuthFilter implements Filter {
                          FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-
-        System.out.println("URI " + req.getRequestURI());
-        System.out.println("URL " + req.getRequestURL());
-        System.out.println("Servlet " + req.getServletPath());
-
-
         redirectRequestToControllerIfRequired(req, resp);
         if (logoutInCaseBackArrowPressed(req)) {
             resp.sendRedirect(new LogOutCommand().execute(req, resp).getPathOfThePage());

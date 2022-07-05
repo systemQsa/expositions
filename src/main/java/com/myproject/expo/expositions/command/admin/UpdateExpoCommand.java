@@ -46,7 +46,6 @@ public class UpdateExpoCommand implements Command, UtilMethods {
         try {
             Exposition expo = buildExpositionFromReq(req, validate);
             expoService.update(expo);
-            //req.getSession().setAttribute(Constant.HALL_LIST, null);
             cleanSession(req);
             return Route.setFullRoutePath(Constant.REDIRECT + DefinePathForUser.definePath(user.getUserRole().getRole()),
                     Route.RouteType.REDIRECT);

@@ -23,7 +23,7 @@ public class FormatFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         HttpSession session = req.getSession();
         ResourceBundle bundle = (ResourceBundle) session.getAttribute(Constant.LANGUAGE);
-        System.out.println("bundle " + bundle.getLocale());
+       // System.out.println("bundle " + bundle.getLocale());
 
         session.setAttribute(Constant.DATE_FORMAT, setDateFormat(bundle.getLocale()));
         session.setAttribute(Constant.TIME_FORMAT, setTimeFormat(bundle.getLocale()));

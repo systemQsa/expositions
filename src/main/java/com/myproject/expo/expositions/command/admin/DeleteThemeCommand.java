@@ -35,6 +35,8 @@ public class DeleteThemeCommand implements Command {
             return Route.setFullRoutePath(Constant.REDIRECT + DefinePathForUser.definePath(user.getUserRole().getRole()),
                     Route.RouteType.REDIRECT);
         } catch (Exception e) {
+            logger.warn("Cannot delete the theme");
+            setInfMSGToSession(e.getMessage(),req);
            throw new CommandException(Constant.URL.FULL_ADMIN_PAGE);
         }
     }
