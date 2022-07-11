@@ -27,7 +27,6 @@ public class UtilMethodsTest {
     private static HttpServletRequest req;
     private static Command command;
     private static HttpSession session;
-    private static Validate validate;
     private static final User user = User.builder()
             .setUserRole(UserRole.ADMIN)
             .setEmail("admin@gmail.com")
@@ -48,9 +47,9 @@ public class UtilMethodsTest {
     @BeforeClass
     public static void init() {
         req = mock(HttpServletRequest.class);
-        validate = mock(ValidateInput.class);
+        Validate validate = mock(ValidateInput.class);
         ThemeService themeService = mock(ThemeServiceImpl.class);
-        command = new AddThemeCommand(themeService,validate);
+        command = new AddThemeCommand(themeService, validate);
         session = mock(HttpSession.class);
     }
 

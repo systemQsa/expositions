@@ -18,9 +18,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
                     <jsp:include page="/WEB-INF/views/general/switchLang.jsp"/>
                     <li class="nav-item dropdown">
                         <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
@@ -67,8 +64,6 @@
                             </li>
                         </ul>
                     </li>
-
-
                 </ul>
             </div>
             <x></x>
@@ -106,18 +101,6 @@
     <c:if test="${not empty sessionScope.searchedList}">
         <jsp:include page="/WEB-INF/views/general/seachedList.jsp"/>
     </c:if>
-
-<%--    <p>${sessionScope.userEmail} == ${sessionScope.role}</p>--%>
-
-    <%--    All data about user--%>
-<%--    <c:if test="${not empty sessionScope.userData}">--%>
-<%--        <p>${sessionScope.userData.name}</p>--%>
-<%--        <p>${sessionScope.userData.surname}</p>--%>
-<%--        <p>${sessionScope.userData.email}</p>--%>
-<%--        <p>${sessionScope.userData.balance}</p>--%>
-<%--        <p>${sessionScope.userData.phone}</p>--%>
-<%--        <p>${sessionScope.userData.idUser}</p>--%>
-<%--    </c:if>--%>
 <jsp:include page="/WEB-INF/views/general/footer.jsp"/>
 </div>
 </body>

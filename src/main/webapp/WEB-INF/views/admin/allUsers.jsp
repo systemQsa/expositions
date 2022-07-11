@@ -5,17 +5,17 @@
 </head>
 <body>
 <table class="table table-info table-hover">
-    <h4 class="text-center">All Users</h4>
+    <h4 class="text-center">${sessionScope.language['all_users']}</h4>
     <thead>
         <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Surname</th>
-            <th scope="col">Email</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Role</th>
-            <th scope="col">Status</th>
-            <th scope="col">Block</th>
-            <th scope="col">Unblock</th>
+            <th scope="col">${sessionScope.language['name']}</th>
+            <th scope="col">${sessionScope.language['surname']}</th>
+            <th scope="col">${sessionScope.language['email']}</th>
+            <th scope="col">${sessionScope.language['phone']}</th>
+            <th scope="col">${sessionScope.language['role']}</th>
+            <th scope="col">${sessionScope.language['status']}</th>
+            <th scope="col">${sessionScope.language['block']}</th>
+            <th scope="col">${sessionScope.language['unblock']}</th>
         </tr>
     </thead>
     <tbody>
@@ -32,7 +32,7 @@
                     <input type="hidden" name="action" value="blockUnblockUser">
                     <input type="hidden" name="status" value="blocked">
                     <input type="hidden" name="userId" value="${user.idUser}">
-                    <button type="submit" class="btn btn-danger btn-sm">block</button>
+                    <button type="submit" class="btn btn-danger btn-sm">${sessionScope.language['block']}</button>
                 </form>
             </td>
             <td>
@@ -40,7 +40,7 @@
                     <input type="hidden" name="action" value="blockUnblockUser">
                     <input type="hidden" name="status" value="active">
                     <input type="hidden" name="userId" value="${user.idUser}">
-                    <button type="submit" class="btn btn-warning btn-sm">unblock</button>
+                    <button type="submit" class="btn btn-warning btn-sm">${sessionScope.language['unblock']}</button>
                 </form>
             </td>
         </tr>

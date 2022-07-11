@@ -31,15 +31,14 @@ public class AddHallCommandTest {
     private static HttpServletRequest req;
     private static HttpServletResponse resp;
     private static HttpSession session;
-    private static Validate validate;
     private static final List<Hall> hallList = Collections.singletonList(Hall.builder().setHallName("HallName").build());
     private static final User user = User.builder().setUserRole(UserRole.ADMIN).build();
 
     @BeforeClass
     public static void init() {
         hallService = mock(HallServiceImpl.class);
-        validate = mock(ValidateInput.class);
-        command = new AddHallCommand(hallService,validate);
+        Validate validate = mock(ValidateInput.class);
+        command = new AddHallCommand(hallService, validate);
         req = mock(HttpServletRequest.class);
         resp = mock(HttpServletResponse.class);
         session = mock(HttpSession.class);

@@ -3,12 +3,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-<%--        <jsp:include page="/WEB-INF/views/general/bootstrap/include_bootstap.jsp"/>--%>
 </head>
 <body>
 
 <table class="table table-info table-hover">
-    <h4 class="text-center">All Themes</h4>
+    <h4 class="text-center">${sessionScope.language['all_themes']}</h4>
     <thead>
     <tr>
         <th scope="col">${sessionScope.language['Theme']}</th>

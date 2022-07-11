@@ -31,7 +31,7 @@
                         </li>
                         <li class="list-group-item">Theme ${requestScope.oneExpoData.theme.name}</li>
                         <li class="list-group-item">Tickets ${requestScope.oneExpoData.tickets}</li>
-                        <li class="list-group item">Status:
+                        <li class="list-group item">${sessionScope.language['status']}:
                             <c:choose>
                                 <c:when test="${requestScope.oneExpoData.statusId == 2}">
                                     ${sessionScope.language['canceled']}
@@ -54,7 +54,7 @@
                                 <input type="hidden" name="action" value="changeExpoStatus">
                                 <input type="hidden" name="expoId" value="${requestScope.oneExpoData.idExpo}">
                                 <input type="hidden" name="status" value="active">
-                                <button class="btn btn-info btn-sm" type="submit">activate</button>
+                                <button class="btn btn-info btn-sm" type="submit">${sessionScope.language['activate']}</button>
                             </form>
                         </li>
                     </ul>
@@ -63,7 +63,7 @@
                         <div class="accordion accordion-flush" role="link" id="updateTheExpo">
                             <button class="btn btn-success btn-sm" role="link" data-bs-toggle="collapse"
                                     data-bs-target="#updateExpo" aria-expanded="false" aria-controls="flush-collapseThree">
-                                Update Expo
+                                ${sessionScope.language['update_expo']}
                             </button>
                             <div id="updateExpo" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
                                  data-bs-parent="#updateValues">
@@ -157,10 +157,6 @@
                                 </div>
                             </div>
                         </div>
-<%--                        <c:if test="${role.equals('admin')}">--%>
-<%--                            <a href="#" class="card-link">Cancel</a>--%>
-<%--                            <a href="#" class="card-link">Delete</a>--%>
-<%--                        </c:if>--%>
                     </div>
                 </div>
 

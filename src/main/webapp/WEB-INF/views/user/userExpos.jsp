@@ -29,7 +29,6 @@
             <td>${expo.date.format(dateFormat)}</td>
             <td>${expo.time.format(timeFormat)}</td>
             <td>${expo.price}</td>
-<%--            <td>${expo.hall.name}</td>--%>
             <td>
                 <c:forEach var="hall" items="${expo.hallList}">
                     ${hall.name}
@@ -39,10 +38,10 @@
             <td>
                 <c:choose>
                     <c:when test="${expo.statusId == 1}">
-                        active
+                        ${sessionScope.language['active']}
                     </c:when>
                     <c:when test="${expo.statusId == 2}">
-                        canceled
+                        ${sessionScope.language['canceled']}
                     </c:when>
                 </c:choose>
 

@@ -16,10 +16,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-
                     <jsp:include page="/WEB-INF/views/general/switchLang.jsp"/>
 
                     <li class="nav-item dropdown">

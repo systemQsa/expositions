@@ -12,6 +12,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import static com.myproject.expo.expositions.util.Constant.*;
+
 public class ValidateInput implements Validate {
     private static final Logger logger = LogManager.getLogger(ValidateInput.class);
     private static final String PASSWORD_REGEX = "^[\\w+]{3,20}$";
@@ -32,7 +34,7 @@ public class ValidateInput implements Validate {
                 .map(mail -> (Pattern.compile(EMAIL_REGEX).matcher(mail).matches()
                         || Pattern.compile(EMAIL_CYRILLIC).matcher(mail).matches()))
                 .filter(res -> res)
-                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.INCORRECT_EMAIL_INPUT));
+                .orElseThrow(() -> new ValidationException(ErrMsg.INCORRECT_EMAIL_INPUT));
 
     }
 
@@ -43,7 +45,7 @@ public class ValidateInput implements Validate {
                         .matcher(userSurname)
                         .matches())
                 .filter(res -> res)
-                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.INCORRECT_SURNAME_INPUT));
+                .orElseThrow(() -> new ValidationException(ErrMsg.INCORRECT_SURNAME_INPUT));
     }
 
     @Override
@@ -52,7 +54,7 @@ public class ValidateInput implements Validate {
                 .map(userName -> Pattern.compile(REGEX_ONLY_WORDS)
                         .matcher(userName).matches())
                 .filter(res -> res)
-                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.INCORRECT_NAME_INPUT));
+                .orElseThrow(() -> new ValidationException(ErrMsg.INCORRECT_NAME_INPUT));
     }
 
     @Override
@@ -60,7 +62,7 @@ public class ValidateInput implements Validate {
         return Optional.ofNullable(phone)
                 .map(userPhone -> Pattern.compile(REGEX_PHONE).matcher(userPhone).matches())
                 .filter(res -> res)
-                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.INCORRECT_PHONE_INPUT));
+                .orElseThrow(() -> new ValidationException(ErrMsg.INCORRECT_PHONE_INPUT));
     }
 
     @Override
@@ -70,7 +72,7 @@ public class ValidateInput implements Validate {
                         .matcher(pass)
                         .matches())
                 .filter(res -> res)
-                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.INCORRECT_PASS_INPUT));
+                .orElseThrow(() -> new ValidationException(ErrMsg.INCORRECT_PASS_INPUT));
     }
 
     @Override
@@ -100,8 +102,8 @@ public class ValidateInput implements Validate {
 
     @Override
     public boolean isUserBlocked(String status) throws ValidationException {
-        if (status.equals(Constant.BLOCKED)) {
-            throw new ValidationException(Constant.ErrMsg.BLOCKED_USER);
+        if (status.equals(BLOCKED)) {
+            throw new ValidationException(ErrMsg.BLOCKED_USER);
         }
         return false;
     }
@@ -111,7 +113,7 @@ public class ValidateInput implements Validate {
         return   Optional.ofNullable(req.getParameter(param))
                 .filter(Objects::nonNull)
                 .filter(str -> !str.isEmpty())
-                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.EMPTY_STR_INPUT));
+                .orElseThrow(() -> new ValidationException(ErrMsg.EMPTY_STR_INPUT));
     }
 
     private boolean validateDate(String date) throws ValidationException {
@@ -119,7 +121,7 @@ public class ValidateInput implements Validate {
                 .map(str -> (Pattern.compile(DATE_REGEX).matcher(str).matches())
                         || Pattern.compile(DATE_ENG_REGEX).matcher(date).matches())
                 .filter(str -> str)
-                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.DATE));
+                .orElseThrow(() -> new ValidationException(ErrMsg.DATE));
     }
 
     private boolean validateTime(String time) throws ValidationException {
@@ -127,28 +129,28 @@ public class ValidateInput implements Validate {
                 .map(str -> (Pattern.compile("\\d{1,2}:\\d{2}\\W[A-Z]{2}").matcher(time).matches())
                         || Pattern.compile(TIME_UKR_REGEX).matcher(str).matches())
                 .filter(str -> str)
-                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.TIME));
+                .orElseThrow(() -> new ValidationException(ErrMsg.TIME));
     }
 
     private boolean validatePrice(String price) throws ValidationException {
         return Optional.ofNullable(price)
                 .map(str -> Pattern.compile(PRICE_REGEX).matcher(str).matches())
                 .filter(str -> str)
-                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.PRICE));
+                .orElseThrow(() -> new ValidationException(ErrMsg.PRICE));
     }
 
     private boolean containsOnlyDigits(String str) throws ValidationException {
         return Optional.ofNullable(str)
                 .map(value -> Pattern.compile(ONLY_DIGITS).matcher(value).matches())
                 .filter(value -> value)
-                .orElseThrow(() -> new ValidationException(Constant.ErrMsg.ONLY_DIGITS));
+                .orElseThrow(() -> new ValidationException(ErrMsg.ONLY_DIGITS));
     }
 
     private boolean validateProperDate(LocalDate date) throws ValidationException {
         if (date.isEqual(LocalDate.now()) || date.isAfter(LocalDate.now())) {
             return true;
         }
-        throw new ValidationException(Constant.ErrMsg.DATE);
+        throw new ValidationException(ErrMsg.DATE);
     }
 
     private boolean validateProperTime(LocalTime time) throws ValidationException {
@@ -157,7 +159,7 @@ public class ValidateInput implements Validate {
         if (time.isAfter(fromTime) || time.isBefore(toTime)) {
             return true;
         }
-        throw new ValidationException(Constant.ErrMsg.TIME);
+        throw new ValidationException(ErrMsg.TIME);
     }
 
 

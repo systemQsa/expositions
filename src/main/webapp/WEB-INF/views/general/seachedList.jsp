@@ -25,9 +25,6 @@
     <c:forEach var="expo" items="${sessionScope.searchedList}">
         <tr>
             <td>
-<%--                <a href="?action=viewSelectedExpo&command=lookAtMe&expoId=${expo.idExpo}">--%>
-<%--                        ${expo.name}--%>
-<%--                </a>--%>
             ${expo.name}
             </td>
             <td>${expo.date.format(dateFormat)}</td>
@@ -52,9 +49,6 @@
         </tr>
     </c:forEach>
     </tbody>
-
 </table>
-
-
 </body>
 </html>

@@ -26,14 +26,14 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i
                                                         class="glyphicon glyphicon-envelope color-blue"></i></span>
-                                                <input id="emailInput" placeholder="old email" class="form-control"
+                                                <input id="emailInput" placeholder="${sessionScope.language['old_email']}" class="form-control"
                                                       name="oldEmail" type="text">
                                             </div>
 
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i
                                                         class="glyphicon glyphicon-envelope color-blue"></i></span>
-                                                <input id="emailInput2" placeholder="new email" class="form-control"
+                                                <input id="emailInput2" placeholder="${sessionScope.language['new_email']}" class="form-control"
                                                        name="newEmail" type="text">
                                             </div>
                                          <br/>
