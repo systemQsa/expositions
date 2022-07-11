@@ -20,7 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-
+/**
+ * The RegisterCommand class register the new user in the system
+ */
 public class RegisterCommand implements Command {
     private static final Logger logger = LogManager.getLogger(RegisterCommand.class);
     private final Validate validate = new ValidateInput();

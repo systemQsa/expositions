@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * The AllUsersCommand class execute getting all registered users in the system
+ */
 public class AllUsersCommand implements Command {
     private static final Logger logger = LogManager.getLogger(AllUsersCommand.class);
     private final UserService userService;

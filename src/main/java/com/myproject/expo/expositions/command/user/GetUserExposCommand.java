@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * The GetUserExposCommand class gets list of bought expositions by the user.
+ * Depend on user command returns all active or canceled expositions to the required endpoint
+ */
 public class GetUserExposCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GetUserExposCommand.class);
     private final ExpositionService<Exposition> expoService;

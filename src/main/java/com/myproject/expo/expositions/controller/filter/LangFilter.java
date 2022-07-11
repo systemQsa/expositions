@@ -12,6 +12,9 @@ import com.myproject.expo.expositions.util.Constant;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+/**
+ * The LangFilter filter switches the language
+ */
 public class LangFilter implements Filter {
     private static final Logger logger = LogManager.getLogger(LangFilter.class);
     private ResourceBundle bundle = ResourceBundle.getBundle(Constant.RESOURCES, Locale.ENGLISH);

@@ -14,6 +14,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The ThemeDaoImpl class do crud operation with theme entity
+ */
 public class ThemeDaoImpl implements ThemeDao {
     private static final Logger logger = LogManager.getLogger(ThemeDaoImpl.class);
     private final ConnectManager connectManager;

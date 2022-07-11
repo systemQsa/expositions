@@ -14,6 +14,9 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The DeleteHallCommand class deletes the hall
+ */
 public class DeleteHallCommand implements Command {
     private static final Logger logger = LogManager.getLogger(DeleteHallCommand.class);
     private final HallService hallService;

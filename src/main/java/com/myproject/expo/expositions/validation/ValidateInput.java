@@ -14,6 +14,9 @@ import java.util.regex.Pattern;
 
 import static com.myproject.expo.expositions.util.Constant.*;
 
+/**
+ * The ValidateInput class validates the income data from requests
+ */
 public class ValidateInput implements Validate {
     private static final Logger logger = LogManager.getLogger(ValidateInput.class);
     private static final String PASSWORD_REGEX = "^[\\w+]{3,20}$";
@@ -23,7 +26,6 @@ public class ValidateInput implements Validate {
     private static final String REGEX_PHONE = "^[+]?[\\d]{7,14}$";
     private static final String DATE_ENG_REGEX = "\\d{1,2}/\\d{1,2}/\\d{2}";
     private static final String DATE_REGEX = "\\d{2}.\\d{2}.\\d{2}";
-    private static final String TIME_ENG_REGEX = "\\d{1,2}:\\d{2}\\W[A-Z]{2}";
     private static final String TIME_UKR_REGEX = "\\d{2}:\\d{2}";
     private static final String PRICE_REGEX = "\\d+\\.\\d{2}";
     private static final String ONLY_DIGITS = "^\\d+$";
@@ -161,7 +163,5 @@ public class ValidateInput implements Validate {
         }
         throw new ValidationException(ErrMsg.TIME);
     }
-
-
 
 }

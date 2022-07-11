@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * The BuyExpoCommand class execute buying exposition process by registered user
+ */
 public class BuyExpoCommand implements Command {
     private static final Logger logger = LogManager.getLogger(BuyExpoCommand.class);
     private final UserService userService;

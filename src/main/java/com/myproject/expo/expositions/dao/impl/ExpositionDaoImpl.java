@@ -20,6 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The ExpositionDaoImpl class manipulates the exposition data from DataBase
+ */
 public class ExpositionDaoImpl implements ExpositionDao {
     private static final Logger logger = LogManager.getLogger(ExpositionDaoImpl.class);
     private final ConnectManager connectManager;
@@ -95,14 +98,6 @@ public class ExpositionDaoImpl implements ExpositionDao {
                 .setHallList(createHallList(resSet))
                 .build();
 
-    }
-
-    private Exposition.ExpositionBuilder setAmountBoughtTickets(Exposition.ExpositionBuilder expo, ResultSet resultSet) throws SQLException {
-        return expo.setExpoSoldTickets(resultSet.getLong("amount"));
-    }
-
-    private Exposition.ExpositionBuilder setSoldTickets(Exposition.ExpositionBuilder expo, ResultSet resultSet) throws SQLException {
-        return expo.setExpoSoldTickets(resultSet.getLong(Constant.Column.SOLD));
     }
 
     private Theme createThemeFromResultSet(ResultSet resSet) throws SQLException {

@@ -35,6 +35,7 @@ public class AllThemeHallServiceImpl implements AllThemeHallService {
         try {
             return allThemeHallDao.allHalls(connectManager.getConnection());
         } catch (DaoException e) {
+            logger.warn("Cannot get all halls in service layer");
             throw new ServiceException(e.getMessage());
         }
     }
@@ -44,6 +45,7 @@ public class AllThemeHallServiceImpl implements AllThemeHallService {
         try {
             return allThemeHallDao.allThemes(connectManager.getConnection());
         } catch (DaoException e) {
+            logger.warn("Cannot get all themes in service layer");
             throw new ServiceException(e.getMessage());
         }
     }

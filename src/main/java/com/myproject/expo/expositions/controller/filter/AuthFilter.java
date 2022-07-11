@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * The AuthFilter filter checks if user after login do not log out if so the system log out the user
+ */
 public class AuthFilter implements Filter {
     private static final Logger logger = LogManager.getLogger(AuthFilter.class);
 

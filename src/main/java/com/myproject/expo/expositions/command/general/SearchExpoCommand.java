@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+/**
+ * The SearchExpoCommand class searches the desired exposition in the system and returns the response to the required endpoint
+ */
 public class SearchExpoCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SearchExpoCommand.class);
     private static final String REGEX_ONLY_WORDS = "^(\\p{L}+){3,}$";

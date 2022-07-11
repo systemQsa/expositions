@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
+/**
+ * The UserDaoImpl class manipulates the user data from DataBase
+ */
 public class UserDaoImpl implements UserDao {
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
     private final ConnectManager connectManager;

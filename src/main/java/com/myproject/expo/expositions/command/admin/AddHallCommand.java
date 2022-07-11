@@ -22,6 +22,9 @@ import javax.servlet.http.HttpSession;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * The AddHallCommand class execute adding a new hall
+ */
 public class AddHallCommand implements Command {
     private static final Logger logger = LogManager.getLogger(AddHallCommand.class);
     private final HallService hallService;

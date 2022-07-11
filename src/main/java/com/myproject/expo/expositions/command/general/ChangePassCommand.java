@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * The ChangePassCommand class changes the old user password to the new one
+ */
 public class ChangePassCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ChangePassCommand.class);
     private final UserService userService;

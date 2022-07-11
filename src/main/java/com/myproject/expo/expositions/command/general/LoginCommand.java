@@ -19,6 +19,9 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The LoginCommand class execute the login process. Authentication and authorization
+ */
 public class LoginCommand implements Command {
     private static final Logger logger = LogManager.getLogger(LoginCommand.class);
     private final Validate validate;

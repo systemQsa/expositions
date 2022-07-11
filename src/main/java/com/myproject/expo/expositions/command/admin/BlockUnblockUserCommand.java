@@ -14,6 +14,9 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The BlockUnblockUserCommand class blocks and unblocks the required user in the system
+ */
 public class BlockUnblockUserCommand implements Command {
     private static final Logger logger = LogManager.getLogger(BlockUnblockUserCommand.class);
     private final UserService userService;

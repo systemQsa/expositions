@@ -12,6 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The ControlAccessFilter filter checks allowed endpoints for each user.
+ * Depend on role the access to different endpoints are differs
+ */
 public class ControlAccessFilter implements Filter {
     private static final Logger logger = LogManager.getLogger(ControlAccessFilter.class);
     private List<String> userAllowedUrls;

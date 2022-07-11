@@ -16,6 +16,9 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The UpdateThemeCommand class updates the required theme
+ */
 public class UpdateThemeCommand implements Command {
     private static final Logger logger = LogManager.getLogger(UpdateThemeCommand.class);
     private final ThemeService themeService;

@@ -16,6 +16,9 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The UpdateHallCommand class updates the required hall
+ */
 public class UpdateHallCommand implements Command {
     private static final Logger logger = LogManager.getLogger(UpdateHallCommand.class);
     private final HallService hallService;

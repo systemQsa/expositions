@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * The LogOutCommand class execute the logout process
+ */
 public class LogOutCommand implements Command {
     private static final Logger logger = LogManager.getLogger(LogOutCommand.class);
 

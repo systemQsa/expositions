@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The ViewSelectedExpoCommand class gets all information about separate exposition and returns expo to the required endpoint
+ */
 public class ViewSelectedExpoCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ViewSelectedExpoCommand.class);
     private final AllThemeHallService allThemeHallService;

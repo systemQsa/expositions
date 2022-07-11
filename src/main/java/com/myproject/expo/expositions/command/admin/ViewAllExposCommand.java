@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * The ViewAllExposCommand class gets list of expositions and returns it to the desired endpoint
+ */
 public class ViewAllExposCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ViewAllExposCommand.class);
     private final ExpositionService<Exposition> expoService;

@@ -14,6 +14,9 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The DeleteThemeCommand class deletes the theme
+ */
 public class DeleteThemeCommand implements Command {
     private static final Logger logger = LogManager.getLogger(DeleteThemeCommand.class);
     private final ThemeService themeService;

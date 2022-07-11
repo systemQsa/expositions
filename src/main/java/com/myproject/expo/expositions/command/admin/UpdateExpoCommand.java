@@ -25,7 +25,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+/**
+ * The UpdateExpoCommand class updates the required exposition
+ */
 public class UpdateExpoCommand implements Command, UtilMethods {
     private static final Logger logger = LogManager.getLogger(UpdateExpoCommand.class);
     private final ExpositionService<Exposition> expoService;

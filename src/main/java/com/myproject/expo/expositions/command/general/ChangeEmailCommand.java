@@ -14,6 +14,9 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ *The ChangeEmailCommand class changes the user old email to the new one
+ */
 public class ChangeEmailCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ChangeEmailCommand.class);
     private final UserService userService;

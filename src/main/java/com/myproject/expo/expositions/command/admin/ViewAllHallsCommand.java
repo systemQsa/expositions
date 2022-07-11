@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * The ViewAllHallsCommand class gets list of halls and returns it to the admin page
+ */
 public class ViewAllHallsCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ViewAllHallsCommand.class);
     private final HallService hallService;

@@ -14,6 +14,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The HallDaoImpl class do crud operations with hall entity
+ */
 public class HallDaoImpl implements HallDao {
     private static final Logger logger = LogManager.getLogger(HallDaoImpl.class);
     private final ConnectManager connectManager;

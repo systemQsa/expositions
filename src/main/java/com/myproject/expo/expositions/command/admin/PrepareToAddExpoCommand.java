@@ -13,6 +13,10 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The PrepareToAddExpoCommand class prepares all required data for the page to add
+ * to select in advance all desired options when adding the new exposition
+ */
 public class PrepareToAddExpoCommand implements Command {
     private static final Logger logger = LogManager.getLogger(PrepareToAddExpoCommand.class);
     private final AllThemeHallService allThemeHallService;

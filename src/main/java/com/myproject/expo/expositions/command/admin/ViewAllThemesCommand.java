@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * The ViewAllThemesCommand class gets list of theme and returns it to the admin page endpoint
+ */
 public class ViewAllThemesCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ViewAllThemesCommand.class);
     private final ThemeService themeService;

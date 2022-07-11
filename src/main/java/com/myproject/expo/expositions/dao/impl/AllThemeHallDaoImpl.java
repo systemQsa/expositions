@@ -18,6 +18,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Depend on requirements the AllThemeHallDaoImpl class returns the list of all halls ot themes from DataBase
+ */
 public class AllThemeHallDaoImpl implements AllThemeHallDao {
     private static final Logger logger = LogManager.getLogger(AllThemeHallDaoImpl.class);
     private final ConnectManager connectManager;
@@ -35,6 +38,7 @@ public class AllThemeHallDaoImpl implements AllThemeHallDao {
         try (PreparedStatement statement = connection.prepareStatement(Query.HallSQL.GET_ALL_HALLS)) {
             return createHallList(statement.executeQuery());
         } catch (SQLException e) {
+            logger.warn("Cannot get all halls");
             throw new DaoException(Constant.ErrMsg.GET_ALL_HALLS);
         }finally {
             connectManager.closeConnection(connection);
@@ -61,6 +65,7 @@ public class AllThemeHallDaoImpl implements AllThemeHallDao {
         try (PreparedStatement statement = connection.prepareStatement(Query.ThemeSQL.GET_ALL_THEMES)) {
             return createThemeList(statement.executeQuery());
         } catch (SQLException e) {
+            logger.warn("Cannot get all themes");
             throw new DaoException(Constant.ErrMsg.GET_ALL_THEMES);
         }finally {
             connectManager.closeConnection(connection);

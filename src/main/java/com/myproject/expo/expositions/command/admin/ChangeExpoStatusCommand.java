@@ -15,6 +15,9 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The ChangeExpoStatusCommand class execute changing the exposition status
+ */
 public class ChangeExpoStatusCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ChangeExpoStatusCommand.class);
     private final ExpositionService<Exposition> expoService;

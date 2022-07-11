@@ -16,6 +16,9 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * The TopUpBalanceCommand class executes top up user balance
+ */
 public class TopUpBalanceCommand implements Command, UtilMethods {
     private static final Logger logger = LogManager.getLogger(TopUpBalanceCommand.class);
     private final UserService userService;

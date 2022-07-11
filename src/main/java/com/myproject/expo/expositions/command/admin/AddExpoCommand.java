@@ -23,6 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The AddExpoCommand class execute adding a new exposition
+ */
 public class AddExpoCommand implements Command {
     private static final Logger logger = LogManager.getLogger(AddExpoCommand.class);
     private final Validate validate;

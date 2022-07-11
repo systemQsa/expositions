@@ -13,6 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * The FacadeCommand class get`s the desired command related to crud operations with hall entity,theme entity,redirects
+ * command to required class where processing the request
+ * @param <T>
+ */
 public class FacadeCommand<T> implements Command {
     private static final Logger logger = LogManager.getLogger(FacadeCommand.class);
     private final Command command;
@@ -35,7 +40,6 @@ public class FacadeCommand<T> implements Command {
             return route;
         } catch (ServiceException | CommandException e) {
             logger.warn("By some reason failed FacadeCommand Class" + e.getMessage());
-           // setInformMessageToUser(11, req, e.getMessage());
             throw new CommandException(Constant.URL.FULL_ADMIN_PAGE);
         }
     }
